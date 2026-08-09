@@ -41,8 +41,6 @@
     body {
       margin: 0;
       padding: 0;
-      height: 100%;
-      overflow: hidden; /* trang ngoài KHÔNG cuộn nữa — mỗi cột tự cuộn riêng bên trong */
     }
 
     body {
@@ -53,14 +51,13 @@
         radial-gradient(1200px 400px at 100% -10%, rgba(254, 95, 0, 0.06), transparent 60%),
         var(--bg);
       color: var(--text);
+      min-height: 100vh;
     }
 
     .wrap {
       max-width: 100%;
       margin: 0 auto;
-      padding: 28px 32px;
-      height: 100vh;
-      box-sizing: border-box;
+      padding: 28px 32px 80px;
     }
 
     /* Độ rộng 3 cột: cột 1 (input) | cột 2 (kết quả, 1fr = chiếm hết phần còn lại) | cột 3 (không tìm thấy)
@@ -69,77 +66,25 @@
       display: grid;
       grid-template-columns: 340px 1fr 260px;
       gap: 24px;
-      align-items: stretch;
-      height: 100%;
+      align-items: start;
     }
 
     .left-col {
-      height: 100%;
-      overflow-y: auto;
+      position: sticky;
+      top: 24px;
       display: flex;
       flex-direction: column;
       min-width: 0;
-      padding-right: 4px;
-    }
-
-    /* Thanh cuộn mảnh, gọn cho các khung tự cuộn (cột 1, bảng kết quả, danh sách không tìm thấy) */
-    .left-col,
-    .results-table-wrap,
-    .notfound-body {
-      scrollbar-width: thin;
-      scrollbar-color: var(--border) transparent;
-    }
-    .left-col::-webkit-scrollbar,
-    .results-table-wrap::-webkit-scrollbar,
-    .notfound-body::-webkit-scrollbar {
-      width: 7px;
-      height: 7px;
-    }
-    .left-col::-webkit-scrollbar-track,
-    .results-table-wrap::-webkit-scrollbar-track,
-    .notfound-body::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    .left-col::-webkit-scrollbar-thumb,
-    .results-table-wrap::-webkit-scrollbar-thumb,
-    .notfound-body::-webkit-scrollbar-thumb {
-      background: var(--border);
-      border-radius: 8px;
-    }
-    .left-col::-webkit-scrollbar-thumb:hover,
-    .results-table-wrap::-webkit-scrollbar-thumb:hover,
-    .notfound-body::-webkit-scrollbar-thumb:hover {
-      background: #c9c5bd;
     }
 
     .right-col {
-      height: 100%;
       min-width: 0;
-      display: flex;
-      flex-direction: column;
-      min-height: 0;
-    }
-
-    #results-area {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      min-height: 0;
     }
 
     .notfound-col {
-      height: 100%;
+      position: sticky;
+      top: 24px;
       min-width: 0;
-      display: flex;
-      flex-direction: column;
-      min-height: 0;
-    }
-
-    #notfound-area {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      min-height: 0;
     }
 
     @media (max-width:1300px) {
@@ -149,23 +94,17 @@
 
       .notfound-col {
         grid-column: 1 / -1;
+        position: static;
       }
     }
 
     @media (max-width:1000px) {
-      html, body {
-        overflow: auto; /* màn hình nhỏ: quay lại cuộn trang bình thường, xếp chồng cột */
-      }
-      .wrap {
-        height: auto;
-      }
       .layout {
         grid-template-columns: 1fr;
-        height: auto;
       }
-      .left-col, .right-col, .notfound-col {
-        height: auto;
-        overflow: visible;
+
+      .left-col {
+        position: static;
       }
     }
 
@@ -173,7 +112,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 10px;
+      margin-bottom: 22px;
       flex-wrap: wrap;
       gap: 10px;
     }
@@ -185,27 +124,27 @@
     }
 
     .brand .mark {
-      width: 28px;
-      height: 28px;
-      border-radius: 8px;
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
       background: linear-gradient(135deg, var(--orange), var(--orange-dark));
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
       font-weight: 800;
-      font-size: 15px;
+      font-size: 18px;
       flex-shrink: 0;
     }
 
     .brand .name {
       font-weight: 800;
-      font-size: 17px;
+      font-size: 19px;
       letter-spacing: -0.01em;
     }
 
     .brand .sub {
-      font-size: 13px;
+      font-size: 15px;
       color: var(--muted);
       margin-top: 1px;
     }
@@ -218,16 +157,16 @@
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 4px;
-      margin-bottom: 8px;
+      margin-bottom: 18px;
     }
 
     .tab {
       flex: 1 1 45%;
       text-align: center;
-      padding: 7px 6px;
+      padding: 10px 8px;
       border-radius: 9px;
       font-weight: 600;
-      font-size: 15px;
+      font-size: 16.5px;
       color: var(--muted);
       cursor: pointer;
       user-select: none;
@@ -258,39 +197,39 @@
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 14px;
-      margin-bottom: 0;
+      padding: 20px;
+      margin-bottom: 18px;
     }
 
     .panel h2 {
-      margin: 0 0 3px;
-      font-size: 17px;
+      margin: 0 0 4px;
+      font-size: 18px;
       font-weight: 700;
     }
 
     .panel p.hint {
-      margin: 0 0 8px;
-      font-size: 14px;
+      margin: 0 0 14px;
+      font-size: 15.5px;
       color: var(--muted);
-      line-height: 1.4;
+      line-height: 1.5;
     }
 
     label.field-label {
       display: block;
-      font-size: 14px;
+      font-size: 15.5px;
       font-weight: 600;
       color: var(--text);
-      margin-bottom: 4px;
+      margin-bottom: 6px;
     }
 
     textarea {
       width: 100%;
-      min-height: 150px;
+      min-height: 96px;
       resize: vertical;
       font-family: var(--mono);
-      font-size: 15px;
-      line-height: 1.5;
-      padding: 9px 12px;
+      font-size: 16px;
+      line-height: 1.6;
+      padding: 12px 14px;
       border: 1.5px solid var(--border);
       border-radius: 10px;
       background: #FBFAF8;
@@ -335,8 +274,8 @@
 
     .actions {
       display: flex;
-      gap: 8px;
-      margin-top: 10px;
+      gap: 10px;
+      margin-top: 16px;
       align-items: center;
       flex-wrap: wrap;
     }
@@ -344,10 +283,10 @@
     button {
       font-family: var(--sans);
       font-weight: 700;
-      font-size: 15px;
+      font-size: 16.5px;
       border: none;
       border-radius: 10px;
-      padding: 8px 16px;
+      padding: 11px 20px;
       cursor: pointer;
       transition: transform .1s, opacity .15s;
     }
@@ -397,9 +336,9 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      margin: 8px 0;
+      margin: 14px 0;
       color: var(--muted);
-      font-size: 12.5px;
+      font-size: 14.5px;
       text-transform: uppercase;
       letter-spacing: .04em;
     }
@@ -415,7 +354,7 @@
     .file-upload-row {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       flex-wrap: wrap;
     }
 
@@ -424,10 +363,10 @@
       align-items: center;
       gap: 6px;
       font-weight: 700;
-      font-size: 14px;
+      font-size: 16px;
       background: var(--blue-soft);
       color: var(--blue);
-      padding: 7px 12px;
+      padding: 10px 16px;
       border-radius: 10px;
       cursor: pointer;
       border: 1.5px dashed var(--blue);
@@ -439,7 +378,7 @@
     }
 
     .file-upload-hint {
-      font-size: 12.5px;
+      font-size: 15px;
       color: var(--muted);
     }
 
@@ -450,40 +389,11 @@
       gap: 12px;
       flex-wrap: wrap;
       margin-bottom: 12px;
-      flex: none;
-    }
-
-    .result-search-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 12px;
-    }
-
-    .result-search-input {
-      flex: 1;
-      min-width: 220px;
-      font-family: var(--sans);
-      font-size: 16px;
-      padding: 9px 14px;
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      background: var(--surface);
-      color: var(--text);
-      outline: none;
-      transition: border-color .15s;
-    }
-
-    .result-search-input:focus {
-      border-color: var(--orange);
-    }
-
-    .result-search-count {
-      font-size: 15px;
-      color: var(--muted);
-      font-family: var(--mono);
-      white-space: nowrap;
+      position: sticky;
+      top: 24px;
+      z-index: 5;
+      background: var(--bg);
+      padding: 6px 0;
     }
 
     .stats {
@@ -585,8 +495,7 @@
       border-radius: var(--radius);
       overflow-x: auto;
       overflow-y: auto;
-      flex: 1;
-      min-height: 0;
+      max-height: calc(100vh - 230px);
     }
 
     table.result-table {
@@ -752,9 +661,6 @@
       border: 1px solid var(--border);
       border-radius: var(--radius);
       overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      height: 100%;
     }
 
     .notfound-header {
@@ -768,7 +674,6 @@
       font-size: 16px;
       color: var(--danger);
       background: var(--danger-bg);
-      flex: none;
     }
 
     .btn-copy-all {
@@ -795,8 +700,7 @@
     }
 
     .notfound-body {
-      flex: 1;
-      min-height: 0;
+      max-height: calc(100vh - 140px);
       overflow-y: auto;
       padding: 6px 14px;
     }
@@ -833,10 +737,105 @@
         grid-template-columns: 1fr 1fr;
       }
     }
+    #auth-gate {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(1200px 400px at 100% -10%, rgba(254, 95, 0, 0.08), transparent 60%),
+        var(--bg);
+      padding: 20px;
+    }
+
+    .auth-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      width: 100%;
+      max-width: 340px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+    }
+
+    .auth-mark {
+      width: 44px;
+      height: 44px;
+      margin: 0 auto 14px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--orange), var(--orange-dark));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 800;
+      font-size: 18px;
+    }
+
+    .auth-card h2 {
+      margin: 0 0 4px;
+      font-size: 19px;
+      font-weight: 800;
+    }
+
+    .auth-card p {
+      margin: 0 0 18px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    #auth-password {
+      width: 100%;
+      font-family: var(--sans);
+      font-size: 16px;
+      padding: 10px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      background: #FBFAF8;
+      color: var(--text);
+      outline: none;
+      margin-bottom: 12px;
+      text-align: center;
+      transition: border-color .15s;
+    }
+
+    #auth-password:focus {
+      border-color: var(--orange);
+      background: white;
+    }
+
+    .auth-submit {
+      width: 100%;
+    }
+
+    .auth-error {
+      margin: 10px 0 0 !important;
+      color: var(--danger) !important;
+      font-size: 13px !important;
+      min-height: 16px;
+    }
+
   </style>
 </head>
 
 <body>
+
+  <!-- ============ GATE MẬT KHẨU ============ -->
+  <div id="auth-gate">
+    <form id="auth-form" class="auth-card">
+      <div class="auth-mark">KA</div>
+      <h2>Tra cứu KAC</h2>
+      <p>Nhập mật khẩu để tiếp tục</p>
+      <input type="password" id="auth-password" placeholder="Mật khẩu" autocomplete="off" autofocus />
+      <button type="submit" class="btn-primary auth-submit">Vào trang</button>
+      <p id="auth-error" class="auth-error"></p>
+    </form>
+  </div>
+
+  <div id="app-root" style="display:none;">
   <div class="wrap">
 
     <div class="layout">
@@ -863,9 +862,10 @@
 
           <div class="divider-or">hoặc</div>
           <div class="file-upload-row">
-            <label class="file-upload-btn" for="file-input">📎 Tải file Excel / CSV</label>
+            <label class="file-upload-btn" for="file-input">📎 Tải file Excel / CSV (chọn được nhiều file)</label>
             <input type="file" id="file-input" accept=".xlsx,.xls,.csv" multiple style="display:none" />
-            <span class="file-upload-hint" id="file-upload-status">Chọn nhiều file, tự dò cột mã đơn trong mọi sheet</span>
+            <span class="file-upload-hint" id="file-upload-status">Tự nhận diện cột mã đơn trong mọi sheet của mọi file
+              (order_code, ma_don_hang, lmtn, spx_shipment_id...)</span>
           </div>
 
           <div class="row" id="date-row" style="display:none;">
@@ -897,8 +897,48 @@
     </div>
 
   </div>
+  </div>
 
   <script>
+    // ============ GATE MẬT KHẨU (tạm thời, kiểm tra phía client) ============
+    // Đổi mật khẩu ở đây khi cần
+    const AUTH_PASSWORD = "kac123456*";
+    const AUTH_STORAGE_KEY = "ka_lookup_authed_v1";
+
+    const authGate = document.getElementById("auth-gate");
+    const appRoot = document.getElementById("app-root");
+    const authForm = document.getElementById("auth-form");
+    const authPasswordInput = document.getElementById("auth-password");
+    const authError = document.getElementById("auth-error");
+
+    function unlockApp() {
+      authGate.style.display = "none";
+      appRoot.style.display = "block";
+      initApp(); // toàn bộ logic tool chỉ chạy sau khi xác thực đúng
+    }
+
+    authForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (authPasswordInput.value === AUTH_PASSWORD) {
+        try { localStorage.setItem(AUTH_STORAGE_KEY, "1"); } catch (err) {}
+        authError.textContent = "";
+        unlockApp();
+      } else {
+        authError.textContent = "Sai mật khẩu, thử lại.";
+        authPasswordInput.value = "";
+        authPasswordInput.focus();
+      }
+    });
+
+    (function checkExistingAuth() {
+      let authed = false;
+      try { authed = localStorage.getItem(AUTH_STORAGE_KEY) === "1"; } catch (err) {}
+      if (authed) unlockApp();
+    })();
+    </script>
+
+    <script>
+    function initApp() {
     // ============ CẤU HÌNH ============
     // Điền URL webhook n8n của bạn vào đây. Webhook nhận GET với query params:
     //   type   = denbu | quahan | miencuoc
@@ -981,9 +1021,7 @@
 
     let activeTab = "denbu";
     let lastResults = [];
-    let lastFullItems = [];
     let lastRequestedCodes = [];
-    let searchQuery = "";
     let currentPage = 1;
     let pageSize = 10;
 
@@ -1248,26 +1286,17 @@
     }
 
     // ============ RENDER KẾT QUẢ (toolbar + thống kê + bảng + phân trang) ============
-    // renderResults: gọi khi có kết quả MỚI từ server (search mới) — reset trang + ô lọc cục bộ
     function renderResults(rawItems, requestedCodes) {
-      lastFullItems = annotateAndSortItems(rawItems); // sort A-Z + gắn số lần lặp
+      const items = annotateAndSortItems(rawItems); // sort A-Z + gắn số lần lặp
+      lastResults = items;
       lastRequestedCodes = requestedCodes || [];
-      searchQuery = "";
-      currentPage = 1;
-      rerenderTable();
-    }
-
-    // rerenderTable: vẽ lại bảng từ lastFullItems hiện có — dùng cho phân trang, đổi số dòng/trang,
-    // và lọc cục bộ trong ô "search mã đơn" — KHÔNG gọi lại webhook.
-    function rerenderTable() {
-      const allItems = lastFullItems;
       const cfg = CONFIG.TABS[activeTab];
 
-      // ----- thống kê tìm thấy / không tìm thấy theo mã đơn đã nhập (luôn tính trên toàn bộ, không bị ảnh hưởng bởi ô lọc) -----
+      // ----- thống kê tìm thấy / không tìm thấy theo mã đơn đã nhập -----
       let statsHtml = "";
       let notFoundCodes = [];
       if (lastRequestedCodes.length) {
-        const foundSet = new Set(allItems.map(i => getCode(i).toString().toUpperCase()));
+        const foundSet = new Set(items.map(i => getCode(i).toString().toUpperCase()));
         const foundCount = lastRequestedCodes.filter(c => foundSet.has(c.toUpperCase())).length;
         notFoundCodes = lastRequestedCodes.filter(c => !foundSet.has(c.toUpperCase()));
         statsHtml = `
@@ -1279,41 +1308,10 @@
       }
       renderNotFound(notFoundCodes);
 
-      if (!allItems.length) {
-        lastResults = [];
-        resultsArea.innerHTML = `
-      ${statsHtml ? `<div class="toolbar">${statsHtml}</div>` : ""}
-      <div class="empty"><div class="big">🔍</div>Không tìm thấy kết quả phù hợp.</div>`;
-        return;
-      }
-
-      // ----- ô lọc mã đơn cục bộ (lọc trong kết quả đang có, không gọi lại webhook) -----
-      const filterTokens = parseCodes(searchQuery);
-      let items = allItems;
-      if (filterTokens.length) {
-        const tokensUpper = filterTokens.map(t => t.toUpperCase());
-        items = allItems.filter(it => {
-          const code = getCode(it).toString().toUpperCase();
-          return tokensUpper.some(t => code.includes(t));
-        });
-      }
-      lastResults = items; // dùng khi Xuất CSV/Excel -> xuất đúng phần đang lọc/xem
-
-      const searchBoxHtml = `
-    <div class="result-search-row">
-      <input type="text" id="result-search" class="result-search-input"
-        placeholder="Lọc mã đơn trong kết quả này — dán được nhiều mã, cách nhau bằng dấu phẩy/khoảng trắng"
-        value="${searchQuery.replace(/"/g, "&quot;")}" />
-      ${searchQuery ? `<button class="btn-ghost" id="btn-clear-search">Xóa lọc</button>` : ""}
-      <span class="result-search-count">${filterTokens.length ? `${items.length}/${allItems.length} dòng khớp` : `${allItems.length} dòng`}</span>
-    </div>`;
-
       if (!items.length) {
         resultsArea.innerHTML = `
       ${statsHtml ? `<div class="toolbar">${statsHtml}</div>` : ""}
-      ${searchBoxHtml}
-      <div class="empty"><div class="big">🔍</div>Không có mã đơn nào khớp ô lọc.</div>`;
-        bindResultSearchEvents();
+      <div class="empty"><div class="big">🔍</div>Không tìm thấy kết quả phù hợp.</div>`;
         return;
       }
 
@@ -1383,7 +1381,6 @@
 
       resultsArea.innerHTML = `
     ${toolbarHtml}
-    ${searchBoxHtml}
     <div class="results-table-wrap">
       <table class="result-table">
         <thead>${theadHtml}</thead>
@@ -1397,42 +1394,14 @@
       el("#page-size-select").onchange = (e) => {
         pageSize = Number(e.target.value);
         currentPage = 1;
-        rerenderTable();
+        renderResults(lastResults, lastRequestedCodes);
       };
       const prevBtn = el("#btn-prev-page");
       const nextBtn = el("#btn-next-page");
       const jumpSelect = el("#page-jump-select");
-      if (prevBtn) prevBtn.onclick = () => { currentPage--; rerenderTable(); };
-      if (nextBtn) nextBtn.onclick = () => { currentPage++; rerenderTable(); };
-      if (jumpSelect) jumpSelect.onchange = (e) => { currentPage = Number(e.target.value); rerenderTable(); };
-      bindResultSearchEvents();
-    }
-
-    function bindResultSearchEvents() {
-      const input = el("#result-search");
-      if (input) {
-        input.oninput = (e) => {
-          searchQuery = e.target.value;
-          currentPage = 1;
-          const cursorPos = e.target.selectionStart;
-          rerenderTable();
-          const newInput = el("#result-search");
-          if (newInput) {
-            newInput.focus();
-            newInput.setSelectionRange(cursorPos, cursorPos);
-          }
-        };
-      }
-      const clearBtn = el("#btn-clear-search");
-      if (clearBtn) {
-        clearBtn.onclick = () => {
-          searchQuery = "";
-          currentPage = 1;
-          rerenderTable();
-          const newInput = el("#result-search");
-          if (newInput) newInput.focus();
-        };
-      }
+      if (prevBtn) prevBtn.onclick = () => { currentPage--; renderResults(lastResults, lastRequestedCodes); };
+      if (nextBtn) nextBtn.onclick = () => { currentPage++; renderResults(lastResults, lastRequestedCodes); };
+      if (jumpSelect) jumpSelect.onchange = (e) => { currentPage = Number(e.target.value); renderResults(lastResults, lastRequestedCodes); };
     }
 
     const CODES_PER_REQUEST = 1000; // tránh URL quá dài (server/n8n thường giới hạn ~8KB cho query string)
@@ -1519,7 +1488,7 @@
       codesInput.value = "";
       dateFrom.value = "";
       dateTo.value = "";
-      fileUploadStatus.textContent = "Chọn nhiều file, tự dò cột mã đơn trong mọi sheet";
+      fileUploadStatus.textContent = "Tự nhận diện cột mã đơn trong mọi sheet của mọi file (order_code, ma_don_hang, lmtn, spx_shipment_id...)";
       resultsArea.innerHTML = "";
       el("#notfound-area").innerHTML = "";
       currentPage = 1;
@@ -1542,7 +1511,9 @@
         doSearch();
       }
     })();
-  </script>
+  
+    }
+    </script>
 </body>
 
 </html>
