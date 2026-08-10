@@ -1265,6 +1265,7 @@
           }
           rows.push([code, ...fields.map(f => item[f] ?? ""), item._occTotal || 1]);
         });
+        rows.sort((a, b) => String(a[0]).localeCompare(String(b[0]), "vi", { numeric: true, sensitivity: "base" }));
         return [header, ...rows];
       }
       function downloadBlob(blob, filename) {
