@@ -1343,6 +1343,39 @@
           btn.disabled = false;
         }, 1500);
       }
+      async function copyFoundCodes() {
+        const codes = [...new Set(lastResults.map(getCode).filter(Boolean))];
+        const text = codes.join("\n");
+        const btn = el("#btn-copy-found");
+        try {
+          await navigator.clipboard.writeText(text);
+          showFoundCopyFeedback(btn, "✅ Đã copy");
+        } catch (err) {
+          try {
+            const ta = document.createElement("textarea");
+            ta.value = text;
+            ta.style.position = "fixed";
+            ta.style.opacity = "0";
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand("copy");
+            document.body.removeChild(ta);
+            showFoundCopyFeedback(btn, "✅ Đã copy");
+          } catch (err2) {
+            showFoundCopyFeedback(btn, "❌ Lỗi copy");
+          }
+        }
+      }
+      function showFoundCopyFeedback(btn, text) {
+        if (!btn) return;
+        const original = "📋 Copy mã đơn";
+        btn.textContent = text;
+        btn.disabled = true;
+        setTimeout(() => {
+          btn.textContent = original;
+          btn.disabled = false;
+        }, 1500);
+      }
       function renderResults(rawItems, requestedCodes) {
         lastFullItems = annotateAndSortItems(rawItems);
         lastRequestedCodes = requestedCodes || [];
@@ -1389,7 +1422,7 @@
         const startIdx = (currentPage - 1) * pageSize;
         const pageItems = items.slice(startIdx, startIdx + pageSize);
         const pageSizeOptions = [10, 20, 50, 100].map(n => `<option value="${n}" ${n === pageSize ? "selected" : ""}>${n}</option>`).join("");
-        const toolbarHtml = `\n    <div class="toolbar">\n      ${statsHtml}\n      <div class="toolbar-actions">\n        <label class="pagesize-label">Hiện <select id="page-size-select">${pageSizeOptions}</select> / trang</label>\n        <button class="btn-ghost" id="btn-export-csv">Xuất CSV</button>\n        <button class="btn-ghost" id="btn-export-xlsx">Xuất Excel</button>\n      </div>\n    </div>`;
+        const toolbarHtml = `\n    <div class="toolbar">\n      ${statsHtml}\n      <div class="toolbar-actions">\n        <label class="pagesize-label">Hiện <select id="page-size-select">${pageSizeOptions}</select> / trang</label>\n        <button class="btn-ghost" id="btn-copy-found">📋 Copy mã đơn</button>\n        <button class="btn-ghost" id="btn-export-csv">Xuất CSV</button>\n        <button class="btn-ghost" id="btn-export-xlsx">Xuất Excel</button>\n      </div>\n    </div>`;
         const headerFieldKeys = [null, ...cfg.knownFields];
         const headerCells = ["Mã đơn", ...cfg.knownFields.map(f => CONFIG.FIELD_LABELS[f] || f)];
         const theadHtml = `<tr>${headerCells.map((h, i) => {
@@ -1430,6 +1463,7 @@
         }, (_, i) => i + 1).map(p => `<option value="${p}" ${p === currentPage ? "selected" : ""}>Trang ${p}</option>`).join("");
         const paginationHtml = totalPages > 1 ? `\n    <div class="pagination">\n      <button class="btn-ghost" id="btn-prev-page" ${currentPage <= 1 ? "disabled" : ""}>← Trước</button>\n      <select id="page-jump-select" class="page-jump-select">${pageJumpOptions}</select>\n      <span class="page-indicator">/ ${totalPages} (${items.length} kết quả)</span>\n      <button class="btn-ghost" id="btn-next-page" ${currentPage >= totalPages ? "disabled" : ""}>Sau →</button>\n    </div>` : `<div class="pagination"><span class="page-indicator">${items.length} kết quả</span></div>`;
         resultsArea.innerHTML = `\n    ${toolbarHtml}\n    ${searchBoxHtml}\n    <div class="results-table-wrap">\n      <table class="result-table">\n        <thead>${theadHtml}</thead>\n        <tbody>${rowsHtml}</tbody>\n      </table>\n    </div>\n    ${paginationHtml}`;
+        el("#btn-copy-found").onclick = copyFoundCodes;
         el("#btn-export-csv").onclick = exportCsv;
         el("#btn-export-xlsx").onclick = exportXlsx;
         el("#page-size-select").onchange = e => {
