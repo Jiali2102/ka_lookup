@@ -1026,14 +1026,12 @@
         TABS: {
           denbu: {
             label: "Đền bù",
-            hint: "Nhập mã đơn để tra cứu tổng giá trị và các lần đền bù.",
+            hint: "Nhập mã đơn để tra cứu các lần đền bù — mỗi dòng là 1 lần đền bù riêng biệt.",
             useDateRange: false,
             knownFields: ["so_tien", "loai_yeu_cau", "ngay_duyet"],
             amountFields: ["so_tien"],
             dateFields: ["ngay_duyet"],
-            statusField: null,
-            multiCountField: "ngay_duyet",
-            splitFieldsForExport: ["loai_yeu_cau", "ngay_duyet"]
+            statusField: null
           },
           quahan: {
             label: "Quá hạn",
@@ -1080,7 +1078,7 @@
         FIELD_LABELS: {
           ma_don: "Mã đơn",
           order_code: "Mã đơn",
-          so_tien: "Tổng giá trị đền bù",
+          so_tien: "Giá trị đền bù",
           loai_yeu_cau: "Loại yêu cầu",
           ngay_duyet: "Ngày duyệt",
           reason: "Lý do",
@@ -1278,8 +1276,9 @@
         document.body.removeChild(a);
         setTimeout(() => URL.revokeObjectURL(a.href), 2e3);
       }
-      function todayStr() {
-        return (new Date).toISOString().slice(0, 10);
+      function exportFileBaseName() {
+        const epoch = (Date.now() / 1000).toFixed(3);
+        return `output_${activeTab}_${epoch}`;
       }
       function exportCsv() {
         if (!lastResults.length) return;
@@ -1290,7 +1289,7 @@
         const blob = new Blob(["\ufeff" + csv], {
           type: "text/csv;charset=utf-8;"
         });
-        downloadBlob(blob, `tra-cuu-${activeTab}-${todayStr()}.csv`);
+        downloadBlob(blob, `${exportFileBaseName()}.csv`);
       }
       function exportXlsx() {
         if (!lastResults.length) return;
@@ -1299,7 +1298,7 @@
         const ws = XLSX.utils.aoa_to_sheet(aoa);
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "KetQua");
-        XLSX.writeFile(wb, `tra-cuu-${activeTab}-${todayStr()}.xlsx`);
+        XLSX.writeFile(wb, `${exportFileBaseName()}.xlsx`);
       }
       function renderNotFound(codes) {
         const area = el("#notfound-area");
