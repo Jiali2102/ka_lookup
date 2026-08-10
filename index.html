@@ -42,13 +42,13 @@
       margin: 0;
       padding: 0;
       height: 100%;
-      overflow: hidden; 
+      overflow: hidden;
     }
 
     body {
       font-family: var(--sans);
       font-size: 23px;
-      
+
       background:
         radial-gradient(1200px 400px at 100% -10%, rgba(254, 95, 0, 0.06), transparent 60%),
         var(--bg);
@@ -63,7 +63,7 @@
       box-sizing: border-box;
     }
 
-    
+
     .layout {
       display: grid;
       grid-template-columns: 340px 1fr 260px;
@@ -81,30 +81,34 @@
       padding-right: 4px;
     }
 
-    
+
     .left-col,
     .results-table-wrap,
     .notfound-body {
       scrollbar-width: thin;
       scrollbar-color: var(--border) transparent;
     }
+
     .left-col::-webkit-scrollbar,
     .results-table-wrap::-webkit-scrollbar,
     .notfound-body::-webkit-scrollbar {
       width: 7px;
       height: 7px;
     }
+
     .left-col::-webkit-scrollbar-track,
     .results-table-wrap::-webkit-scrollbar-track,
     .notfound-body::-webkit-scrollbar-track {
       background: transparent;
     }
+
     .left-col::-webkit-scrollbar-thumb,
     .results-table-wrap::-webkit-scrollbar-thumb,
     .notfound-body::-webkit-scrollbar-thumb {
       background: var(--border);
       border-radius: 8px;
     }
+
     .left-col::-webkit-scrollbar-thumb:hover,
     .results-table-wrap::-webkit-scrollbar-thumb:hover,
     .notfound-body::-webkit-scrollbar-thumb:hover {
@@ -152,17 +156,24 @@
     }
 
     @media (max-width:1000px) {
-      html, body {
-        overflow: auto; 
+
+      html,
+      body {
+        overflow: auto;
       }
+
       .wrap {
         height: auto;
       }
+
       .layout {
         grid-template-columns: 1fr;
         height: auto;
       }
-      .left-col, .right-col, .notfound-col {
+
+      .left-col,
+      .right-col,
+      .notfound-col {
         height: auto;
         overflow: visible;
       }
@@ -450,6 +461,39 @@
       flex-wrap: wrap;
       margin-bottom: 12px;
       flex: none;
+    }
+
+    .result-search-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .result-search-input {
+      flex: 1;
+      min-width: 220px;
+      font-family: var(--sans);
+      font-size: 16px;
+      padding: 9px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      background: var(--surface);
+      color: var(--text);
+      outline: none;
+      transition: border-color .15s;
+    }
+
+    .result-search-input:focus {
+      border-color: var(--orange);
+    }
+
+    .result-search-count {
+      font-size: 15px;
+      color: var(--muted);
+      font-family: var(--mono);
+      white-space: nowrap;
     }
 
     .stats {
@@ -814,6 +858,7 @@
         grid-template-columns: 1fr 1fr;
       }
     }
+
     #auth-gate {
       position: fixed;
       inset: 0;
@@ -835,7 +880,7 @@
       width: 100%;
       max-width: 340px;
       text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
     }
 
     .auth-mark {
@@ -894,7 +939,6 @@
       font-size: 13px !important;
       min-height: 16px;
     }
-
   </style>
 </head>
 
@@ -913,172 +957,176 @@
   </div>
 
   <div id="app-root" style="display:none;">
-  <div class="wrap">
+    <div class="wrap">
 
-    <div class="layout">
-      <div class="left-col">
-        <header class="top">
-          <div class="brand">
-            <div class="mark">KA</div>
-            <div>
-              <div class="name">Tra cứu</div>
-              <div class="sub">Đền bù · Quá hạn · Miễn cước</div>
+      <div class="layout">
+        <div class="left-col">
+          <header class="top">
+            <div class="brand">
+              <div class="mark">KA</div>
+              <div>
+                <div class="name">Tra cứu</div>
+                <div class="sub">Đền bù · Quá hạn · Miễn cước</div>
+              </div>
+            </div>
+          </header>
+
+          <div class="tabs" id="tabs"></div>
+
+          <div class="panel">
+            <h2 id="panel-title"></h2>
+            <p class="hint" id="panel-hint"></p>
+
+            <label class="field-label">Danh sách mã đơn</label>
+            <textarea id="codes-input"
+              placeholder="Dán mã đơn vào đây — mỗi dòng, cách nhau bằng dấu phẩy hoặc khoảng trắng đều được.&#10;Mã trùng sẽ tự động loại bỏ."></textarea>
+
+            <div class="divider-or">hoặc</div>
+            <div class="file-upload-row">
+              <label class="file-upload-btn" for="file-input">📎 Tải file Excel / CSV</label>
+              <input type="file" id="file-input" accept=".xlsx,.xls,.csv" multiple style="display:none" />
+              <span class="file-upload-hint" id="file-upload-status">Chọn nhiều file, tự dò cột mã đơn trong mọi
+                sheet</span>
+            </div>
+
+            <div class="row" id="date-row" style="display:none;">
+              <div class="col">
+                <label class="field-label">Từ ngày</label>
+                <input type="date" id="date-from" />
+              </div>
+              <div class="col">
+                <label class="field-label">Đến ngày</label>
+                <input type="date" id="date-to" />
+              </div>
+            </div>
+
+            <div class="actions">
+              <button class="btn-primary" id="btn-search">Tra cứu</button>
+              <button class="btn-ghost" id="btn-clear">Xóa</button>
+              <span class="count-tag" id="code-count"></span>
             </div>
           </div>
-        </header>
+        </div>
 
-        <div class="tabs" id="tabs"></div>
+        <div class="right-col">
+          <div id="results-area"></div>
+        </div>
 
-        <div class="panel">
-          <h2 id="panel-title"></h2>
-          <p class="hint" id="panel-hint"></p>
-
-          <label class="field-label">Danh sách mã đơn</label>
-          <textarea id="codes-input"
-            placeholder="Dán mã đơn vào đây — mỗi dòng, cách nhau bằng dấu phẩy hoặc khoảng trắng đều được.&#10;Mã trùng sẽ tự động loại bỏ."></textarea>
-
-          <div class="divider-or">hoặc</div>
-          <div class="file-upload-row">
-            <label class="file-upload-btn" for="file-input">📎 Tải file Excel / CSV</label>
-            <input type="file" id="file-input" accept=".xlsx,.xls,.csv" multiple style="display:none" />
-            <span class="file-upload-hint" id="file-upload-status">Chọn nhiều file, tự dò cột mã đơn trong mọi sheet</span>
-          </div>
-
-          <div class="row" id="date-row" style="display:none;">
-            <div class="col">
-              <label class="field-label">Từ ngày</label>
-              <input type="date" id="date-from" />
-            </div>
-            <div class="col">
-              <label class="field-label">Đến ngày</label>
-              <input type="date" id="date-to" />
-            </div>
-          </div>
-
-          <div class="actions">
-            <button class="btn-primary" id="btn-search">Tra cứu</button>
-            <button class="btn-ghost" id="btn-clear">Xóa</button>
-            <span class="count-tag" id="code-count"></span>
-          </div>
+        <div class="notfound-col">
+          <div id="notfound-area"></div>
         </div>
       </div>
 
-      <div class="right-col">
-        <div id="results-area"></div>
-      </div>
-
-      <div class="notfound-col">
-        <div id="notfound-area"></div>
-      </div>
     </div>
-
-  </div>
   </div>
 
-    <script>function initApp() {
-    const CONFIG = {
+  <script>function initApp() {
+      const CONFIG = {
         WEBHOOK_URL: WEBHOOK_BASE_URL,
         TABS: {
-            denbu: {
-                label: "Đền bù",
-                hint: "Nhập mã đơn để tra cứu tổng giá trị và các lần đền bù.",
-                useDateRange: false,
-                knownFields: [ "so_tien", "loai_yeu_cau", "ngay_duyet" ],
-                amountFields: [ "so_tien" ],
-                dateFields: [ "ngay_duyet" ],
-                statusField: null,
-                multiCountField: "ngay_duyet"
+          denbu: {
+            label: "Đền bù",
+            hint: "Nhập mã đơn để tra cứu tổng giá trị và các lần đền bù.",
+            useDateRange: false,
+            knownFields: ["so_tien", "loai_yeu_cau", "ngay_duyet"],
+            amountFields: ["so_tien"],
+            dateFields: ["ngay_duyet"],
+            statusField: null,
+            multiCountField: "ngay_duyet",
+            splitFieldsForExport: ["loai_yeu_cau", "ngay_duyet"]
+          },
+          quahan: {
+            label: "Quá hạn",
+            hint: "Nhập mã đơn để tra cứu lý do và ngày chốt quá hạn.",
+            useDateRange: false,
+            knownFields: ["reason", "overdue_date"],
+            amountFields: [],
+            dateFields: ["overdue_date"],
+            statusField: null
+          },
+          miencuoc: {
+            label: "Miễn cước",
+            hint: "Nhập mã đơn để tra cứu lý do và số tiền miễn cước.",
+            useDateRange: false,
+            knownFields: ["ly_do", "so_tien_mien", "ngay_duyet", "trang_thai"],
+            amountFields: ["so_tien_mien"],
+            dateFields: ["ngay_duyet"],
+            statusField: "trang_thai",
+            notReady: true
+          },
+          ticket: {
+            label: "Ticket",
+            hint: "Nhập mã đơn để tra cứu ticket liên quan — 1 đơn có thể có nhiều ticket.",
+            useDateRange: false,
+            knownFields: ["client_name", "reason_type", "first_article_from"],
+            amountFields: [],
+            dateFields: [],
+            statusField: null,
+            linkedFieldMap: {
+              reason_type: "ticket_url"
             },
-            quahan: {
-                label: "Quá hạn",
-                hint: "Nhập mã đơn để tra cứu lý do và ngày chốt quá hạn.",
-                useDateRange: false,
-                knownFields: [ "reason", "overdue_date" ],
-                amountFields: [],
-                dateFields: [ "overdue_date" ],
-                statusField: null
-            },
-            miencuoc: {
-                label: "Miễn cước",
-                hint: "Nhập mã đơn để tra cứu lý do và số tiền miễn cước.",
-                useDateRange: false,
-                knownFields: [ "ly_do", "so_tien_mien", "ngay_duyet", "trang_thai" ],
-                amountFields: [ "so_tien_mien" ],
-                dateFields: [ "ngay_duyet" ],
-                statusField: "trang_thai",
-                notReady: true
-            },
-            ticket: {
-                label: "Ticket",
-                hint: "Nhập mã đơn để tra cứu ticket liên quan — 1 đơn có thể có nhiều ticket.",
-                useDateRange: false,
-                knownFields: [ "client_name", "reason_type", "first_article_from" ],
-                amountFields: [],
-                dateFields: [],
-                statusField: null,
-                linkedFieldMap: {
-                    reason_type: "ticket_url"
-                },
-                exportExtraFields: [ "ticket_url" ]
-            },
-            fake_attempt: {
-                label: "Fake Attempt",
-                hint: "Nhập mã đơn để tra cứu tình trạng fake attempt (tháng phát sinh, loại client).",
-                useDateRange: false,
-                knownFields: [ "month", "client_type" ],
-                amountFields: [],
-                dateFields: [ "month" ],
-                statusField: null
-            }
+            exportExtraFields: ["ticket_url"]
+          },
+          fake_attempt: {
+            label: "Fake Attempt",
+            hint: "Nhập mã đơn để tra cứu tình trạng fake attempt (tháng phát sinh, loại client).",
+            useDateRange: false,
+            knownFields: ["month", "client_type"],
+            amountFields: [],
+            dateFields: ["month"],
+            statusField: null
+          }
         },
         FIELD_LABELS: {
-            ma_don: "Mã đơn",
-            order_code: "Mã đơn",
-            so_tien: "Tổng giá trị đền bù",
-            loai_yeu_cau: "Loại yêu cầu",
-            ngay_duyet: "Ngày duyệt",
-            reason: "Lý do",
-            overdue_date: "Ngày chốt quá hạn",
-            ly_do: "Lý do",
-            so_tien_mien: "Số tiền miễn",
-            trang_thai: "Trạng thái",
-            client_name: "Client / Team",
-            reason_type: "Lý do",
-            ticket_url: "Link ticket",
-            first_article_from: "Người tạo",
-            month: "Tháng phát sinh",
-            client_type: "Loại client"
+          ma_don: "Mã đơn",
+          order_code: "Mã đơn",
+          so_tien: "Tổng giá trị đền bù",
+          loai_yeu_cau: "Loại yêu cầu",
+          ngay_duyet: "Ngày duyệt",
+          reason: "Lý do",
+          overdue_date: "Ngày chốt quá hạn",
+          ly_do: "Lý do",
+          so_tien_mien: "Số tiền miễn",
+          trang_thai: "Trạng thái",
+          client_name: "Client / Team",
+          reason_type: "Lý do",
+          ticket_url: "Link ticket",
+          first_article_from: "Người tạo",
+          month: "Tháng phát sinh",
+          client_type: "Loại client"
         }
-    };
-    let activeTab = "denbu";
-    let lastResults = [];
-    let lastRequestedCodes = [];
-    let currentPage = 1;
-    let pageSize = 10;
-    const el = sel => document.querySelector(sel);
-    const tabsEl = el("#tabs");
-    const codesInput = el("#codes-input");
-    const dateRow = el("#date-row");
-    const dateFrom = el("#date-from");
-    const dateTo = el("#date-to");
-    const resultsArea = el("#results-area");
-    const codeCount = el("#code-count");
-    const fileInput = el("#file-input");
-    const fileUploadStatus = el("#file-upload-status");
-    function parseCodes(raw) {
-        return [ ...new Set(raw.split(/[\s,;]+/).map(s => s.trim()).filter(Boolean)) ];
-    }
-    function renderTabs() {
+      };
+      let activeTab = "denbu";
+      let lastResults = [];
+      let lastFullItems = [];
+      let lastRequestedCodes = [];
+      let searchQuery = "";
+      let currentPage = 1;
+      let pageSize = 10;
+      const el = sel => document.querySelector(sel);
+      const tabsEl = el("#tabs");
+      const codesInput = el("#codes-input");
+      const dateRow = el("#date-row");
+      const dateFrom = el("#date-from");
+      const dateTo = el("#date-to");
+      const resultsArea = el("#results-area");
+      const codeCount = el("#code-count");
+      const fileInput = el("#file-input");
+      const fileUploadStatus = el("#file-upload-status");
+      function parseCodes(raw) {
+        return [...new Set(raw.split(/[\s,;]+/).map(s => s.trim()).filter(Boolean))];
+      }
+      function renderTabs() {
         tabsEl.innerHTML = "";
         Object.entries(CONFIG.TABS).forEach(([key, cfg]) => {
-            const d = document.createElement("div");
-            d.className = "tab" + (key === activeTab ? " active" : "");
-            d.innerHTML = cfg.label;
-            d.onclick = () => switchTab(key);
-            tabsEl.appendChild(d);
+          const d = document.createElement("div");
+          d.className = "tab" + (key === activeTab ? " active" : "");
+          d.innerHTML = cfg.label;
+          d.onclick = () => switchTab(key);
+          tabsEl.appendChild(d);
         });
-    }
-    function switchTab(key) {
+      }
+      function switchTab(key) {
         activeTab = key;
         const cfg = CONFIG.TABS[key];
         renderTabs();
@@ -1089,59 +1137,59 @@
         el("#notfound-area").innerHTML = "";
         currentPage = 1;
         updateCount();
-    }
-    function updateCount() {
+      }
+      function updateCount() {
         const n = parseCodes(codesInput.value).length;
         codeCount.textContent = n > 0 ? n + " mã đơn" : "";
-    }
-    codesInput.addEventListener("input", updateCount);
-    function statusClass(value) {
+      }
+      codesInput.addEventListener("input", updateCount);
+      function statusClass(value) {
         if (!value) return "";
         const v = value.toString().toLowerCase();
         if (/(hoàn thành|đã duyệt|đã đền|thành công|ok|approved)/.test(v)) return "ok";
         if (/(đang xử lý|chờ|pending|xem xét)/.test(v)) return "warn";
         if (/(từ chối|hủy|reject|không đạt)/.test(v)) return "danger";
         return "";
-    }
-    function formatAmount(v) {
+      }
+      function formatAmount(v) {
         const n = Number(String(v).replace(/[^\d.-]/g, ""));
         if (isNaN(n)) return v;
         return n.toLocaleString("vi-VN") + " đ";
-    }
-    function getCode(item) {
+      }
+      function getCode(item) {
         return item.ma_don || item.order_code || item.code || "";
-    }
-    function numberToEmoji(n) {
+      }
+      function numberToEmoji(n) {
         if (n === 10) return "🔟";
         return String(n).split("").map(d => d + "️⃣").join("");
-    }
-    function annotateAndSortItems(items) {
-        const sorted = [ ...items ].sort((a, b) => getCode(a).localeCompare(getCode(b), "vi", {
-            numeric: true,
-            sensitivity: "base"
+      }
+      function annotateAndSortItems(items) {
+        const sorted = [...items].sort((a, b) => getCode(a).localeCompare(getCode(b), "vi", {
+          numeric: true,
+          sensitivity: "base"
         }));
         const totalCounts = {};
         sorted.forEach(it => {
-            const c = getCode(it).toString().toUpperCase();
-            totalCounts[c] = (totalCounts[c] || 0) + 1;
+          const c = getCode(it).toString().toUpperCase();
+          totalCounts[c] = (totalCounts[c] || 0) + 1;
         });
         const runningIdx = {};
         return sorted.map(it => {
-            const c = getCode(it).toString().toUpperCase();
-            runningIdx[c] = (runningIdx[c] || 0) + 1;
-            return {
-                ...it,
-                _occIndex: runningIdx[c],
-                _occTotal: totalCounts[c]
-            };
+          const c = getCode(it).toString().toUpperCase();
+          runningIdx[c] = (runningIdx[c] || 0) + 1;
+          return {
+            ...it,
+            _occIndex: runningIdx[c],
+            _occTotal: totalCounts[c]
+          };
         });
-    }
-    function normalizeKey(str) {
+      }
+      function normalizeKey(str) {
         return String(str || "").replace(/^\uFEFF/, "").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d").replace(/[\s_]+/g, "");
-    }
-    const ALLOWED_COLUMN_NAMES = [ "order_code", "ordercode", "order code", "madonhang", "ma_don_hang", "madh", "ma dh", "ma don hang", "ma don", "lmtn", "spx_shipment_id", "spx shipment id" ].map(normalizeKey);
-    fileInput.addEventListener("change", handleFileUpload);
-    async function handleFileUpload(e) {
+      }
+      const ALLOWED_COLUMN_NAMES = ["order_code", "ordercode", "order code", "madonhang", "ma_don_hang", "madh", "ma dh", "ma don hang", "ma don", "lmtn", "spx_shipment_id", "spx shipment id"].map(normalizeKey);
+      fileInput.addEventListener("change", handleFileUpload);
+      async function handleFileUpload(e) {
         const files = Array.from(e.target.files || []);
         if (!files.length) return;
         fileUploadStatus.textContent = "Đang đọc file...";
@@ -1150,48 +1198,78 @@
         let sheetsRead = 0;
         let sheetsWithoutMatch = 0;
         try {
-            for (const file of files) {
-                const buf = await file.arrayBuffer();
-                const wb = XLSX.read(buf, {
-                    type: "array"
-                });
-                filesRead++;
-                for (const sheetName of wb.SheetNames) {
-                    const rows = XLSX.utils.sheet_to_json(wb.Sheets[sheetName], {
-                        defval: ""
-                    });
-                    if (!rows.length) continue;
-                    sheetsRead++;
-                    const firstRowKeys = Object.keys(rows[0]);
-                    const matchedKey = firstRowKeys.find(k => ALLOWED_COLUMN_NAMES.includes(normalizeKey(k)));
-                    let codes;
-                    if (matchedKey) {
-                        codes = rows.map(r => String(r[matchedKey] || "").trim().toUpperCase()).filter(Boolean);
-                    } else {
-                        sheetsWithoutMatch++;
-                        codes = rows.map(r => String(Object.values(r)[0] || "").trim().toUpperCase()).filter(Boolean);
-                    }
-                    allCodes.push(...codes);
-                }
+          for (const file of files) {
+            const buf = await file.arrayBuffer();
+            const wb = XLSX.read(buf, {
+              type: "array"
+            });
+            filesRead++;
+            for (const sheetName of wb.SheetNames) {
+              const rows = XLSX.utils.sheet_to_json(wb.Sheets[sheetName], {
+                defval: ""
+              });
+              if (!rows.length) continue;
+              sheetsRead++;
+              const firstRowKeys = Object.keys(rows[0]);
+              const matchedKey = firstRowKeys.find(k => ALLOWED_COLUMN_NAMES.includes(normalizeKey(k)));
+              let codes;
+              if (matchedKey) {
+                codes = rows.map(r => String(r[matchedKey] || "").trim().toUpperCase()).filter(Boolean);
+              } else {
+                sheetsWithoutMatch++;
+                codes = rows.map(r => String(Object.values(r)[0] || "").trim().toUpperCase()).filter(Boolean);
+              }
+              allCodes.push(...codes);
             }
-            allCodes = [ ...new Set(allCodes) ];
-            codesInput.value = allCodes.join("\n");
-            updateCount();
-            const warn = sheetsWithoutMatch > 0 ? ` (⚠️ ${sheetsWithoutMatch} sheet không thấy cột quen thuộc, đã lấy cột đầu tiên)` : "";
-            fileUploadStatus.textContent = `✅ Đã đọc ${allCodes.length} mã đơn từ ${filesRead} file / ${sheetsRead} sheet.${warn}`;
+          }
+          allCodes = [...new Set(allCodes)];
+          codesInput.value = allCodes.join("\n");
+          updateCount();
+          const warn = sheetsWithoutMatch > 0 ? ` (⚠️ ${sheetsWithoutMatch} sheet không thấy cột quen thuộc, đã lấy cột đầu tiên)` : "";
+          fileUploadStatus.textContent = `✅ Đã đọc ${allCodes.length} mã đơn từ ${filesRead} file / ${sheetsRead} sheet.${warn}`;
         } catch (err) {
-            fileUploadStatus.textContent = "❌ Lỗi đọc file: " + err.message;
+          fileUploadStatus.textContent = "❌ Lỗi đọc file: " + err.message;
         } finally {
-            e.target.value = "";
+          e.target.value = "";
         }
-    }
-    function buildExportRows(cfg) {
-        const fields = [ ...cfg.knownFields, ...cfg.exportExtraFields || [] ];
-        const header = [ "Mã đơn", ...fields.map(f => CONFIG.FIELD_LABELS[f] || f), "Số lần phát sinh" ];
-        const rows = lastResults.map(item => [ getCode(item), ...fields.map(f => item[f] ?? ""), item._occTotal || 1 ]);
-        return [ header, ...rows ];
-    }
-    function downloadBlob(blob, filename) {
+      }
+      function buildExportRows(cfg) {
+        const fields = [...cfg.knownFields, ...cfg.exportExtraFields || []];
+        const header = ["Mã đơn", ...fields.map(f => CONFIG.FIELD_LABELS[f] || f), "Số lần phát sinh"];
+        const splitFields = cfg.splitFieldsForExport || [];
+        const rows = [];
+        lastResults.forEach(item => {
+          const code = getCode(item);
+          if (splitFields.length) {
+            const splitValuesMap = {};
+            let maxCount = 1;
+            splitFields.forEach(f => {
+              const vals = String(item[f] ?? "").split(",").map(s => s.trim()).filter(Boolean);
+              splitValuesMap[f] = vals;
+              if (vals.length > maxCount) maxCount = vals.length;
+            });
+            if (maxCount > 1) {
+              for (let i = 0; i < maxCount; i++) {
+                const row = [code];
+                fields.forEach(f => {
+                  if (splitFields.includes(f)) {
+                    const vals = splitValuesMap[f];
+                    row.push(vals[i] ?? vals[vals.length - 1] ?? "");
+                  } else {
+                    row.push(item[f] ?? "");
+                  }
+                });
+                row.push(maxCount);
+                rows.push(row);
+              }
+              return;
+            }
+          }
+          rows.push([code, ...fields.map(f => item[f] ?? ""), item._occTotal || 1]);
+        });
+        return [header, ...rows];
+      }
+      function downloadBlob(blob, filename) {
         const a = document.createElement("a");
         a.href = URL.createObjectURL(blob);
         a.download = filename;
@@ -1199,22 +1277,22 @@
         a.click();
         document.body.removeChild(a);
         setTimeout(() => URL.revokeObjectURL(a.href), 2e3);
-    }
-    function todayStr() {
+      }
+      function todayStr() {
         return (new Date).toISOString().slice(0, 10);
-    }
-    function exportCsv() {
+      }
+      function exportCsv() {
         if (!lastResults.length) return;
         const cfg = CONFIG.TABS[activeTab];
         const aoa = buildExportRows(cfg);
         const ws = XLSX.utils.aoa_to_sheet(aoa);
         const csv = XLSX.utils.sheet_to_csv(ws);
-        const blob = new Blob([ "\ufeff" + csv ], {
-            type: "text/csv;charset=utf-8;"
+        const blob = new Blob(["\ufeff" + csv], {
+          type: "text/csv;charset=utf-8;"
         });
         downloadBlob(blob, `tra-cuu-${activeTab}-${todayStr()}.csv`);
-    }
-    function exportXlsx() {
+      }
+      function exportXlsx() {
         if (!lastResults.length) return;
         const cfg = CONFIG.TABS[activeTab];
         const aoa = buildExportRows(cfg);
@@ -1222,208 +1300,257 @@
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "KetQua");
         XLSX.writeFile(wb, `tra-cuu-${activeTab}-${todayStr()}.xlsx`);
-    }
-    function renderNotFound(codes) {
+      }
+      function renderNotFound(codes) {
         const area = el("#notfound-area");
         if (!codes || !codes.length) {
-            area.innerHTML = "";
-            return;
+          area.innerHTML = "";
+          return;
         }
         const itemsHtml = codes.map(c => `<div class="notfound-item">${c}</div>`).join("");
         area.innerHTML = `\n    <div class="notfound-card">\n      <div class="notfound-header">\n        <span>Không tìm thấy (${codes.length})</span>\n        <button class="btn-copy-all" id="btn-copy-notfound" type="button">📋 Copy all</button>\n      </div>\n      <div class="notfound-body">${itemsHtml}</div>\n    </div>`;
         el("#btn-copy-notfound").onclick = () => copyNotFoundCodes(codes);
-    }
-    async function copyNotFoundCodes(codes) {
+      }
+      async function copyNotFoundCodes(codes) {
         const text = codes.join("\n");
         const btn = el("#btn-copy-notfound");
         try {
-            await navigator.clipboard.writeText(text);
-            showCopyFeedback(btn, "✅ Đã copy");
+          await navigator.clipboard.writeText(text);
+          showCopyFeedback(btn, "✅ Đã copy");
         } catch (err) {
-            try {
-                const ta = document.createElement("textarea");
-                ta.value = text;
-                ta.style.position = "fixed";
-                ta.style.opacity = "0";
-                document.body.appendChild(ta);
-                ta.select();
-                document.execCommand("copy");
-                document.body.removeChild(ta);
-                showCopyFeedback(btn, "✅ Đã copy");
-            } catch (err2) {
-                showCopyFeedback(btn, "❌ Lỗi copy");
-            }
+          try {
+            const ta = document.createElement("textarea");
+            ta.value = text;
+            ta.style.position = "fixed";
+            ta.style.opacity = "0";
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand("copy");
+            document.body.removeChild(ta);
+            showCopyFeedback(btn, "✅ Đã copy");
+          } catch (err2) {
+            showCopyFeedback(btn, "❌ Lỗi copy");
+          }
         }
-    }
-    function showCopyFeedback(btn, text) {
+      }
+      function showCopyFeedback(btn, text) {
         if (!btn) return;
         const original = "📋 Copy all";
         btn.textContent = text;
         btn.disabled = true;
         setTimeout(() => {
-            btn.textContent = original;
-            btn.disabled = false;
+          btn.textContent = original;
+          btn.disabled = false;
         }, 1500);
-    }
-    function renderResults(rawItems, requestedCodes) {
-        const items = annotateAndSortItems(rawItems);
-        lastResults = items;
+      }
+      function renderResults(rawItems, requestedCodes) {
+        lastFullItems = annotateAndSortItems(rawItems);
         lastRequestedCodes = requestedCodes || [];
+        searchQuery = "";
+        currentPage = 1;
+        rerenderTable();
+      }
+      function rerenderTable() {
+        const allItems = lastFullItems;
         const cfg = CONFIG.TABS[activeTab];
         let statsHtml = "";
         let notFoundCodes = [];
         if (lastRequestedCodes.length) {
-            const foundSet = new Set(items.map(i => getCode(i).toString().toUpperCase()));
-            const foundCount = lastRequestedCodes.filter(c => foundSet.has(c.toUpperCase())).length;
-            notFoundCodes = lastRequestedCodes.filter(c => !foundSet.has(c.toUpperCase()));
-            statsHtml = `\n      <div class="stats">\n        <span class="stat-badge total">Tổng mã đơn: ${lastRequestedCodes.length}</span>\n        <span class="stat-badge found">Có kết quả: ${foundCount}</span>\n        <span class="stat-badge notfound">Không có kết quả: ${notFoundCodes.length}</span>\n      </div>`;
+          const foundSet = new Set(allItems.map(i => getCode(i).toString().toUpperCase()));
+          const foundCount = lastRequestedCodes.filter(c => foundSet.has(c.toUpperCase())).length;
+          notFoundCodes = lastRequestedCodes.filter(c => !foundSet.has(c.toUpperCase()));
+          statsHtml = `\n      <div class="stats">\n        <span class="stat-badge total">Tổng mã đơn: ${lastRequestedCodes.length}</span>\n        <span class="stat-badge found">Có kết quả: ${foundCount}</span>\n        <span class="stat-badge notfound">Không có kết quả: ${notFoundCodes.length}</span>\n      </div>`;
         }
         renderNotFound(notFoundCodes);
+        if (!allItems.length) {
+          lastResults = [];
+          resultsArea.innerHTML = `\n      ${statsHtml ? `<div class="toolbar">${statsHtml}</div>` : ""}\n      <div class="empty"><div class="big">🔍</div>Không tìm thấy kết quả phù hợp.</div>`;
+          return;
+        }
+        const filterTokens = parseCodes(searchQuery);
+        let items = allItems;
+        if (filterTokens.length) {
+          const tokensUpper = filterTokens.map(t => t.toUpperCase());
+          items = allItems.filter(it => {
+            const code = getCode(it).toString().toUpperCase();
+            return tokensUpper.some(t => code.includes(t));
+          });
+        }
+        lastResults = items;
+        const searchBoxHtml = `\n    <div class="result-search-row">\n      <input type="text" id="result-search" class="result-search-input" placeholder="Lọc mã đơn trong kết quả này — dán được nhiều mã, cách nhau bằng dấu phẩy/khoảng trắng" value="${searchQuery.replace(/"/g, "&quot;")}" />\n      ${searchQuery ? `<button class="btn-ghost" id="btn-clear-search">Xóa lọc</button>` : ""}\n      <span class="result-search-count">${filterTokens.length ? `${items.length}/${allItems.length} dòng khớp` : `${allItems.length} dòng`}</span>\n    </div>`;
         if (!items.length) {
-            resultsArea.innerHTML = `\n      ${statsHtml ? `<div class="toolbar">${statsHtml}</div>` : ""}\n      <div class="empty"><div class="big">🔍</div>Không tìm thấy kết quả phù hợp.</div>`;
-            return;
+          resultsArea.innerHTML = `\n      ${statsHtml ? `<div class="toolbar">${statsHtml}</div>` : ""}\n      ${searchBoxHtml}\n      <div class="empty"><div class="big">🔍</div>Không có mã đơn nào khớp ô lọc.</div>`;
+          bindResultSearchEvents();
+          return;
         }
         const totalPages = Math.max(1, Math.ceil(items.length / pageSize));
         if (currentPage > totalPages) currentPage = totalPages;
         if (currentPage < 1) currentPage = 1;
         const startIdx = (currentPage - 1) * pageSize;
         const pageItems = items.slice(startIdx, startIdx + pageSize);
-        const pageSizeOptions = [ 10, 20, 50, 100 ].map(n => `<option value="${n}" ${n === pageSize ? "selected" : ""}>${n}</option>`).join("");
+        const pageSizeOptions = [10, 20, 50, 100].map(n => `<option value="${n}" ${n === pageSize ? "selected" : ""}>${n}</option>`).join("");
         const toolbarHtml = `\n    <div class="toolbar">\n      ${statsHtml}\n      <div class="toolbar-actions">\n        <label class="pagesize-label">Hiện <select id="page-size-select">${pageSizeOptions}</select> / trang</label>\n        <button class="btn-ghost" id="btn-export-csv">Xuất CSV</button>\n        <button class="btn-ghost" id="btn-export-xlsx">Xuất Excel</button>\n      </div>\n    </div>`;
-        const headerFieldKeys = [ null, ...cfg.knownFields ];
-        const headerCells = [ "Mã đơn", ...cfg.knownFields.map(f => CONFIG.FIELD_LABELS[f] || f) ];
+        const headerFieldKeys = [null, ...cfg.knownFields];
+        const headerCells = ["Mã đơn", ...cfg.knownFields.map(f => CONFIG.FIELD_LABELS[f] || f)];
         const theadHtml = `<tr>${headerCells.map((h, i) => {
-            const key = headerFieldKeys[i];
-            const isRight = key && (cfg.amountFields.includes(key) || (cfg.dateFields || []).includes(key));
-            return `<th${isRight ? ' class="align-right"' : ""}>${h}</th>`;
+          const key = headerFieldKeys[i];
+          const isRight = key && (cfg.amountFields.includes(key) || (cfg.dateFields || []).includes(key));
+          return `<th${isRight ? ' class="align-right"' : ""}>${h}</th>`;
         }).join("")}</tr>`;
         const rowsHtml = pageItems.map(item => {
-            const status = cfg.statusField ? item[cfg.statusField] : "";
-            const sClass = statusClass(status);
-            const code = getCode(item) || "—";
-            let dupBadge = "";
-            if (item._occIndex >= 2) {
-                dupBadge = ` <span class="dup-badge" title="Lần phát sinh thứ ${item._occIndex}/${item._occTotal} của mã đơn này">${numberToEmoji(item._occIndex)}</span>`;
-            } else if (cfg.multiCountField && item[cfg.multiCountField]) {
-                const count = String(item[cfg.multiCountField]).split(",").map(s => s.trim()).filter(Boolean).length;
-                if (count >= 2) {
-                    dupBadge = ` <span class="dup-badge" title="Phát sinh ${count} lần (gộp trong cùng 1 dòng)">${numberToEmoji(count)}</span>`;
-                }
+          const status = cfg.statusField ? item[cfg.statusField] : "";
+          const sClass = statusClass(status);
+          const code = getCode(item) || "—";
+          let dupBadge = "";
+          if (item._occIndex >= 2) {
+            dupBadge = ` <span class="dup-badge" title="Lần phát sinh thứ ${item._occIndex}/${item._occTotal} của mã đơn này">${numberToEmoji(item._occIndex)}</span>`;
+          } else if (cfg.multiCountField && item[cfg.multiCountField]) {
+            const count = String(item[cfg.multiCountField]).split(",").map(s => s.trim()).filter(Boolean).length;
+            if (count >= 2) {
+              dupBadge = ` <span class="dup-badge" title="Phát sinh ${count} lần (gộp trong cùng 1 dòng)">${numberToEmoji(count)}</span>`;
             }
-            const cells = cfg.knownFields.map(f => {
-                const raw = item[f];
-                if (raw === undefined || raw === null || raw === "") return `<td class="align-right">—</td>`;
-                if (cfg.amountFields.includes(f)) return `<td class="amount-cell">${formatAmount(raw)}</td>`;
-                if ((cfg.dateFields || []).includes(f)) return `<td class="date-cell">${raw}</td>`;
-                if (cfg.linkedFieldMap && cfg.linkedFieldMap[f]) {
-                    const url = item[cfg.linkedFieldMap[f]];
-                    if (url) return `<td><a class="ticket-link" href="${url}" target="_blank" rel="noopener">${raw} ↗</a></td>`;
-                    return `<td>${raw}</td>`;
-                }
-                if (f === cfg.statusField) return `<td class="badge-cell"><span class="badge${sClass ? " " + sClass : ""}">${raw}</span></td>`;
-                return `<td>${raw}</td>`;
-            }).join("");
-            return `<tr><td class="code-cell">${code}${dupBadge}</td>${cells}</tr>`;
+          }
+          const cells = cfg.knownFields.map(f => {
+            const raw = item[f];
+            if (raw === undefined || raw === null || raw === "") return `<td class="align-right">—</td>`;
+            if (cfg.amountFields.includes(f)) return `<td class="amount-cell">${formatAmount(raw)}</td>`;
+            if ((cfg.dateFields || []).includes(f)) return `<td class="date-cell">${raw}</td>`;
+            if (cfg.linkedFieldMap && cfg.linkedFieldMap[f]) {
+              const url = item[cfg.linkedFieldMap[f]];
+              if (url) return `<td><a class="ticket-link" href="${url}" target="_blank" rel="noopener">${raw} ↗</a></td>`;
+              return `<td>${raw}</td>`;
+            }
+            if (f === cfg.statusField) return `<td class="badge-cell"><span class="badge${sClass ? " " + sClass : ""}">${raw}</span></td>`;
+            return `<td>${raw}</td>`;
+          }).join("");
+          return `<tr><td class="code-cell">${code}${dupBadge}</td>${cells}</tr>`;
         }).join("");
         const pageJumpOptions = Array.from({
-            length: totalPages
+          length: totalPages
         }, (_, i) => i + 1).map(p => `<option value="${p}" ${p === currentPage ? "selected" : ""}>Trang ${p}</option>`).join("");
         const paginationHtml = totalPages > 1 ? `\n    <div class="pagination">\n      <button class="btn-ghost" id="btn-prev-page" ${currentPage <= 1 ? "disabled" : ""}>← Trước</button>\n      <select id="page-jump-select" class="page-jump-select">${pageJumpOptions}</select>\n      <span class="page-indicator">/ ${totalPages} (${items.length} kết quả)</span>\n      <button class="btn-ghost" id="btn-next-page" ${currentPage >= totalPages ? "disabled" : ""}>Sau →</button>\n    </div>` : `<div class="pagination"><span class="page-indicator">${items.length} kết quả</span></div>`;
-        resultsArea.innerHTML = `\n    ${toolbarHtml}\n    <div class="results-table-wrap">\n      <table class="result-table">\n        <thead>${theadHtml}</thead>\n        <tbody>${rowsHtml}</tbody>\n      </table>\n    </div>\n    ${paginationHtml}`;
+        resultsArea.innerHTML = `\n    ${toolbarHtml}\n    ${searchBoxHtml}\n    <div class="results-table-wrap">\n      <table class="result-table">\n        <thead>${theadHtml}</thead>\n        <tbody>${rowsHtml}</tbody>\n      </table>\n    </div>\n    ${paginationHtml}`;
         el("#btn-export-csv").onclick = exportCsv;
         el("#btn-export-xlsx").onclick = exportXlsx;
         el("#page-size-select").onchange = e => {
-            pageSize = Number(e.target.value);
-            currentPage = 1;
-            renderResults(lastResults, lastRequestedCodes);
+          pageSize = Number(e.target.value);
+          currentPage = 1;
+          rerenderTable();
         };
         const prevBtn = el("#btn-prev-page");
         const nextBtn = el("#btn-next-page");
         const jumpSelect = el("#page-jump-select");
         if (prevBtn) prevBtn.onclick = () => {
-            currentPage--;
-            renderResults(lastResults, lastRequestedCodes);
+          currentPage--;
+          rerenderTable();
         };
         if (nextBtn) nextBtn.onclick = () => {
-            currentPage++;
-            renderResults(lastResults, lastRequestedCodes);
+          currentPage++;
+          rerenderTable();
         };
         if (jumpSelect) jumpSelect.onchange = e => {
-            currentPage = Number(e.target.value);
-            renderResults(lastResults, lastRequestedCodes);
+          currentPage = Number(e.target.value);
+          rerenderTable();
         };
-    }
-    const CODES_PER_REQUEST = 1e3;
-    function chunkArray(arr, size) {
+        bindResultSearchEvents();
+      }
+      function bindResultSearchEvents() {
+        const input = el("#result-search");
+        if (input) {
+          input.oninput = e => {
+            searchQuery = e.target.value;
+            currentPage = 1;
+            const cursorPos = e.target.selectionStart;
+            rerenderTable();
+            const newInput = el("#result-search");
+            if (newInput) {
+              newInput.focus();
+              newInput.setSelectionRange(cursorPos, cursorPos);
+            }
+          };
+        }
+        const clearBtn = el("#btn-clear-search");
+        if (clearBtn) {
+          clearBtn.onclick = () => {
+            searchQuery = "";
+            currentPage = 1;
+            rerenderTable();
+            const newInput = el("#result-search");
+            if (newInput) newInput.focus();
+          };
+        }
+      }
+      const CODES_PER_REQUEST = 1e3;
+      function chunkArray(arr, size) {
         const out = [];
         for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
         return out;
-    }
-    async function doSearch() {
+      }
+      async function doSearch() {
         const cfg = CONFIG.TABS[activeTab];
         if (cfg.notReady) {
-            resultsArea.innerHTML = `<div class="empty"><div class="big">🚧</div>Chưa có nguồn dữ liệu cho mục này.<br/>Sẽ bổ sung khi có Google Sheet miễn cước.</div>`;
-            el("#notfound-area").innerHTML = "";
-            return;
+          resultsArea.innerHTML = `<div class="empty"><div class="big">🚧</div>Chưa có nguồn dữ liệu cho mục này.<br/>Sẽ bổ sung khi có Google Sheet miễn cước.</div>`;
+          el("#notfound-area").innerHTML = "";
+          return;
         }
         const codes = parseCodes(codesInput.value);
         if (!codes.length && !cfg.useDateRange) {
-            resultsArea.innerHTML = `<div class="empty"><div class="big">✏️</div>Nhập ít nhất một mã đơn để tra cứu.</div>`;
-            el("#notfound-area").innerHTML = "";
-            return;
+          resultsArea.innerHTML = `<div class="empty"><div class="big">✏️</div>Nhập ít nhất một mã đơn để tra cứu.</div>`;
+          el("#notfound-area").innerHTML = "";
+          return;
         }
         if (cfg.useDateRange && !codes.length && (!dateFrom.value || !dateTo.value)) {
-            resultsArea.innerHTML = `<div class="empty"><div class="big">✏️</div>Nhập mã đơn hoặc chọn khoảng ngày để tra cứu.</div>`;
-            el("#notfound-area").innerHTML = "";
-            return;
+          resultsArea.innerHTML = `<div class="empty"><div class="big">✏️</div>Nhập mã đơn hoặc chọn khoảng ngày để tra cứu.</div>`;
+          el("#notfound-area").innerHTML = "";
+          return;
         }
         el("#btn-search").disabled = true;
         currentPage = 1;
-        const codeChunks = codes.length > CODES_PER_REQUEST ? chunkArray(codes, CODES_PER_REQUEST) : [ codes ];
+        const codeChunks = codes.length > CODES_PER_REQUEST ? chunkArray(codes, CODES_PER_REQUEST) : [codes];
         const totalChunks = codeChunks.length;
         let allItems = [];
         const failedChunks = [];
         for (let i = 0; i < totalChunks; i++) {
-            const chunk = codeChunks[i];
-            resultsArea.innerHTML = `<div class="state loading"><span class="spinner"></span>Đang tra cứu${totalChunks > 1 ? ` — lượt ${i + 1}/${totalChunks} (${chunk.length} mã)` : "..."}</div>`;
-            const params = new URLSearchParams({
-                type: activeTab,
-                codes: chunk.join(",")
+          const chunk = codeChunks[i];
+          resultsArea.innerHTML = `<div class="state loading"><span class="spinner"></span>Đang tra cứu${totalChunks > 1 ? ` — lượt ${i + 1}/${totalChunks} (${chunk.length} mã)` : "..."}</div>`;
+          const params = new URLSearchParams({
+            type: activeTab,
+            codes: chunk.join(",")
+          });
+          if (cfg.useDateRange) {
+            if (dateFrom.value) params.set("tu_ngay", dateFrom.value);
+            if (dateTo.value) params.set("den_ngay", dateTo.value);
+          }
+          try {
+            const res = await fetch(`${CONFIG.WEBHOOK_URL}?${params.toString()}`);
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const data = await res.json();
+            if (data.ok === false) throw new Error(data.message || "Lỗi không xác định");
+            const items = Array.isArray(data.items) ? data.items : Array.isArray(data) ? data : [];
+            allItems.push(...items);
+          } catch (err) {
+            failedChunks.push({
+              index: i + 1,
+              count: chunk.length,
+              message: err.message
             });
-            if (cfg.useDateRange) {
-                if (dateFrom.value) params.set("tu_ngay", dateFrom.value);
-                if (dateTo.value) params.set("den_ngay", dateTo.value);
-            }
-            try {
-                const res = await fetch(`${CONFIG.WEBHOOK_URL}?${params.toString()}`);
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                const data = await res.json();
-                if (data.ok === false) throw new Error(data.message || "Lỗi không xác định");
-                const items = Array.isArray(data.items) ? data.items : Array.isArray(data) ? data : [];
-                allItems.push(...items);
-            } catch (err) {
-                failedChunks.push({
-                    index: i + 1,
-                    count: chunk.length,
-                    message: err.message
-                });
-            }
+          }
         }
         el("#btn-search").disabled = false;
         if (failedChunks.length === totalChunks) {
-            const msg = failedChunks[0].message;
-            resultsArea.innerHTML = `<div class="state error">⚠️ Không thể tải dữ liệu: ${msg}<br/><span style="font-size:14.5px;">Kiểm tra lại URL webhook trong cấu hình, hoặc n8n workflow có đang bật không.</span></div>`;
-            el("#notfound-area").innerHTML = "";
-            return;
+          const msg = failedChunks[0].message;
+          resultsArea.innerHTML = `<div class="state error">⚠️ Không thể tải dữ liệu: ${msg}<br/><span style="font-size:14.5px;">Kiểm tra lại URL webhook trong cấu hình, hoặc n8n workflow có đang bật không.</span></div>`;
+          el("#notfound-area").innerHTML = "";
+          return;
         }
         renderResults(allItems, codes);
         if (failedChunks.length) {
-            const failNote = failedChunks.map(f => `lượt ${f.index} (${f.count} mã, lỗi: ${f.message})`).join("; ");
-            resultsArea.innerHTML += `<div class="state error" style="margin-top:10px;">⚠️ ${failedChunks.length}/${totalChunks} lượt tra cứu bị lỗi, kết quả có thể chưa đầy đủ: ${failNote}. Thử tra cứu lại để bổ sung phần còn thiếu.</div>`;
+          const failNote = failedChunks.map(f => `lượt ${f.index} (${f.count} mã, lỗi: ${f.message})`).join("; ");
+          resultsArea.innerHTML += `<div class="state error" style="margin-top:10px;">⚠️ ${failedChunks.length}/${totalChunks} lượt tra cứu bị lỗi, kết quả có thể chưa đầy đủ: ${failNote}. Thử tra cứu lại để bổ sung phần còn thiếu.</div>`;
         }
-    }
-    el("#btn-search").onclick = doSearch;
-    el("#btn-clear").onclick = () => {
+      }
+      el("#btn-search").onclick = doSearch;
+      el("#btn-clear").onclick = () => {
         codesInput.value = "";
         dateFrom.value = "";
         dateTo.value = "";
@@ -1432,90 +1559,90 @@
         el("#notfound-area").innerHTML = "";
         currentPage = 1;
         updateCount();
-    };
-    codesInput.addEventListener("keydown", e => {
+      };
+      codesInput.addEventListener("keydown", e => {
         if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) doSearch();
-    });
-    (function initFromUrl() {
+      });
+      (function initFromUrl() {
         const params = new URLSearchParams(window.location.search);
         const type = params.get("type");
         const codes = params.get("codes");
         if (type && CONFIG.TABS[type]) activeTab = type;
         switchTab(activeTab);
         if (codes) {
-            codesInput.value = codes.split(",").join("\n");
-            updateCount();
-            doSearch();
+          codesInput.value = codes.split(",").join("\n");
+          updateCount();
+          doSearch();
         }
-    })();
-}
-</script>
+      })();
+    }
+  </script>
 
   <script>const WEBHOOK_BASE_URL = "https://n8n-workflow.ghn.vn/webhook/compensation";
-</script>
+  </script>
 
   <script>const AUTH_STORAGE_KEY = "ka_lookup_authed_v1";
 
-const authGate = document.getElementById("auth-gate");
+    const authGate = document.getElementById("auth-gate");
 
-const appRoot = document.getElementById("app-root");
+    const appRoot = document.getElementById("app-root");
 
-const authForm = document.getElementById("auth-form");
+    const authForm = document.getElementById("auth-form");
 
-const authPasswordInput = document.getElementById("auth-password");
+    const authPasswordInput = document.getElementById("auth-password");
 
-const authError = document.getElementById("auth-error");
+    const authError = document.getElementById("auth-error");
 
-const authSubmitBtn = authForm.querySelector(".auth-submit");
+    const authSubmitBtn = authForm.querySelector(".auth-submit");
 
-function unlockApp() {
-    authGate.style.display = "none";
-    appRoot.style.display = "block";
-    initApp();
-}
+    function unlockApp() {
+      authGate.style.display = "none";
+      appRoot.style.display = "block";
+      initApp();
+    }
 
-async function verifyPassword(password) {
-    const params = new URLSearchParams({
+    async function verifyPassword(password) {
+      const params = new URLSearchParams({
         type: "auth",
         password: password
-    });
-    const res = await fetch(`${WEBHOOK_BASE_URL}?${params.toString()}`);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
-    return data.ok === true;
-}
+      });
+      const res = await fetch(`${WEBHOOK_BASE_URL}?${params.toString()}`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      return data.ok === true;
+    }
 
-authForm.addEventListener("submit", async e => {
-    e.preventDefault();
-    authSubmitBtn.disabled = true;
-    authError.textContent = "";
-    try {
+    authForm.addEventListener("submit", async e => {
+      e.preventDefault();
+      authSubmitBtn.disabled = true;
+      authError.textContent = "";
+      try {
         const ok = await verifyPassword(authPasswordInput.value);
         if (ok) {
-            try {
-                localStorage.setItem(AUTH_STORAGE_KEY, "1");
-            } catch (err) {}
-            unlockApp();
+          try {
+            localStorage.setItem(AUTH_STORAGE_KEY, "1");
+          } catch (err) { }
+          unlockApp();
         } else {
-            authError.textContent = "Sai mật khẩu, thử lại.";
-            authPasswordInput.value = "";
-            authPasswordInput.focus();
+          authError.textContent = "Sai mật khẩu, thử lại.";
+          authPasswordInput.value = "";
+          authPasswordInput.focus();
         }
-    } catch (err) {
+      } catch (err) {
         authError.textContent = "Không kiểm tra được mật khẩu, thử lại.";
-    } finally {
+      } finally {
         authSubmitBtn.disabled = false;
-    }
-});
+      }
+    });
 
-(function checkExistingAuth() {
-    let authed = false;
-    try {
+    (function checkExistingAuth() {
+      let authed = false;
+      try {
         authed = localStorage.getItem(AUTH_STORAGE_KEY) === "1";
-    } catch (err) {}
-    if (authed) unlockApp();
-})();
-</script>
+      } catch (err) { }
+      if (authed) unlockApp();
+    })();
+  </script>
 </body>
 
 </html>
