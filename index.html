@@ -972,37 +972,6 @@
       transform: scale(0.97);
     }
 
-    .userid-guide {
-      background: var(--blue-soft);
-      border: 1px solid #cfe0f0;
-      border-radius: 10px;
-      padding: 14px 14px 10px;
-      margin-top: 10px;
-      text-align: left;
-    }
-
-    .guide-steps {
-      margin: 0;
-      padding-left: 20px;
-      font-size: 13px;
-      color: var(--text);
-      line-height: 1.6;
-    }
-
-    .guide-steps li {
-      margin-bottom: 6px;
-    }
-
-    .guide-steps code {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 5px;
-      padding: 1px 6px;
-      font-family: var(--mono);
-      font-size: 12.5px;
-      color: var(--orange-dark);
-    }
-
     .auth-link-btn:hover {
       opacity: .8;
     }
@@ -1041,17 +1010,8 @@
     <form id="request-form" class="auth-card" style="display:none;">
       <div class="auth-mark">KA</div>
       <h2>Yêu cầu cấp mật khẩu</h2>
-      <p>Chưa biết Telegram User ID của mình? Xem hướng dẫn lấy ID bên dưới.</p>
-      <button type="button" id="btn-show-guide" class="btn-ghost get-userid-btn">📖 Hướng dẫn lấy User ID</button>
-      <div id="userid-guide" class="userid-guide" style="display:none;">
-        <ol class="guide-steps">
-          <li>Mở Telegram, tìm bot <strong>@TEN_BOT_CUA_BAN</strong></li>
-          <li>Gõ lệnh <code>/myid</code> rồi gửi</li>
-          <li>Bot trả lời ngay <strong>User ID</strong> của bạn</li>
-          <li>Copy User ID đó, dán vào ô bên dưới</li>
-        </ol>
-        <button type="button" id="btn-close-guide" class="auth-link-btn">Đóng hướng dẫn</button>
-      </div>
+      <p>Chưa biết Telegram User ID của mình? Lấy ID trước, sau đó nhập vào bên dưới để gửi yêu cầu.</p>
+      <a href="https://t.me/userinfobot" target="_blank" rel="noopener" class="btn-ghost get-userid-btn">🔎 Lấy User ID qua @userinfobot</a>
       <div class="divider-or">sau đó</div>
       <input type="text" id="request-user-id" placeholder="Nhập Telegram User ID" autocomplete="off" />
       <button type="submit" class="btn-primary auth-submit">Gửi yêu cầu</button>
@@ -1827,18 +1787,6 @@
       requestForm.style.display = "none";
       authForm.style.display = "block";
       authPasswordInput.focus();
-    });
-
-    const btnShowGuide = document.getElementById("btn-show-guide");
-    const btnCloseGuide = document.getElementById("btn-close-guide");
-    const useridGuide = document.getElementById("userid-guide");
-
-    btnShowGuide.addEventListener("click", () => {
-      useridGuide.style.display = useridGuide.style.display === "none" ? "block" : "none";
-    });
-
-    btnCloseGuide.addEventListener("click", () => {
-      useridGuide.style.display = "none";
     });
 
     async function submitPasswordRequest(userId) {
