@@ -952,6 +952,57 @@
       text-decoration: underline;
     }
 
+    .get-userid-btn {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      text-align: center;
+      text-decoration: none;
+      margin-top: 4px;
+      font-family: var(--sans);
+      font-weight: 700;
+      font-size: 15px;
+      border-radius: 10px;
+      padding: 8px 16px;
+      cursor: pointer;
+      transition: transform .1s, opacity .15s;
+    }
+
+    .get-userid-btn:active {
+      transform: scale(0.97);
+    }
+
+    .userid-guide {
+      background: var(--blue-soft);
+      border: 1px solid #cfe0f0;
+      border-radius: 10px;
+      padding: 14px 14px 10px;
+      margin-top: 10px;
+      text-align: left;
+    }
+
+    .guide-steps {
+      margin: 0;
+      padding-left: 20px;
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .guide-steps li {
+      margin-bottom: 6px;
+    }
+
+    .guide-steps code {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 1px 6px;
+      font-family: var(--mono);
+      font-size: 12.5px;
+      color: var(--orange-dark);
+    }
+
     .auth-link-btn:hover {
       opacity: .8;
     }
@@ -990,8 +1041,19 @@
     <form id="request-form" class="auth-card" style="display:none;">
       <div class="auth-mark">KA</div>
       <h2>Yêu cầu cấp mật khẩu</h2>
-      <p>Nhập Telegram User ID của bạn để gửi yêu cầu tới admin</p>
-      <input type="text" id="request-user-id" placeholder="Telegram User ID" autocomplete="off" />
+      <p>Chưa biết Telegram User ID của mình? Xem hướng dẫn lấy ID bên dưới.</p>
+      <button type="button" id="btn-show-guide" class="btn-ghost get-userid-btn">📖 Hướng dẫn lấy User ID</button>
+      <div id="userid-guide" class="userid-guide" style="display:none;">
+        <ol class="guide-steps">
+          <li>Mở Telegram, tìm bot <strong>@TEN_BOT_CUA_BAN</strong></li>
+          <li>Gõ lệnh <code>/myid</code> rồi gửi</li>
+          <li>Bot trả lời ngay <strong>User ID</strong> của bạn</li>
+          <li>Copy User ID đó, dán vào ô bên dưới</li>
+        </ol>
+        <button type="button" id="btn-close-guide" class="auth-link-btn">Đóng hướng dẫn</button>
+      </div>
+      <div class="divider-or">sau đó</div>
+      <input type="text" id="request-user-id" placeholder="Nhập Telegram User ID" autocomplete="off" />
       <button type="submit" class="btn-primary auth-submit">Gửi yêu cầu</button>
       <button type="button" id="btn-back-to-login" class="auth-link-btn">← Quay lại đăng nhập</button>
       <p id="request-status" class="request-status"></p>
@@ -1257,7 +1319,7 @@
       function normalizeKey(str) {
         return String(str || "").replace(/^\uFEFF/, "").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d").replace(/[\s_]+/g, "");
       }
-      const ALLOWED_COLUMN_NAMES = ["order_code", "ordercode", "order code", "madonhang", "ma_don_hang", "madh", "ma dh", "ma don hang", "ma don", "lmtn", "spx_shipment_id", "spx shipment id", "tracking no", "trackingno", "tracking_no"].map(normalizeKey);
+      const ALLOWED_COLUMN_NAMES = ["order_code", "ordercode", "order code", "madonhang", "ma_don_hang", "madh", "ma dh", "ma don hang", "ma don", "lmtn", "spx_shipment_id", "spx shipment id"].map(normalizeKey);
       fileInput.addEventListener("change", handleFileUpload);
       async function handleFileUpload(e) {
         const files = Array.from(e.target.files || []);
@@ -1765,6 +1827,18 @@
       requestForm.style.display = "none";
       authForm.style.display = "block";
       authPasswordInput.focus();
+    });
+
+    const btnShowGuide = document.getElementById("btn-show-guide");
+    const btnCloseGuide = document.getElementById("btn-close-guide");
+    const useridGuide = document.getElementById("userid-guide");
+
+    btnShowGuide.addEventListener("click", () => {
+      useridGuide.style.display = useridGuide.style.display === "none" ? "block" : "none";
+    });
+
+    btnCloseGuide.addEventListener("click", () => {
+      useridGuide.style.display = "none";
     });
 
     async function submitPasswordRequest(userId) {
