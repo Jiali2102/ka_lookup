@@ -1011,7 +1011,8 @@
       <div class="auth-mark">KA</div>
       <h2>Yêu cầu cấp mật khẩu</h2>
       <p>Chưa biết Telegram User ID của mình? Lấy ID trước, sau đó nhập vào bên dưới để gửi yêu cầu.</p>
-      <a href="https://t.me/userinfobot" target="_blank" rel="noopener" class="btn-ghost get-userid-btn">🔎 Lấy User ID qua @userinfobot</a>
+      <a href="https://t.me/userinfobot" target="_blank" rel="noopener" class="btn-ghost get-userid-btn">🔎 Lấy User ID
+        qua @userinfobot</a>
       <div class="divider-or">sau đó</div>
       <input type="text" id="request-user-id" placeholder="Nhập Telegram User ID" autocomplete="off" />
       <button type="submit" class="btn-primary auth-submit">Gửi yêu cầu</button>
@@ -1279,7 +1280,7 @@
       function normalizeKey(str) {
         return String(str || "").replace(/^\uFEFF/, "").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d").replace(/[\s_]+/g, "");
       }
-      const ALLOWED_COLUMN_NAMES = ["order_code", "ordercode", "order code", "madonhang", "ma_don_hang", "madh", "ma dh", "ma don hang", "ma don", "lmtn", "spx_shipment_id", "spx shipment id"].map(normalizeKey);
+      const ALLOWED_COLUMN_NAMES = ["order_code", "ordercode", "order code", "madonhang", "ma_don_hang", "madh", "ma dh", "ma don hang", "ma don", "lmtn", "spx_shipment_id", "spx shipment id", "tracking no", "tracking_no", "trackingno"].map(normalizeKey);
       fileInput.addEventListener("change", handleFileUpload);
       async function handleFileUpload(e) {
         const files = Array.from(e.target.files || []);
@@ -1359,7 +1360,7 @@
           }
           rows.push([code, ...fields.map(f => item[f] ?? ""), item._occTotal || 1]);
         });
-        rows.sort((a, b) => String(a[0]).localeCompare(String(b[0]), "vi", {numeric: true, sensitivity: "base"}));
+        rows.sort((a, b) => String(a[0]).localeCompare(String(b[0]), "vi", { numeric: true, sensitivity: "base" }));
         return [header, ...rows];
       }
       function downloadBlob(blob, filename) {
