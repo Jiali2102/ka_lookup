@@ -188,6 +188,26 @@
       gap: 10px;
     }
 
+    .logout-btn {
+      background: transparent;
+      border: 1.5px solid var(--border);
+      color: var(--muted);
+      font-family: var(--sans);
+      font-weight: 600;
+      font-size: 12.5px;
+      border-radius: 8px;
+      padding: 6px 10px;
+      cursor: pointer;
+      transition: all .15s;
+      white-space: nowrap;
+    }
+
+    .logout-btn:hover {
+      color: var(--danger);
+      border-color: var(--danger);
+      background: var(--danger-bg);
+    }
+
     .brand {
       display: flex;
       align-items: center;
@@ -1034,6 +1054,7 @@
                 <div class="sub">Đền bù · Quá hạn · Miễn cước</div>
               </div>
             </div>
+            <button type="button" id="btn-logout" class="logout-btn" title="Đăng xuất">⏻ Đăng xuất</button>
           </header>
 
           <div class="tabs" id="tabs"></div>
@@ -1695,6 +1716,23 @@
         delete tabState[activeTab];
         updateCount();
       };
+      el("#btn-logout").onclick = () => {
+        if (!confirm("Đăng xuất khỏi tool tra cứu?")) return;
+        // Dọn sạch toàn bộ dữ liệu phiên hiện tại (mọi tab) trước khi đăng xuất,
+        // tránh người dùng kế tiếp trên cùng máy nhìn thấy dữ liệu cũ.
+        Object.keys(tabState).forEach(k => delete tabState[k]);
+        lastFullItems = [];
+        lastResults = [];
+        lastRequestedCodes = [];
+        searchQuery = "";
+        currentPage = 1;
+        codesInput.value = "";
+        dateFrom.value = "";
+        dateTo.value = "";
+        resultsArea.innerHTML = "";
+        el("#notfound-area").innerHTML = "";
+        doLogout();
+      };
       codesInput.addEventListener("keydown", e => {
         if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) doSearch();
       });
@@ -1829,6 +1867,23 @@
         requestSubmitBtn.disabled = false;
       }
     });
+
+    function doLogout() {
+      try {
+        localStorage.removeItem(AUTH_STORAGE_KEY);
+        localStorage.removeItem(AUTH_PASSWORD_KEY);
+      } catch (err) { }
+      sessionPassword = "";
+      appRoot.style.display = "none";
+      authGate.style.display = "";
+      authForm.style.display = "block";
+      requestForm.style.display = "none";
+      authPasswordInput.value = "";
+      authError.textContent = "";
+      requestStatus.textContent = "";
+      requestStatus.className = "request-status";
+      requestUserIdInput.value = "";
+    }
 
     (function checkExistingAuth() {
       let authed = false;
