@@ -1644,7 +1644,8 @@
           resultsArea.innerHTML = `<div class="state loading"><span class="spinner"></span>Đang tra cứu${totalChunks > 1 ? ` — lượt ${i + 1}/${totalChunks} (${chunk.length} mã)` : "..."}</div>`;
           const params = new URLSearchParams({
             type: activeTab,
-            codes: chunk.join(",")
+            codes: chunk.join(","),
+            password: sessionPassword
           });
           if (cfg.useDateRange) {
             if (dateFrom.value) params.set("tu_ngay", dateFrom.value);
@@ -1716,6 +1717,8 @@
   </script>
 
   <script>const AUTH_STORAGE_KEY = "ka_lookup_authed_v1";
+    const AUTH_PASSWORD_KEY = "ka_lookup_pw_v1";
+    let sessionPassword = "";
 
     const authGate = document.getElementById("auth-gate");
 
@@ -1753,8 +1756,10 @@
       try {
         const ok = await verifyPassword(authPasswordInput.value);
         if (ok) {
+          sessionPassword = authPasswordInput.value;
           try {
             localStorage.setItem(AUTH_STORAGE_KEY, "1");
+            localStorage.setItem(AUTH_PASSWORD_KEY, sessionPassword);
           } catch (err) { }
           unlockApp();
         } else {
@@ -1829,6 +1834,7 @@
       let authed = false;
       try {
         authed = localStorage.getItem(AUTH_STORAGE_KEY) === "1";
+        if (authed) sessionPassword = localStorage.getItem(AUTH_PASSWORD_KEY) || "";
       } catch (err) { }
       if (authed) unlockApp();
     })();
