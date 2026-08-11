@@ -1100,7 +1100,7 @@
       let lastRequestedCodes = [];
       let searchQuery = "";
       let currentPage = 1;
-      let pageSize = 20;
+      let pageSize = 10;
       const el = sel => document.querySelector(sel);
       const tabsEl = el("#tabs");
       const codesInput = el("#codes-input");
@@ -1124,17 +1124,47 @@
           tabsEl.appendChild(d);
         });
       }
+      const tabState = {};
+      function saveCurrentTabState() {
+        tabState[activeTab] = {
+          lastFullItems,
+          lastRequestedCodes,
+          searchQuery,
+          currentPage,
+          pageSize,
+          codesInputValue: codesInput.value
+        };
+      }
       function switchTab(key) {
+        saveCurrentTabState();
         activeTab = key;
         const cfg = CONFIG.TABS[key];
         renderTabs();
         el("#panel-title").textContent = "Tra cứu " + cfg.label.toLowerCase();
         el("#panel-hint").textContent = cfg.hint;
         dateRow.style.display = cfg.useDateRange ? "flex" : "none";
-        resultsArea.innerHTML = "";
-        el("#notfound-area").innerHTML = "";
-        currentPage = 1;
-        updateCount();
+        const saved = tabState[key];
+        if (saved) {
+          lastFullItems = saved.lastFullItems;
+          lastRequestedCodes = saved.lastRequestedCodes;
+          searchQuery = saved.searchQuery;
+          currentPage = saved.currentPage;
+          pageSize = saved.pageSize;
+          codesInput.value = saved.codesInputValue;
+          updateCount();
+          if (lastFullItems.length || lastRequestedCodes.length) {
+            rerenderTable();
+          } else {
+            resultsArea.innerHTML = "";
+            el("#notfound-area").innerHTML = "";
+          }
+        } else {
+          codesInput.value = "";
+          resultsArea.innerHTML = "";
+          el("#notfound-area").innerHTML = "";
+          currentPage = 1;
+          updateCount();
+        }
       }
       function updateCount() {
         const n = parseCodes(codesInput.value).length;
@@ -1591,7 +1621,12 @@
         fileUploadStatus.textContent = "Chọn nhiều file, tự dò cột mã đơn trong mọi sheet";
         resultsArea.innerHTML = "";
         el("#notfound-area").innerHTML = "";
+        lastFullItems = [];
+        lastResults = [];
+        lastRequestedCodes = [];
+        searchQuery = "";
         currentPage = 1;
+        delete tabState[activeTab];
         updateCount();
       };
       codesInput.addEventListener("keydown", e => {
