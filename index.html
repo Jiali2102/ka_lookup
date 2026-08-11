@@ -952,6 +952,26 @@
       text-decoration: underline;
     }
 
+    .get-userid-btn {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      text-align: center;
+      text-decoration: none;
+      margin-top: 4px;
+      font-family: var(--sans);
+      font-weight: 700;
+      font-size: 15px;
+      border-radius: 10px;
+      padding: 8px 16px;
+      cursor: pointer;
+      transition: transform .1s, opacity .15s;
+    }
+
+    .get-userid-btn:active {
+      transform: scale(0.97);
+    }
+
     .auth-link-btn:hover {
       opacity: .8;
     }
@@ -990,8 +1010,10 @@
     <form id="request-form" class="auth-card" style="display:none;">
       <div class="auth-mark">KA</div>
       <h2>Yêu cầu cấp mật khẩu</h2>
-      <p>Nhập Telegram User ID của bạn để gửi yêu cầu tới admin</p>
-      <input type="text" id="request-user-id" placeholder="Telegram User ID" autocomplete="off" />
+      <p>Chưa biết Telegram User ID của mình? Lấy ID trước, sau đó nhập vào bên dưới để gửi yêu cầu.</p>
+      <a href="https://t.me/userinfobot" target="_blank" rel="noopener" class="btn-ghost get-userid-btn">🔎 Lấy User ID của tôi</a>
+      <div class="divider-or">sau đó</div>
+      <input type="text" id="request-user-id" placeholder="Nhập Telegram User ID" autocomplete="off" />
       <button type="submit" class="btn-primary auth-submit">Gửi yêu cầu</button>
       <button type="button" id="btn-back-to-login" class="auth-link-btn">← Quay lại đăng nhập</button>
       <p id="request-status" class="request-status"></p>
