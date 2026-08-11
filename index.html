@@ -939,6 +939,37 @@
       font-size: 13px !important;
       min-height: 16px;
     }
+
+    .auth-link-btn {
+      background: none;
+      border: none;
+      color: var(--blue);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 10px 0 0;
+      width: 100%;
+      text-decoration: underline;
+    }
+
+    .auth-link-btn:hover {
+      opacity: .8;
+    }
+
+    .request-status {
+      margin: 10px 0 0;
+      font-size: 13px;
+      min-height: 16px;
+      color: var(--muted);
+    }
+
+    .request-status.ok {
+      color: var(--ok);
+    }
+
+    .request-status.error {
+      color: var(--danger);
+    }
   </style>
 </head>
 
@@ -952,7 +983,18 @@
       <p>Nhập mật khẩu để tiếp tục</p>
       <input type="password" id="auth-password" placeholder="Mật khẩu" autocomplete="off" autofocus />
       <button type="submit" class="btn-primary auth-submit">Vào trang</button>
+      <button type="button" id="btn-show-request" class="auth-link-btn">Chưa có mật khẩu? Yêu cầu cấp</button>
       <p id="auth-error" class="auth-error"></p>
+    </form>
+
+    <form id="request-form" class="auth-card" style="display:none;">
+      <div class="auth-mark">KA</div>
+      <h2>Yêu cầu cấp mật khẩu</h2>
+      <p>Nhập Telegram User ID của bạn để gửi yêu cầu tới admin</p>
+      <input type="text" id="request-user-id" placeholder="Telegram User ID" autocomplete="off" />
+      <button type="submit" class="btn-primary auth-submit">Gửi yêu cầu</button>
+      <button type="button" id="btn-back-to-login" class="auth-link-btn">← Quay lại đăng nhập</button>
+      <p id="request-status" class="request-status"></p>
     </form>
   </div>
 
@@ -1295,7 +1337,7 @@
           }
           rows.push([code, ...fields.map(f => item[f] ?? ""), item._occTotal || 1]);
         });
-        rows.sort((a, b) => String(a[0]).localeCompare(String(b[0]), "vi", { numeric: true, sensitivity: "base" }));
+        rows.sort((a, b) => String(a[0]).localeCompare(String(b[0]), "vi", {numeric: true, sensitivity: "base"}));
         return [header, ...rows];
       }
       function downloadBlob(blob, filename) {
@@ -1701,6 +1743,62 @@
         authError.textContent = "Không kiểm tra được mật khẩu, thử lại.";
       } finally {
         authSubmitBtn.disabled = false;
+      }
+    });
+
+    const requestForm = document.getElementById("request-form");
+    const requestUserIdInput = document.getElementById("request-user-id");
+    const requestStatus = document.getElementById("request-status");
+    const requestSubmitBtn = requestForm.querySelector(".auth-submit");
+    const btnShowRequest = document.getElementById("btn-show-request");
+    const btnBackToLogin = document.getElementById("btn-back-to-login");
+
+    btnShowRequest.addEventListener("click", () => {
+      authForm.style.display = "none";
+      requestForm.style.display = "block";
+      requestStatus.textContent = "";
+      requestStatus.className = "request-status";
+      requestUserIdInput.focus();
+    });
+
+    btnBackToLogin.addEventListener("click", () => {
+      requestForm.style.display = "none";
+      authForm.style.display = "block";
+      authPasswordInput.focus();
+    });
+
+    async function submitPasswordRequest(userId) {
+      const params = new URLSearchParams({
+        type: "request_password",
+        user_id: userId
+      });
+      const res = await fetch(`${WEBHOOK_BASE_URL}?${params.toString()}`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return res.json();
+    }
+
+    requestForm.addEventListener("submit", async e => {
+      e.preventDefault();
+      const userId = requestUserIdInput.value.trim();
+      if (!userId) return;
+      requestSubmitBtn.disabled = true;
+      requestStatus.textContent = "Đang gửi yêu cầu...";
+      requestStatus.className = "request-status";
+      try {
+        const data = await submitPasswordRequest(userId);
+        if (data.ok) {
+          requestStatus.textContent = data.message || "Đã gửi yêu cầu thành công.";
+          requestStatus.className = "request-status ok";
+          requestUserIdInput.value = "";
+        } else {
+          requestStatus.textContent = data.message || "Gửi yêu cầu thất bại.";
+          requestStatus.className = "request-status error";
+        }
+      } catch (err) {
+        requestStatus.textContent = "Lỗi kết nối, thử lại sau.";
+        requestStatus.className = "request-status error";
+      } finally {
+        requestSubmitBtn.disabled = false;
       }
     });
 
