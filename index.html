@@ -188,6 +188,26 @@
       gap: 10px;
     }
 
+    .logout-btn {
+      background: transparent;
+      border: 1.5px solid var(--border);
+      color: var(--muted);
+      font-family: var(--sans);
+      font-weight: 600;
+      font-size: 12.5px;
+      border-radius: 8px;
+      padding: 6px 10px;
+      cursor: pointer;
+      transition: all .15s;
+      white-space: nowrap;
+    }
+
+    .logout-btn:hover {
+      color: var(--danger);
+      border-color: var(--danger);
+      background: var(--danger-bg);
+    }
+
     .brand {
       display: flex;
       align-items: center;
@@ -909,7 +929,8 @@
       color: var(--muted);
     }
 
-    #auth-password {
+    #auth-password,
+    #auth-user-id {
       width: 100%;
       font-family: var(--sans);
       font-size: 16px;
@@ -924,7 +945,8 @@
       transition: border-color .15s;
     }
 
-    #auth-password:focus {
+    #auth-password:focus,
+    #auth-user-id:focus {
       border-color: var(--orange);
       background: white;
     }
@@ -1000,8 +1022,9 @@
     <form id="auth-form" class="auth-card">
       <div class="auth-mark">KA</div>
       <h2>Tra cứu KAC</h2>
-      <p>Nhập mật khẩu để tiếp tục</p>
-      <input type="password" id="auth-password" placeholder="Mật khẩu" autocomplete="off" autofocus />
+      <p>Nhập User ID và mật khẩu để tiếp tục</p>
+      <input type="text" id="auth-user-id" placeholder="Telegram User ID" autocomplete="off" autofocus />
+      <input type="password" id="auth-password" placeholder="Mật khẩu" autocomplete="off" />
       <button type="submit" class="btn-primary auth-submit">Vào trang</button>
       <button type="button" id="btn-show-request" class="auth-link-btn">Chưa có mật khẩu? Yêu cầu cấp</button>
       <p id="auth-error" class="auth-error"></p>
@@ -1011,7 +1034,8 @@
       <div class="auth-mark">KA</div>
       <h2>Yêu cầu cấp mật khẩu</h2>
       <p>Chưa biết Telegram User ID của mình? Lấy ID trước, sau đó nhập vào bên dưới để gửi yêu cầu.</p>
-      <a href="https://t.me/userinfobot" target="_blank" rel="noopener" class="btn-ghost get-userid-btn">🔎 Lấy User ID qua @userinfobot</a>
+      <a href="https://t.me/userinfobot" target="_blank" rel="noopener" class="btn-ghost get-userid-btn">🔎 Lấy User ID
+        qua @userinfobot</a>
       <div class="divider-or">sau đó</div>
       <input type="text" id="request-user-id" placeholder="Nhập Telegram User ID" autocomplete="off" />
       <button type="submit" class="btn-primary auth-submit">Gửi yêu cầu</button>
@@ -1033,6 +1057,7 @@
                 <div class="sub">Đền bù · Quá hạn · Miễn cước</div>
               </div>
             </div>
+            <button type="button" id="btn-logout" class="logout-btn" title="Đăng xuất">⏻ Đăng xuất</button>
           </header>
 
           <div class="tabs" id="tabs"></div>
@@ -1279,7 +1304,7 @@
       function normalizeKey(str) {
         return String(str || "").replace(/^\uFEFF/, "").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d").replace(/[\s_]+/g, "");
       }
-      const ALLOWED_COLUMN_NAMES = ["order_code", "ordercode", "order code", "madonhang", "ma_don_hang", "madh", "ma dh", "ma don hang", "ma don", "lmtn", "spx_shipment_id", "spx shipment id"].map(normalizeKey);
+      const ALLOWED_COLUMN_NAMES = ["order_code", "ordercode", "order code", "madonhang", "ma_don_hang", "madh", "ma dh", "ma don hang", "ma don", "lmtn", "spx_shipment_id", "spx shipment id", "tracking no", "tracking_no", "trackingno"].map(normalizeKey);
       fileInput.addEventListener("change", handleFileUpload);
       async function handleFileUpload(e) {
         const files = Array.from(e.target.files || []);
@@ -1359,7 +1384,7 @@
           }
           rows.push([code, ...fields.map(f => item[f] ?? ""), item._occTotal || 1]);
         });
-        rows.sort((a, b) => String(a[0]).localeCompare(String(b[0]), "vi", {numeric: true, sensitivity: "base"}));
+        rows.sort((a, b) => String(a[0]).localeCompare(String(b[0]), "vi", { numeric: true, sensitivity: "base" }));
         return [header, ...rows];
       }
       function downloadBlob(blob, filename) {
@@ -1643,7 +1668,8 @@
           resultsArea.innerHTML = `<div class="state loading"><span class="spinner"></span>Đang tra cứu${totalChunks > 1 ? ` — lượt ${i + 1}/${totalChunks} (${chunk.length} mã)` : "..."}</div>`;
           const params = new URLSearchParams({
             type: activeTab,
-            codes: chunk.join(",")
+            codes: chunk.join(","),
+            password: sessionPassword
           });
           if (cfg.useDateRange) {
             if (dateFrom.value) params.set("tu_ngay", dateFrom.value);
@@ -1693,6 +1719,23 @@
         delete tabState[activeTab];
         updateCount();
       };
+      el("#btn-logout").onclick = () => {
+        if (!confirm("Đăng xuất khỏi tool tra cứu?")) return;
+        // Dọn sạch toàn bộ dữ liệu phiên hiện tại (mọi tab) trước khi đăng xuất,
+        // tránh người dùng kế tiếp trên cùng máy nhìn thấy dữ liệu cũ.
+        Object.keys(tabState).forEach(k => delete tabState[k]);
+        lastFullItems = [];
+        lastResults = [];
+        lastRequestedCodes = [];
+        searchQuery = "";
+        currentPage = 1;
+        codesInput.value = "";
+        dateFrom.value = "";
+        dateTo.value = "";
+        resultsArea.innerHTML = "";
+        el("#notfound-area").innerHTML = "";
+        doLogout();
+      };
       codesInput.addEventListener("keydown", e => {
         if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) doSearch();
       });
@@ -1715,12 +1758,16 @@
   </script>
 
   <script>const AUTH_STORAGE_KEY = "ka_lookup_authed_v1";
+    const AUTH_PASSWORD_KEY = "ka_lookup_pw_v1";
+    let sessionPassword = "";
 
     const authGate = document.getElementById("auth-gate");
 
     const appRoot = document.getElementById("app-root");
 
     const authForm = document.getElementById("auth-form");
+
+    const authUserIdInput = document.getElementById("auth-user-id");
 
     const authPasswordInput = document.getElementById("auth-password");
 
@@ -1734,9 +1781,10 @@
       initApp();
     }
 
-    async function verifyPassword(password) {
+    async function verifyPassword(userId, password) {
       const params = new URLSearchParams({
         type: "auth",
+        user_id: userId,
         password: password
       });
       const res = await fetch(`${WEBHOOK_BASE_URL}?${params.toString()}`);
@@ -1747,17 +1795,25 @@
 
     authForm.addEventListener("submit", async e => {
       e.preventDefault();
+      const userId = authUserIdInput.value.trim();
+      const password = authPasswordInput.value;
+      if (!userId || !password) {
+        authError.textContent = "Vui lòng nhập đầy đủ User ID và mật khẩu.";
+        return;
+      }
       authSubmitBtn.disabled = true;
       authError.textContent = "";
       try {
-        const ok = await verifyPassword(authPasswordInput.value);
+        const ok = await verifyPassword(userId, password);
         if (ok) {
+          sessionPassword = password;
           try {
             localStorage.setItem(AUTH_STORAGE_KEY, "1");
+            localStorage.setItem(AUTH_PASSWORD_KEY, sessionPassword);
           } catch (err) { }
           unlockApp();
         } else {
-          authError.textContent = "Sai mật khẩu, thử lại.";
+          authError.textContent = "Sai User ID hoặc mật khẩu (mật khẩu chỉ dùng được 1 lần), thử lại.";
           authPasswordInput.value = "";
           authPasswordInput.focus();
         }
@@ -1824,10 +1880,29 @@
       }
     });
 
+    function doLogout() {
+      try {
+        localStorage.removeItem(AUTH_STORAGE_KEY);
+        localStorage.removeItem(AUTH_PASSWORD_KEY);
+      } catch (err) { }
+      sessionPassword = "";
+      appRoot.style.display = "none";
+      authGate.style.display = "";
+      authForm.style.display = "block";
+      requestForm.style.display = "none";
+      authUserIdInput.value = "";
+      authPasswordInput.value = "";
+      authError.textContent = "";
+      requestStatus.textContent = "";
+      requestStatus.className = "request-status";
+      requestUserIdInput.value = "";
+    }
+
     (function checkExistingAuth() {
       let authed = false;
       try {
         authed = localStorage.getItem(AUTH_STORAGE_KEY) === "1";
+        if (authed) sessionPassword = localStorage.getItem(AUTH_PASSWORD_KEY) || "";
       } catch (err) { }
       if (authed) unlockApp();
     })();
