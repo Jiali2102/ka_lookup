@@ -1,0 +1,30 @@
+// api/lookup.js
+// Proxy phía server: client chỉ gọi /api/lookup (cùng origin với Vercel),
+// KHÔNG bao giờ thấy URL webhook n8n thật. URL thật nằm trong biến môi
+// trường N8N_WEBHOOK_URL, cấu hình trong Vercel Dashboard (không nằm trong code/git).
+
+export default async function handler(req, res) {
+  const target = process.env.N8N_WEBHOOK_URL;
+
+  if (!target) {
+    res.status(500).json({ ok: false, message: "Server chưa cấu hình N8N_WEBHOOK_URL." });
+    return;
+  }
+
+  // Forward nguyên query string client gửi lên (type, codes, password, user_id, tu_ngay, den_ngay...)
+  const qs = req.url.includes("?") ? req.url.slice(req.url.indexOf("?")) : "";
+
+  try {
+    const upstream = await fetch(`${target}${qs}`, { method: "GET" });
+    const text = await upstream.text();
+
+    res.status(upstream.status);
+    res.setHeader(
+      "Content-Type",
+      upstream.headers.get("content-type") || "application/json"
+    );
+    res.send(text);
+  } catch (err) {
+    res.status(502).json({ ok: false, message: "Không gọi được webhook n8n." });
+  }
+}
