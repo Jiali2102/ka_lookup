@@ -2,6 +2,12 @@
 // Proxy phía server: client chỉ gọi /api/lookup (cùng origin với Vercel),
 // KHÔNG bao giờ thấy URL webhook n8n thật. URL thật nằm trong biến môi
 // trường N8N_WEBHOOK_URL, cấu hình trong Vercel Dashboard (không nằm trong code/git).
+//
+// Dùng CommonJS (module.exports) thay vì "export default" vì project này
+// không có package.json khai báo "type":"module" — nếu dùng cú pháp ESM,
+// Vercel sẽ build/run function này như CommonJS và báo lỗi cú pháp khi
+// gặp "export", khiến function luôn trả về lỗi (đây là nguyên nhân gây
+// "Lỗi kết nối, thử lại sau" ở bản trước).
 
 module.exports = async (req, res) => {
   const target = process.env.N8N_WEBHOOK_URL;
@@ -27,4 +33,4 @@ module.exports = async (req, res) => {
   } catch (err) {
     res.status(502).json({ ok: false, message: "Không gọi được webhook n8n." });
   }
-}
+};
