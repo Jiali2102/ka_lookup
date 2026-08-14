@@ -3,7 +3,7 @@
 // KHÔNG bao giờ thấy URL webhook n8n thật. URL thật nằm trong biến môi
 // trường N8N_WEBHOOK_URL, cấu hình trong Vercel Dashboard (không nằm trong code/git).
 
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
   const target = process.env.N8N_WEBHOOK_URL;
 
   if (!target) {
