@@ -929,8 +929,7 @@
       color: var(--muted);
     }
 
-    #auth-password,
-    #auth-user-id {
+    #auth-password {
       width: 100%;
       font-family: var(--sans);
       font-size: 16px;
@@ -945,8 +944,7 @@
       transition: border-color .15s;
     }
 
-    #auth-password:focus,
-    #auth-user-id:focus {
+    #auth-password:focus {
       border-color: var(--orange);
       background: white;
     }
@@ -1022,9 +1020,8 @@
     <form id="auth-form" class="auth-card">
       <div class="auth-mark">KA</div>
       <h2>Tra cứu KAC</h2>
-      <p>Nhập User ID và mật khẩu để tiếp tục</p>
-      <input type="text" id="auth-user-id" placeholder="Telegram User ID" autocomplete="off" autofocus />
-      <input type="password" id="auth-password" placeholder="Mật khẩu" autocomplete="off" />
+      <p>Nhập mật khẩu để tiếp tục</p>
+      <input type="password" id="auth-password" placeholder="Mật khẩu" autocomplete="off" autofocus />
       <button type="submit" class="btn-primary auth-submit">Vào trang</button>
       <button type="button" id="btn-show-request" class="auth-link-btn">Chưa có mật khẩu? Yêu cầu cấp</button>
       <p id="auth-error" class="auth-error"></p>
@@ -1754,7 +1751,7 @@
     }
   </script>
 
-  <script>const WEBHOOK_BASE_URL = "https://n8n-workflow.ghn.vn/webhook/compensation";
+  <script>const WEBHOOK_BASE_URL = "/api/lookup";
   </script>
 
   <script>const AUTH_STORAGE_KEY = "ka_lookup_authed_v1";
@@ -1766,8 +1763,6 @@
     const appRoot = document.getElementById("app-root");
 
     const authForm = document.getElementById("auth-form");
-
-    const authUserIdInput = document.getElementById("auth-user-id");
 
     const authPasswordInput = document.getElementById("auth-password");
 
@@ -1781,10 +1776,9 @@
       initApp();
     }
 
-    async function verifyPassword(userId, password) {
+    async function verifyPassword(password) {
       const params = new URLSearchParams({
         type: "auth",
-        user_id: userId,
         password: password
       });
       const res = await fetch(`${WEBHOOK_BASE_URL}?${params.toString()}`);
@@ -1795,25 +1789,19 @@
 
     authForm.addEventListener("submit", async e => {
       e.preventDefault();
-      const userId = authUserIdInput.value.trim();
-      const password = authPasswordInput.value;
-      if (!userId || !password) {
-        authError.textContent = "Vui lòng nhập đầy đủ User ID và mật khẩu.";
-        return;
-      }
       authSubmitBtn.disabled = true;
       authError.textContent = "";
       try {
-        const ok = await verifyPassword(userId, password);
+        const ok = await verifyPassword(authPasswordInput.value);
         if (ok) {
-          sessionPassword = password;
+          sessionPassword = authPasswordInput.value;
           try {
             localStorage.setItem(AUTH_STORAGE_KEY, "1");
             localStorage.setItem(AUTH_PASSWORD_KEY, sessionPassword);
           } catch (err) { }
           unlockApp();
         } else {
-          authError.textContent = "Sai User ID hoặc mật khẩu (mật khẩu chỉ dùng được 1 lần), thử lại.";
+          authError.textContent = "Sai mật khẩu, thử lại.";
           authPasswordInput.value = "";
           authPasswordInput.focus();
         }
@@ -1890,7 +1878,6 @@
       authGate.style.display = "";
       authForm.style.display = "block";
       requestForm.style.display = "none";
-      authUserIdInput.value = "";
       authPasswordInput.value = "";
       authError.textContent = "";
       requestStatus.textContent = "";
