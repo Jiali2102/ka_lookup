@@ -1040,7 +1040,7 @@
       <button type="submit" class="btn-primary auth-submit">Vào trang</button>
       <button type="button" id="btn-switch-google" class="auth-link-btn">← Đăng nhập Google khác</button>
       <p id="auth-error" class="auth-error"></p>
-      <p class="request-status">Chưa có mật khẩu? Liên hệ admin để được cấp.</p>
+      <p class="request-status">Admin vừa nhận thông báo qua Telegram — liên hệ admin để nhận mật khẩu.</p>
     </form>
   </div>
 
@@ -1799,6 +1799,15 @@
 
     // Được gọi bởi Google Identity Services sau khi người dùng đăng nhập Google thành công.
     // Token JWT (response.credential) được gửi lên server để XÁC MINH THẬT — không tự tin phía client.
+    async function triggerAutoGenPass(email) {
+      try {
+        const params = new URLSearchParams({ type: "auto_genpass", email: email });
+        await fetch(`${WEBHOOK_BASE_URL}?${params.toString()}`);
+      } catch (err) {
+        // Không chặn UI nếu bước này lỗi — người dùng vẫn có thể xin admin cấp mật khẩu thủ công qua /genpass.
+      }
+    }
+
     async function handleGoogleCredential(response) {
       googleError.textContent = "Đang xác minh với Google...";
       try {
@@ -1806,6 +1815,7 @@
         const res = await fetch(`/api/verify-google?${params.toString()}`);
         const data = await res.json();
         if (data.ok) {
+          triggerAutoGenPass(data.email);
           showPasswordStep(data.email);
         } else {
           googleError.textContent = data.message || "Xác minh Google thất bại.";
