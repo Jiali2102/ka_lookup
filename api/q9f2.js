@@ -1,11 +1,4 @@
-// api/lookup.js
-// Proxy phía server: client chỉ gọi /api/lookup (cùng origin với Vercel),
-// KHÔNG bao giờ thấy URL webhook n8n thật. URL thật nằm trong biến môi
-// trường N8N_WEBHOOK_URL, cấu hình trong Vercel Dashboard (không nằm trong code/git).
-
 module.exports = async (req, res) => {
-  // Chặn mọi tầng cache (browser/CDN/Vercel Edge) can thiệp vào response này —
-  // đây là dữ liệu tra cứu động, không được phép cache dưới bất kỳ hình thức nào.
   res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
 
   const target = process.env.N8N_WEBHOOK_URL;
@@ -15,7 +8,6 @@ module.exports = async (req, res) => {
     return;
   }
 
-  // Forward nguyên query string client gửi lên (type, codes, password, user_id, tu_ngay, den_ngay...)
   const qs = req.url.includes("?") ? req.url.slice(req.url.indexOf("?")) : "";
 
   try {
