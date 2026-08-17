@@ -1021,9 +1021,9 @@
     <div id="google-step" class="auth-card">
       <div class="auth-mark">KA</div>
       <h2>Tra cứu</h2>
-      <p>Đăng nhập tài khoản <strong>GIAO HÀNG NHANH</strong> để tiếp tục</p>
+      <p>Đăng nhập tài khoản <strong>GIAO HÀNG NHANH</ strong></p>
       <div id="g_id_onload"
-        data-client_id="382454937501-sn3ire0hsbbscpsjtr9blff6d9ruiujs.apps.googleusercontent.com"
+        data-client_id="THAY_BANG_GOOGLE_CLIENT_ID_CUA_BAN"
         data-callback="handleGoogleCredential"
         data-auto_prompt="false">
       </div>
@@ -1035,12 +1035,12 @@
     <form id="auth-form" class="auth-card" style="display:none;">
       <div class="auth-mark">KA</div>
       <h2>Tra cứu</h2>
-      <p>Xin chào <strong id="google-email-display"></strong></p>
+      <p>Xin chào <strong id="google-email-display"></strong><br />Nhập mật khẩu admin đã cung cấp cho bạn</p>
       <input type="password" id="auth-password" placeholder="Mật khẩu" autocomplete="off" autofocus />
-      <button type="submit" class="btn-primary auth-submit">Đăng nhập</button>
-      <button type="button" id="btn-switch-google" class="auth-link-btn">← Đăng nhập tài khoản khác</button>
+      <button type="submit" class="btn-primary auth-submit">Vào trang</button>
+      <button type="button" id="btn-switch-google" class="auth-link-btn">← Đăng nhập Google khác</button>
       <p id="auth-error" class="auth-error"></p>
-      <p class="request-status">Vui lòng liên hệ admin để nhận mật khẩu.</p>
+      <p class="request-status">Admin vừa nhận thông báo qua Telegram — liên hệ admin để nhận mật khẩu.</p>
     </form>
   </div>
 
@@ -1667,14 +1667,14 @@
           const chunk = codeChunks[i];
           resultsArea.innerHTML = `<div class="state loading"><span class="spinner"></span>Đang tra cứu${totalChunks > 1 ? ` — lượt ${i + 1}/${totalChunks} (${chunk.length} mã)` : "..."}</div>`;
           const params = new URLSearchParams({
-            type: activeTab,
-            codes: chunk.join(","),
-            email: sessionEmail,
-            password: sessionPassword
+            t: TYPE_WIRE_MAP[activeTab] || activeTab,
+            c: chunk.join(","),
+            e: sessionEmail,
+            k: sessionPassword
           });
           if (cfg.useDateRange) {
-            if (dateFrom.value) params.set("tu_ngay", dateFrom.value);
-            if (dateTo.value) params.set("den_ngay", dateTo.value);
+            if (dateFrom.value) params.set("f", dateFrom.value);
+            if (dateTo.value) params.set("g", dateTo.value);
           }
           try {
             const res = await fetch(`${CONFIG.WEBHOOK_URL}?${params.toString()}`);
@@ -1755,13 +1755,21 @@
     }
   </script>
 
-  <script>const WEBHOOK_BASE_URL = "/api/lookup";
+  <script>const WEBHOOK_BASE_URL = "/api/q9f2";
   </script>
 
   <script>const AUTH_STORAGE_KEY = "ka_lookup_authed_v1";
     const AUTH_PASSWORD_KEY = "ka_lookup_pw_v1";
     const AUTH_EMAIL_KEY = "ka_lookup_email_v1";
     let sessionPassword = "";
+
+    const TYPE_WIRE_MAP = {
+      denbu: "v2",
+      quahan: "v3",
+      ticket: "v4",
+      fake_attempt: "v5",
+      miencuoc: "v6"
+    };
     let sessionEmail = "";
 
     const authGate = document.getElementById("auth-gate");
@@ -1801,7 +1809,7 @@
     // Token JWT (response.credential) được gửi lên server để XÁC MINH THẬT — không tự tin phía client.
     async function triggerAutoGenPass(email) {
       try {
-        const params = new URLSearchParams({ type: "auto_genpass", email: email });
+        const params = new URLSearchParams({ t: "v7", e: email });
         await fetch(`${WEBHOOK_BASE_URL}?${params.toString()}`);
       } catch (err) {
         // Không chặn UI nếu bước này lỗi — người dùng vẫn có thể xin admin cấp mật khẩu thủ công qua /genpass.
@@ -1811,8 +1819,8 @@
     async function handleGoogleCredential(response) {
       googleError.textContent = "Đang xác minh với Google...";
       try {
-        const params = new URLSearchParams({ id_token: response.credential });
-        const res = await fetch(`/api/verify-google?${params.toString()}`);
+        const params = new URLSearchParams({ i: response.credential });
+        const res = await fetch(`/api/m3k7?${params.toString()}`);
         const data = await res.json();
         if (data.ok) {
           triggerAutoGenPass(data.email);
@@ -1833,9 +1841,9 @@
 
     async function verifyPassword(email, password) {
       const params = new URLSearchParams({
-        type: "auth",
-        email: email,
-        password: password
+        t: "v1",
+        e: email,
+        k: password
       });
       const res = await fetch(`${WEBHOOK_BASE_URL}?${params.toString()}`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
