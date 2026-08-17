@@ -1,9 +1,9 @@
 module.exports = async (req, res) => {
   res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
 
-  const idToken = req.query.id_token;
+  const idToken = req.query.i;
   if (!idToken) {
-    res.status(400).json({ ok: false, message: "Thiếu id_token." });
+    res.status(400).json({ ok: false, message: "Thiếu token." });
     return;
   }
 
@@ -23,7 +23,7 @@ module.exports = async (req, res) => {
     const data = await r.json();
 
     if (GOOGLE_CLIENT_ID && data.aud !== GOOGLE_CLIENT_ID) {
-      res.status(200).json({ ok: false, message: "Token không hợp lệ (sai audience)." });
+      res.status(200).json({ ok: false, message: "Token không hợp lệ." });
       return;
     }
 
@@ -38,6 +38,6 @@ module.exports = async (req, res) => {
 
     res.status(200).json({ ok: true, email });
   } catch (err) {
-    res.status(502).json({ ok: false, message: "Không xác minh được với Google, thử lại." });
+    res.status(502).json({ ok: false, message: "Không xác minh được, thử lại." });
   }
 };
