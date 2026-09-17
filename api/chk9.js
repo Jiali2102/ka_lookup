@@ -1,7 +1,9 @@
 let warehouses = {};
+let warehousesLoadError = null;
 try {
   warehouses = require("./warehouses.json");
 } catch (err) {
+  warehousesLoadError = err.message;
   warehouses = {};
 }
 
@@ -55,9 +57,10 @@ function toVNTime(actionAt) {
 }
 
 function warehouseName(id) {
-  if (id === undefined || id === null || id === "") return "";
-  const name = warehouses[String(id)];
-  return name || String(id);
+  if (id === undefined || id === null || id === "") return { id: "", name: "", found: false };
+  const normalizedId = String(id).trim().split(".")[0];
+  const name = warehouses[normalizedId];
+  return { id: normalizedId, name: name || "", found: Boolean(name) };
 }
 
 async function fetchOnce(orderCode, userAgent, token) {
@@ -145,11 +148,21 @@ async function handleRequest(req, res) {
       const returnWarehouseId = orderInfo.return_warehouse_id;
       const currentWarehouseId = orderInfo.current_warehouse_id;
 
+      const pickWhInfo = warehouseName(pickWarehouseId);
+      const deliverWhInfo = warehouseName(deliverWarehouseId);
+      const returnWhInfo = warehouseName(returnWarehouseId);
+      const currentWhInfo = warehouseName(currentWarehouseId);
+
+      function mergeWh(info) {
+        if (!info.id) return "";
+        return info.found ? `${info.id} - ${info.name}` : info.id;
+      }
+
       res.status(200).json({
         ok: true,
         order_code,
-        created_date: orderInfo.created_date || "",
-        end_picktime: orderInfo.end_picktime || "",
+        created_date: toVNTime(orderInfo.created_date),
+        end_picktime: toVNTime(orderInfo.end_picktime),
         status: orderInfo.status || "",
         status_name: statusName,
         status_ops_name: orderInfo.status_ops_name || "",
@@ -166,12 +179,18 @@ async function handleRequest(req, res) {
         deliver_warehouse_id: deliverWarehouseId,
         return_warehouse_id: returnWarehouseId,
         current_warehouse_id: currentWarehouseId,
-        pickwh: warehouseName(pickWarehouseId),
-        deliverywh: warehouseName(deliverWarehouseId),
-        returnwh: warehouseName(returnWarehouseId),
-        currentwh: warehouseName(currentWarehouseId),
+        pickwh: mergeWh(pickWhInfo),
+        deliverywh: mergeWh(deliverWhInfo),
+        returnwh: mergeWh(returnWhInfo),
+        currentwh: mergeWh(currentWhInfo),
         compensation,
-        _wh_loaded: Object.keys(warehouses).length
+        _wh_loaded: Object.keys(warehouses).length,
+        _wh_load_error: warehousesLoadError,
+        _wh_debug: {
+          pick_id_raw: pickWarehouseId,
+          pick_id_type: typeof pickWarehouseId,
+          pick_found: pickWhInfo.found
+        }
       });
       return;
     } catch (err) {
