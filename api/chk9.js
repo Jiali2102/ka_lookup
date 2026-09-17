@@ -1,4 +1,9 @@
-const warehouses = require("./warehouses.json");
+let warehouses = {};
+try {
+  warehouses = require("./warehouses.json");
+} catch (err) {
+  warehouses = {};
+}
 
 const TRACKING_URL = "https://fe-online-gateway.ghn.vn/order-tracking/public-api/internal/tracking-logs";
 const DELIVERED = "Giao hàng thành công";
@@ -69,6 +74,14 @@ async function fetchOnce(orderCode, userAgent, token) {
 }
 
 module.exports = async (req, res) => {
+  try {
+    await handleRequest(req, res);
+  } catch (err) {
+    res.status(200).json({ ok: false, message: "Lỗi hệ thống: " + err.message });
+  }
+};
+
+async function handleRequest(req, res) {
   res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
 
   if (req.method !== "POST") {
@@ -168,4 +181,4 @@ module.exports = async (req, res) => {
   }
 
   res.status(200).json({ ok: false, order_code, message: lastError || "Không xác định" });
-};
+}
