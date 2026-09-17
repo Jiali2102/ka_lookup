@@ -385,6 +385,25 @@
       background: white;
     }
 
+    .chk-input {
+      width: 100%;
+      font-family: var(--sans);
+      font-size: 15px;
+      padding: 9px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      background: #FBFAF8;
+      color: var(--text);
+      outline: none;
+      transition: border-color .15s;
+      margin-top: 4px;
+    }
+
+    .chk-input:focus {
+      border-color: var(--orange);
+      background: white;
+    }
+
     .row {
       display: flex;
       gap: 12px;
@@ -1099,10 +1118,11 @@
       <div class="rail">
         <div class="rail-mark">KA</div>
         <div class="tabs" id="tabs"></div>
+        <div class="tab" id="tab-checker">🔎 Kiểm tra đơn</div>
         <button type="button" id="btn-logout" class="rail-logout" title="Đăng xuất">⏻</button>
       </div>
 
-      <div class="side-panel">
+      <div class="side-panel" id="side-panel-normal">
         <div class="app-title">Tra cứu KAC</div>
         <h2 id="panel-title"></h2>
         <p class="hint" id="panel-hint"></p>
@@ -1137,8 +1157,38 @@
         </div>
       </div>
 
-      <div class="main-col">
+      <div class="side-panel" id="side-panel-checker" style="display:none;">
+        <div class="app-title">Kiểm tra đơn</div>
+        <h2>Kiểm tra trạng thái &amp; đền bù</h2>
+        <p class="hint">Gọi trực tiếp API GHN bằng User-Agent/Token của bạn — không lưu trên server.</p>
+
+        <label class="field-label">User-Agent</label>
+        <input type="text" id="chk-user-agent" class="chk-input" placeholder="User-Agent tài khoản của bạn" />
+
+        <label class="field-label" style="margin-top:10px;">Token</label>
+        <input type="password" id="chk-token" class="chk-input" placeholder="Token tài khoản của bạn" />
+
+        <button class="btn-ghost" id="chk-btn-save-config" style="margin-top:8px;">💾 Lưu cấu hình</button>
+
+        <div class="divider-or">sau đó</div>
+
+        <label class="field-label">Danh sách mã đơn</label>
+        <textarea id="chk-codes-input"
+          placeholder="Dán mã đơn cần kiểm tra, mỗi dòng 1 mã."></textarea>
+
+        <div class="actions">
+          <button class="btn-primary" id="chk-btn-run">Chạy kiểm tra</button>
+          <button class="btn-ghost" id="chk-btn-clear">Xóa</button>
+          <span class="count-tag" id="chk-code-count"></span>
+        </div>
+      </div>
+
+      <div class="main-col" id="main-col-normal">
         <div id="results-area"></div>
+      </div>
+
+      <div class="main-col" id="main-col-checker" style="display:none;">
+        <div id="chk-results-area"></div>
       </div>
     </div>
 
@@ -1791,6 +1841,194 @@
         el("#nf-drawer").classList.remove("open");
       };
       el("#btn-toggle-notfound").style.display = "none";
+
+      const CHK_CONFIG_KEY = "ka_lookup_chk_config_v1";
+      const tabChecker = el("#tab-checker");
+      const sidePanelNormal = el("#side-panel-normal");
+      const sidePanelChecker = el("#side-panel-checker");
+      const mainColNormal = el("#main-col-normal");
+      const mainColChecker = el("#main-col-checker");
+      const chkUserAgentInput = el("#chk-user-agent");
+      const chkTokenInput = el("#chk-token");
+      const chkCodesInput = el("#chk-codes-input");
+      const chkCodeCount = el("#chk-code-count");
+      const chkResultsArea = el("#chk-results-area");
+      const chkBtnRun = el("#chk-btn-run");
+
+      function loadChkConfig() {
+        try {
+          const raw = localStorage.getItem(CHK_CONFIG_KEY);
+          if (!raw) return;
+          const cfg = JSON.parse(raw);
+          chkUserAgentInput.value = cfg.userAgent || "";
+          chkTokenInput.value = cfg.token || "";
+        } catch (err) { }
+      }
+
+      function saveChkConfig() {
+        const cfg = {
+          userAgent: chkUserAgentInput.value.trim(),
+          token: chkTokenInput.value.trim()
+        };
+        try {
+          localStorage.setItem(CHK_CONFIG_KEY, JSON.stringify(cfg));
+        } catch (err) { }
+      }
+
+      loadChkConfig();
+
+      el("#chk-btn-save-config").onclick = () => {
+        saveChkConfig();
+        alert("Đã lưu User-Agent & Token vào trình duyệt này.");
+      };
+
+      function showCheckerView() {
+        sidePanelNormal.style.display = "none";
+        mainColNormal.style.display = "none";
+        sidePanelChecker.style.display = "block";
+        mainColChecker.style.display = "flex";
+        document.querySelectorAll(".tabs .tab").forEach(t => t.classList.remove("active"));
+        tabChecker.classList.add("active");
+        el("#btn-toggle-notfound").style.display = "none";
+      }
+
+      function showNormalView() {
+        sidePanelNormal.style.display = "block";
+        mainColNormal.style.display = "flex";
+        sidePanelChecker.style.display = "none";
+        mainColChecker.style.display = "none";
+        tabChecker.classList.remove("active");
+      }
+
+      tabChecker.onclick = showCheckerView;
+
+      const originalSwitchTab = switchTab;
+      switchTab = function (key) {
+        showNormalView();
+        originalSwitchTab(key);
+      };
+
+      function parseChkCodes(raw) {
+        return [...new Set(raw.split(/[\s,;]+/).map(s => s.trim().toUpperCase()).filter(Boolean))];
+      }
+
+      chkCodesInput.addEventListener("input", () => {
+        const n = parseChkCodes(chkCodesInput.value).length;
+        chkCodeCount.textContent = n > 0 ? n + " mã đơn" : "";
+      });
+
+      el("#chk-btn-clear").onclick = () => {
+        chkCodesInput.value = "";
+        chkCodeCount.textContent = "";
+        chkResultsArea.innerHTML = "";
+        chkResults = [];
+      };
+
+      let chkResults = [];
+
+      function formatMoney(v) {
+        const n = Number(v);
+        if (isNaN(n)) return v;
+        return n.toLocaleString("vi-VN") + " đ";
+      }
+
+      function renderChkResults() {
+        if (!chkResults.length) {
+          chkResultsArea.innerHTML = `<div class="empty"><div class="big">🔍</div>Chưa có kết quả.</div>`;
+          return;
+        }
+        const rows = chkResults.map(r => `
+          <tr>
+            <td class="code-cell">${r.order_code}</td>
+            <td>${r.status_name || (r.message ? "Lỗi" : "")}</td>
+            <td>${r.client_id ?? ""}</td>
+            <td class="amount-cell">${r.order_value !== undefined ? formatMoney(r.order_value) : ""}</td>
+            <td class="amount-cell">${r.cod_amount !== undefined ? formatMoney(r.cod_amount) : ""}</td>
+            <td class="amount-cell">${r.compensation !== undefined ? formatMoney(r.compensation) : ""}</td>
+            <td>${r.last_action_at_vn || ""}</td>
+          </tr>`).join("");
+        chkResultsArea.innerHTML = `
+          <div class="toolbar">
+            <span class="stats"><span class="stat-badge total">Tổng: ${chkResults.length}</span></span>
+            <div class="toolbar-actions">
+              <button class="btn-ghost" id="chk-btn-copy">Copy kết quả</button>
+              <button class="btn-ghost" id="chk-btn-csv">Xuất CSV</button>
+              <button class="btn-ghost" id="chk-btn-xlsx">Xuất Excel</button>
+            </div>
+          </div>
+          <div class="results-table-wrap">
+            <table class="result-table">
+              <thead>
+                <tr><th>Mã đơn</th><th>Trạng thái</th><th>Client ID</th><th class="align-right">Order Value</th><th class="align-right">COD</th><th class="align-right">Đền/bồi</th><th>Thời gian gần nhất</th></tr>
+              </thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </div>`;
+        el("#chk-btn-copy").onclick = () => {
+          const header = ["Mã đơn", "Trạng thái", "Client ID", "OrderValue", "COD", "Đền/bồi", "Thời gian"].join("\t");
+          const lines = chkResults.map(r => [
+            r.order_code, r.status_name || r.message || "", r.client_id ?? "",
+            r.order_value ?? "", r.cod_amount ?? "", r.compensation ?? "", r.last_action_at_vn ?? ""
+          ].join("\t"));
+          navigator.clipboard.writeText([header, ...lines].join("\n"));
+        };
+        el("#chk-btn-csv").onclick = () => {
+          const aoa = [["Mã đơn", "Trạng thái", "Client ID", "OrderValue", "COD", "Đền/bồi", "Thời gian"]];
+          chkResults.forEach(r => aoa.push([r.order_code, r.status_name || r.message || "", r.client_id ?? "", r.order_value ?? "", r.cod_amount ?? "", r.compensation ?? "", r.last_action_at_vn ?? ""]));
+          const ws = XLSX.utils.aoa_to_sheet(aoa);
+          const csv = XLSX.utils.sheet_to_csv(ws);
+          const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8;" });
+          const epoch = (Date.now() / 1000).toFixed(3);
+          downloadBlob(blob, `output_kiemtra_${epoch}.csv`);
+        };
+        el("#chk-btn-xlsx").onclick = () => {
+          const aoa = [["Mã đơn", "Trạng thái", "Client ID", "OrderValue", "COD", "Đền/bồi", "Thời gian"]];
+          chkResults.forEach(r => aoa.push([r.order_code, r.status_name || r.message || "", r.client_id ?? "", r.order_value ?? "", r.cod_amount ?? "", r.compensation ?? "", r.last_action_at_vn ?? ""]));
+          const ws = XLSX.utils.aoa_to_sheet(aoa);
+          const wb = XLSX.utils.book_new();
+          XLSX.utils.book_append_sheet(wb, ws, "KetQua");
+          const epoch = (Date.now() / 1000).toFixed(3);
+          XLSX.writeFile(wb, `output_kiemtra_${epoch}.xlsx`);
+        };
+      }
+
+      async function fetchOneOrder(orderCode, userAgent, token) {
+        const res = await fetch("/api/chk9", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ order_code: orderCode, user_agent: userAgent, token })
+        });
+        return res.json();
+      }
+
+      chkBtnRun.onclick = async () => {
+        const userAgent = chkUserAgentInput.value.trim();
+        const token = chkTokenInput.value.trim();
+        if (!userAgent || !token) {
+          alert("Vui lòng nhập đầy đủ User-Agent và Token.");
+          return;
+        }
+        const codes = parseChkCodes(chkCodesInput.value);
+        if (!codes.length) {
+          alert("Vui lòng nhập ít nhất 1 mã đơn.");
+          return;
+        }
+        saveChkConfig();
+        chkBtnRun.disabled = true;
+        chkResults = [];
+        for (let i = 0; i < codes.length; i++) {
+          chkResultsArea.innerHTML = `<div class="state loading"><span class="spinner"></span>Đang chạy... ${i + 1}/${codes.length}</div>`;
+          try {
+            const data = await fetchOneOrder(codes[i], userAgent, token);
+            chkResults.push({ order_code: codes[i], ...data });
+          } catch (err) {
+            chkResults.push({ order_code: codes[i], ok: false, message: "Lỗi kết nối" });
+          }
+        }
+        chkBtnRun.disabled = false;
+        renderChkResults();
+      };
+
       codesInput.addEventListener("keydown", e => {
         if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) doSearch();
       });
