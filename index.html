@@ -768,27 +768,6 @@
       z-index: 3;
     }
 
-    .result-table tbody tr.chk-status-delivered {
-      background: #E9F7EF;
-    }
-
-    .result-table tbody tr.chk-status-return {
-      background: #FFF8E1;
-    }
-
-    .result-table tbody tr.chk-status-lost {
-      background: #FBEAE8;
-    }
-
-    .result-table tbody tr.chk-status-cancel {
-      background: #1A1A1A;
-      color: white;
-    }
-
-    .result-table tbody tr.chk-status-cancel td {
-      color: white;
-    }
-
     table.result-table {
       width: 100%;
       border-collapse: collapse;
@@ -835,6 +814,27 @@
 
     table.result-table tbody tr:hover {
       background: var(--blue-soft);
+    }
+
+    table.result-table tbody tr.chk-status-delivered {
+      background: #E9F7EF;
+    }
+
+    table.result-table tbody tr.chk-status-return {
+      background: #FFF8E1;
+    }
+
+    table.result-table tbody tr.chk-status-lost {
+      background: #FBEAE8;
+    }
+
+    table.result-table tbody tr.chk-status-cancel {
+      background: #1A1A1A;
+      color: white;
+    }
+
+    table.result-table tbody tr.chk-status-cancel td {
+      color: white;
     }
 
     table.result-table td.code-cell {
@@ -2059,24 +2059,24 @@
 
       const CHK_COLUMNS = [
         ["order_code", "Mã đơn"],
-        ["client_id", "Mã kh"],
+        ["client_id", "Client ID"],
         ["created_date", "Ngày tạo"],
-        ["end_picktime", "Lấy tc"],
-        ["status", "Trạng thái"],
-        ["status_ops_name", "TT vận hành"],
-        ["last_action_at_vn", "Cập nhật cuối"],
-        ["order_value", "Giá trị"],
+        ["end_picktime", "Giờ lấy xong"],
+        ["status", "Status"],
+        ["status_name", "Trạng thái"],
+        ["status_ops_name", "Status Ops"],
+        ["last_action_at_vn", "Cập nhật lần cuối"],
+        ["order_value", "Order Value"],
         ["cod_amount", "COD"],
-        ["insurance_value", "Khai giá"],
-        ["compensation", "GT đền bù"],
+        ["insurance_value", "Bảo hiểm"],
+        ["package_value", "Package Value"],
+        ["compensation", "Đền/bồi"],
         ["pickwh", "Kho lấy"],
         ["deliverywh", "Kho giao"],
         ["returnwh", "Kho trả"],
         ["currentwh", "Kho hiện tại"]
       ];
       const CHK_EXPORT_EXTRA_COLUMNS = [
-        ["package_value", "Package Value"],
-        ["status_name", "Trạng thái"],
         ["content", "Nội dung hàng"],
         ["from_name", "Người gửi"],
         ["from_address", "Địa chỉ gửi"]
