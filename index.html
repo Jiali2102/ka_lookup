@@ -174,6 +174,37 @@
       min-height: 0;
     }
 
+    #chk-results-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .result-table th,
+    .result-table td {
+      white-space: nowrap;
+    }
+
+    .result-table tbody tr {
+      background: var(--surface);
+    }
+
+    .tab,
+    button,
+    .file-upload-btn,
+    .chk-edit-link {
+      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22"><circle cx="11" cy="11" r="7" fill="%23FE5F00" opacity="0.85"/></svg>') 11 11, pointer;
+      transition: transform .12s ease;
+    }
+
+    .tab:hover,
+    .btn-ghost:hover,
+    .btn-primary:hover,
+    .file-upload-btn:hover {
+      transform: translateY(-1px);
+    }
+
     .nf-toggle {
       position: fixed;
       right: 22px;
@@ -1186,8 +1217,8 @@
     <div class="app-shell">
       <div class="rail">
         <div class="rail-mark">KA</div>
-        <div class="tabs" id="tabs"></div>
         <div class="tab" id="tab-checker">🔎 Kiểm tra đơn</div>
+        <div class="tabs" id="tabs"></div>
         <button type="button" id="btn-logout" class="rail-logout" title="Đăng xuất">⏻</button>
       </div>
 
@@ -2014,9 +2045,11 @@
         chkCodeCount.textContent = "";
         chkResultsArea.innerHTML = "";
         chkResults = [];
+        chkSearchQuery = "";
       };
 
       let chkResults = [];
+      let chkSearchQuery = "";
 
       function formatMoney(v) {
         const n = Number(v);
@@ -2078,7 +2111,22 @@
           chkResultsArea.innerHTML = `<div class="empty"><div class="big">🔍</div>Chưa có kết quả.</div>`;
           return;
         }
-        const rows = chkResults.map(r => {
+        const filterTokens = chkSearchQuery.split(/[\s,;]+/).map(s => s.trim().toUpperCase()).filter(Boolean);
+        const filtered = filterTokens.length
+          ? chkResults.filter(r => filterTokens.some(t => (r.order_code || "").toUpperCase().includes(t)))
+          : chkResults;
+        const searchBoxHtml = `
+          <div class="result-search-row">
+            <input type="text" id="chk-result-search" class="result-search-input" placeholder="Lọc mã đơn trong kết quả này — dán được nhiều mã, cách nhau bằng dấu phẩy/khoảng trắng" value="${chkSearchQuery.replace(/"/g, "&quot;")}" />
+            ${chkSearchQuery ? `<button class="btn-ghost" id="chk-btn-clear-search">Xóa lọc</button>` : ""}
+            <span class="result-search-count">${filterTokens.length ? `${filtered.length}/${chkResults.length} dòng khớp` : `${chkResults.length} dòng`}</span>
+          </div>`;
+        if (!filtered.length) {
+          chkResultsArea.innerHTML = `${searchBoxHtml}<div class="empty"><div class="big">🔍</div>Không có mã đơn nào khớp ô lọc.</div>`;
+          bindChkSearchEvents();
+          return;
+        }
+        const rows = filtered.map(r => {
           const rowClass = chkStatusRowClass(r.status);
           const cells = CHK_COLUMNS.map(([field]) => {
             const cls = CHK_MONEY_FIELDS.has(field) ? ' class="amount-cell"' : (field === "order_code" ? ' class="code-cell"' : "");
@@ -2095,7 +2143,7 @@
               <button class="btn-ghost" id="chk-btn-xlsx">Xuất Excel</button>
             </div>
           </div>
-          <div class="results-table-wrap">
+          ${searchBoxHtml}<div class="results-table-wrap">
             <table class="result-table">
               <thead>
                 <tr>${CHK_COLUMNS.map(([field, label]) => `<th${CHK_MONEY_FIELDS.has(field) ? ' class="align-right"' : ""}>${label}</th>`).join("")}</tr>
@@ -2106,12 +2154,12 @@
         const exportCols = [...CHK_COLUMNS, ...CHK_EXPORT_EXTRA_COLUMNS];
         el("#chk-btn-copy").onclick = () => {
           const header = exportCols.map(([, label]) => label).join("\t");
-          const lines = chkResults.map(r => exportCols.map(([field]) => chkRawValue(r, field)).join("\t"));
+          const lines = filtered.map(r => exportCols.map(([field]) => chkRawValue(r, field)).join("\t"));
           navigator.clipboard.writeText([header, ...lines].join("\n"));
         };
         el("#chk-btn-csv").onclick = () => {
           const aoa = [exportCols.map(([, label]) => label)];
-          chkResults.forEach(r => aoa.push(exportCols.map(([field]) => chkRawValue(r, field))));
+          filtered.forEach(r => aoa.push(exportCols.map(([field]) => chkRawValue(r, field))));
           const ws = XLSX.utils.aoa_to_sheet(aoa);
           const csv = XLSX.utils.sheet_to_csv(ws);
           const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8;" });
@@ -2120,13 +2168,39 @@
         };
         el("#chk-btn-xlsx").onclick = () => {
           const aoa = [exportCols.map(([, label]) => label)];
-          chkResults.forEach(r => aoa.push(exportCols.map(([field]) => chkRawValue(r, field))));
+          filtered.forEach(r => aoa.push(exportCols.map(([field]) => chkRawValue(r, field))));
           const ws = XLSX.utils.aoa_to_sheet(aoa);
           const wb = XLSX.utils.book_new();
           XLSX.utils.book_append_sheet(wb, ws, "KetQua");
           const epoch = (Date.now() / 1000).toFixed(3);
           XLSX.writeFile(wb, `output_kiemtra_${epoch}.xlsx`);
         };
+        bindChkSearchEvents();
+      }
+
+      function bindChkSearchEvents() {
+        const input = el("#chk-result-search");
+        if (input) {
+          input.oninput = e => {
+            chkSearchQuery = e.target.value;
+            const cursorPos = e.target.selectionStart;
+            renderChkResults();
+            const newInput = el("#chk-result-search");
+            if (newInput) {
+              newInput.focus();
+              newInput.setSelectionRange(cursorPos, cursorPos);
+            }
+          };
+        }
+        const clearBtn = el("#chk-btn-clear-search");
+        if (clearBtn) {
+          clearBtn.onclick = () => {
+            chkSearchQuery = "";
+            renderChkResults();
+            const newInput = el("#chk-result-search");
+            if (newInput) newInput.focus();
+          };
+        }
       }
 
       async function fetchOneOrder(orderCode, userAgent, token) {
@@ -2154,6 +2228,7 @@
         updateChkConfigView();
         chkBtnRun.disabled = true;
         chkResults = [];
+        chkSearchQuery = "";
         for (let i = 0; i < codes.length; i++) {
           chkResultsArea.innerHTML = `<div class="state loading"><span class="spinner"></span>Đang chạy... ${i + 1}/${codes.length}</div>`;
           try {
@@ -2174,12 +2249,17 @@
         const params = new URLSearchParams(window.location.search);
         const type = params.get("type");
         const codes = params.get("codes");
-        if (type && CONFIG.TABS[type]) activeTab = type;
-        switchTab(activeTab);
-        if (codes) {
-          codesInput.value = codes.split(",").join("\n");
-          updateCount();
-          doSearch();
+        if (type && CONFIG.TABS[type]) {
+          activeTab = type;
+          switchTab(activeTab);
+          if (codes) {
+            codesInput.value = codes.split(",").join("\n");
+            updateCount();
+            doSearch();
+          }
+        } else {
+          renderTabs();
+          showCheckerView();
         }
       })();
     }
