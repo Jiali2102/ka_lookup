@@ -1959,13 +1959,13 @@
           <div class="results-table-wrap">
             <table class="result-table">
               <thead>
-                <tr><th>Mã đơn</th><th>Trạng thái</th><th>Client ID</th><th class="align-right">Order Value</th><th class="align-right">COD</th><th class="align-right">Đền/bồi</th><th>Thời gian gần nhất</th></tr>
+                <tr><th>ordercode</th><th>status</th><th>clientid</th><th class="align-right">ordervalue</th><th class="align-right">codamount</th><th class="align-right">compensation</th><th>Thời gian gần nhất</th></tr>
               </thead>
               <tbody>${rows}</tbody>
             </table>
           </div>`;
         el("#chk-btn-copy").onclick = () => {
-          const header = ["Mã đơn", "Trạng thái", "Client ID", "OrderValue", "COD", "Đền/bồi", "Thời gian"].join("\t");
+          const header = ["ordercode", "status", "clientid", "ordervalue", "codamount", "compensation", "lastupdated"].join("\t");
           const lines = chkResults.map(r => [
             r.order_code, r.status_name || r.message || "", r.client_id ?? "",
             r.order_value ?? "", r.cod_amount ?? "", r.compensation ?? "", r.last_action_at_vn ?? ""
@@ -1973,7 +1973,7 @@
           navigator.clipboard.writeText([header, ...lines].join("\n"));
         };
         el("#chk-btn-csv").onclick = () => {
-          const aoa = [["Mã đơn", "Trạng thái", "Client ID", "OrderValue", "COD", "Đền/bồi", "Thời gian"]];
+          const aoa = [["ordercode", "status", "clientid", "ordervalue", "codamount", "compensation", "lastupdated"]];
           chkResults.forEach(r => aoa.push([r.order_code, r.status_name || r.message || "", r.client_id ?? "", r.order_value ?? "", r.cod_amount ?? "", r.compensation ?? "", r.last_action_at_vn ?? ""]));
           const ws = XLSX.utils.aoa_to_sheet(aoa);
           const csv = XLSX.utils.sheet_to_csv(ws);
@@ -1982,7 +1982,7 @@
           downloadBlob(blob, `output_kiemtra_${epoch}.csv`);
         };
         el("#chk-btn-xlsx").onclick = () => {
-          const aoa = [["Mã đơn", "Trạng thái", "Client ID", "OrderValue", "COD", "Đền/bồi", "Thời gian"]];
+          const aoa = [["ordercode", "status", "clientid", "ordervalue", "codamount", "compensation", "lastupdated"]];
           chkResults.forEach(r => aoa.push([r.order_code, r.status_name || r.message || "", r.client_id ?? "", r.order_value ?? "", r.cod_amount ?? "", r.compensation ?? "", r.last_action_at_vn ?? ""]));
           const ws = XLSX.utils.aoa_to_sheet(aoa);
           const wb = XLSX.utils.book_new();
