@@ -170,7 +170,8 @@ async function handleRequest(req, res) {
         deliverywh: warehouseName(deliverWarehouseId),
         returnwh: warehouseName(returnWarehouseId),
         currentwh: warehouseName(currentWarehouseId),
-        compensation
+        compensation,
+        _wh_loaded: Object.keys(warehouses).length
       });
       return;
     } catch (err) {
