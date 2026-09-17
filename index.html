@@ -404,6 +404,40 @@
       background: white;
     }
 
+    .chk-config-summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      background: var(--ok-bg, #E9F7EF);
+      border: 1px solid #C9E9D4;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 13.5px;
+      color: var(--ok, #1E8E5A);
+    }
+
+    .chk-edit-link {
+      background: none;
+      border: none;
+      color: var(--blue);
+      font-weight: 700;
+      font-size: 13px;
+      text-decoration: underline;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    @keyframes tabFlash {
+      0% { box-shadow: 0 0 0 0 rgba(254, 95, 0, .55); }
+      70% { box-shadow: 0 0 0 10px rgba(254, 95, 0, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(254, 95, 0, 0); }
+    }
+
+    .tab.flash {
+      animation: tabFlash .6s ease-out;
+    }
+
     .row {
       display: flex;
       gap: 12px;
@@ -1124,7 +1158,6 @@
 
       <div class="side-panel" id="side-panel-normal">
         <div class="app-title">Tra cứu</div>
-        <h2 id="panel-title"></h2>
         <p class="hint" id="panel-hint"></p>
 
         <label class="field-label">Danh sách mã đơn</label>
@@ -1159,15 +1192,21 @@
 
       <div class="side-panel" id="side-panel-checker" style="display:none;">
         <div class="app-title">Kiểm tra đơn</div>
-        <h2>Kiểm tra trạng thái &amp; đền bù</h2>
 
-        <label class="field-label">User-Agent</label>
-        <input type="text" id="chk-user-agent" class="chk-input" placeholder="User-Agent tài khoản của bạn" />
+        <div id="chk-config-fields">
+          <label class="field-label">User-Agent</label>
+          <input type="text" id="chk-user-agent" class="chk-input" placeholder="User-Agent tài khoản của bạn" />
 
-        <label class="field-label" style="margin-top:10px;">Token</label>
-        <input type="password" id="chk-token" class="chk-input" placeholder="Token tài khoản của bạn" />
+          <label class="field-label" style="margin-top:10px;">Token</label>
+          <input type="password" id="chk-token" class="chk-input" placeholder="Token tài khoản của bạn" />
 
-        <button class="btn-ghost" id="chk-btn-save-config" style="margin-top:8px;">💾 Lưu cấu hình</button>
+          <button class="btn-ghost" id="chk-btn-save-config" style="margin-top:8px;">💾 Lưu cấu hình</button>
+        </div>
+
+        <div id="chk-config-summary" class="chk-config-summary" style="display:none;">
+          <span>🔒 Đã cấu hình User-Agent &amp; Token</span>
+          <button type="button" class="chk-edit-link" id="chk-btn-edit-config">Thay đổi</button>
+        </div>
 
         <div class="divider-or">sau đó</div>
 
@@ -1290,13 +1329,21 @@
       function parseCodes(raw) {
         return [...new Set(raw.split(/[\s,;]+/).map(s => s.trim()).filter(Boolean))];
       }
+      function flashTab(el) {
+        el.classList.remove("flash");
+        void el.offsetWidth;
+        el.classList.add("flash");
+      }
       function renderTabs() {
         tabsEl.innerHTML = "";
         Object.entries(CONFIG.TABS).forEach(([key, cfg]) => {
           const d = document.createElement("div");
           d.className = "tab" + (key === activeTab ? " active" : "");
           d.innerHTML = cfg.label;
-          d.onclick = () => switchTab(key);
+          d.onclick = () => {
+            flashTab(d);
+            switchTab(key);
+          };
           tabsEl.appendChild(d);
         });
       }
@@ -1316,7 +1363,6 @@
         activeTab = key;
         const cfg = CONFIG.TABS[key];
         renderTabs();
-        el("#panel-title").textContent = "Tra cứu " + cfg.label.toLowerCase();
         el("#panel-hint").textContent = cfg.hint;
         dateRow.style.display = cfg.useDateRange ? "flex" : "none";
         const saved = tabState[key];
@@ -1849,6 +1895,15 @@
       const chkResultsArea = el("#chk-results-area");
       const chkBtnRun = el("#chk-btn-run");
 
+      const chkConfigFields = el("#chk-config-fields");
+      const chkConfigSummary = el("#chk-config-summary");
+
+      function updateChkConfigView() {
+        const hasConfig = chkUserAgentInput.value.trim() && chkTokenInput.value.trim();
+        chkConfigFields.style.display = hasConfig ? "none" : "block";
+        chkConfigSummary.style.display = hasConfig ? "flex" : "none";
+      }
+
       function loadChkConfig() {
         try {
           const raw = localStorage.getItem(CHK_CONFIG_KEY);
@@ -1870,10 +1925,16 @@
       }
 
       loadChkConfig();
+      updateChkConfigView();
 
       el("#chk-btn-save-config").onclick = () => {
         saveChkConfig();
-        alert("Đã lưu User-Agent & Token vào trình duyệt này.");
+        updateChkConfigView();
+      };
+
+      el("#chk-btn-edit-config").onclick = () => {
+        chkConfigFields.style.display = "block";
+        chkConfigSummary.style.display = "none";
       };
 
       function showCheckerView() {
@@ -1894,7 +1955,10 @@
         tabChecker.classList.remove("active");
       }
 
-      tabChecker.onclick = showCheckerView;
+      tabChecker.onclick = () => {
+        flashTab(tabChecker);
+        showCheckerView();
+      };
 
       const originalSwitchTab = switchTab;
       switchTab = function (key) {
@@ -1926,6 +1990,34 @@
         return n.toLocaleString("vi-VN") + " đ";
       }
 
+      const CHK_COLUMNS = [
+        ["order_code", "Mã đơn"],
+        ["client_id", "Client ID"],
+        ["status_name", "Trạng thái"],
+        ["pickwh", "Kho lấy"],
+        ["deliverywh", "Kho giao"],
+        ["returnwh", "Kho trả"],
+        ["currentwh", "Kho hiện tại"],
+        ["order_value", "Order Value"],
+        ["cod_amount", "COD"],
+        ["insurance_value", "Bảo hiểm"],
+        ["compensation", "Đền/bồi"],
+        ["last_action_at_vn", "Cập nhật lần cuối"]
+      ];
+      const CHK_MONEY_FIELDS = new Set(["order_value", "cod_amount", "insurance_value", "compensation"]);
+
+      function chkCellValue(r, field) {
+        if (r.message && field === "status_name") return "Lỗi: " + r.message;
+        const v = r[field];
+        if (v === undefined || v === null || v === "") return "";
+        return CHK_MONEY_FIELDS.has(field) ? formatMoney(v) : v;
+      }
+
+      function chkRawValue(r, field) {
+        if (r.message && field === "status_name") return "Lỗi: " + r.message;
+        return r[field] ?? "";
+      }
+
       function renderChkResults() {
         if (!chkResults.length) {
           chkResultsArea.innerHTML = `<div class="empty"><div class="big">🔍</div>Chưa có kết quả.</div>`;
@@ -1933,13 +2025,10 @@
         }
         const rows = chkResults.map(r => `
           <tr>
-            <td class="code-cell">${r.order_code}</td>
-            <td>${r.status_name || (r.message ? "Lỗi" : "")}</td>
-            <td>${r.client_id ?? ""}</td>
-            <td class="amount-cell">${r.order_value !== undefined ? formatMoney(r.order_value) : ""}</td>
-            <td class="amount-cell">${r.cod_amount !== undefined ? formatMoney(r.cod_amount) : ""}</td>
-            <td class="amount-cell">${r.compensation !== undefined ? formatMoney(r.compensation) : ""}</td>
-            <td>${r.last_action_at_vn || ""}</td>
+            ${CHK_COLUMNS.map(([field]) => {
+              const cls = CHK_MONEY_FIELDS.has(field) ? ' class="amount-cell"' : (field === "order_code" ? ' class="code-cell"' : "");
+              return `<td${cls}>${chkCellValue(r, field)}</td>`;
+            }).join("")}
           </tr>`).join("");
         chkResultsArea.innerHTML = `
           <div class="toolbar">
@@ -1953,22 +2042,19 @@
           <div class="results-table-wrap">
             <table class="result-table">
               <thead>
-                <tr><th>ordercode</th><th>status</th><th>clientid</th><th class="align-right">ordervalue</th><th class="align-right">codamount</th><th class="align-right">compensation</th><th>lastupdated</th></tr>
+                <tr>${CHK_COLUMNS.map(([field, label]) => `<th${CHK_MONEY_FIELDS.has(field) ? ' class="align-right"' : ""}>${label}</th>`).join("")}</tr>
               </thead>
               <tbody>${rows}</tbody>
             </table>
           </div>`;
         el("#chk-btn-copy").onclick = () => {
-          const header = ["ordercode", "status", "clientid", "ordervalue", "codamount", "compensation", "lastupdated"].join("\t");
-          const lines = chkResults.map(r => [
-            r.order_code, r.status_name || r.message || "", r.client_id ?? "",
-            r.order_value ?? "", r.cod_amount ?? "", r.compensation ?? "", r.last_action_at_vn ?? ""
-          ].join("\t"));
+          const header = CHK_COLUMNS.map(([, label]) => label).join("\t");
+          const lines = chkResults.map(r => CHK_COLUMNS.map(([field]) => chkRawValue(r, field)).join("\t"));
           navigator.clipboard.writeText([header, ...lines].join("\n"));
         };
         el("#chk-btn-csv").onclick = () => {
-          const aoa = [["ordercode", "status", "clientid", "ordervalue", "codamount", "compensation", "lastupdated"]];
-          chkResults.forEach(r => aoa.push([r.order_code, r.status_name || r.message || "", r.client_id ?? "", r.order_value ?? "", r.cod_amount ?? "", r.compensation ?? "", r.last_action_at_vn ?? ""]));
+          const aoa = [CHK_COLUMNS.map(([, label]) => label)];
+          chkResults.forEach(r => aoa.push(CHK_COLUMNS.map(([field]) => chkRawValue(r, field))));
           const ws = XLSX.utils.aoa_to_sheet(aoa);
           const csv = XLSX.utils.sheet_to_csv(ws);
           const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8;" });
@@ -1976,8 +2062,8 @@
           downloadBlob(blob, `output_kiemtra_${epoch}.csv`);
         };
         el("#chk-btn-xlsx").onclick = () => {
-          const aoa = [["ordercode", "status", "clientid", "ordervalue", "codamount", "compensation", "lastupdated"]];
-          chkResults.forEach(r => aoa.push([r.order_code, r.status_name || r.message || "", r.client_id ?? "", r.order_value ?? "", r.cod_amount ?? "", r.compensation ?? "", r.last_action_at_vn ?? ""]));
+          const aoa = [CHK_COLUMNS.map(([, label]) => label)];
+          chkResults.forEach(r => aoa.push(CHK_COLUMNS.map(([field]) => chkRawValue(r, field))));
           const ws = XLSX.utils.aoa_to_sheet(aoa);
           const wb = XLSX.utils.book_new();
           XLSX.utils.book_append_sheet(wb, ws, "KetQua");
@@ -2008,6 +2094,7 @@
           return;
         }
         saveChkConfig();
+        updateChkConfigView();
         chkBtnRun.disabled = true;
         chkResults = [];
         for (let i = 0; i < codes.length; i++) {
