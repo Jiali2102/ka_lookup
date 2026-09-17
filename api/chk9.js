@@ -1,3 +1,5 @@
+const warehouses = require("./warehouses.json");
+
 const TRACKING_URL = "https://fe-online-gateway.ghn.vn/order-tracking/public-api/internal/tracking-logs";
 const DELIVERED = "Giao hàng thành công";
 const LOST_STATUSES = ["Hàng thất lạc", "Hàng hư hỏng", "Huỷ đơn hàng"];
@@ -45,6 +47,12 @@ function toVNTime(actionAt) {
   if (!actionAt) return "";
   const d = new Date(actionAt);
   return d.toLocaleString("sv-SE", { timeZone: "Asia/Ho_Chi_Minh" });
+}
+
+function warehouseName(id) {
+  if (id === undefined || id === null || id === "") return "";
+  const name = warehouses[String(id)];
+  return name || String(id);
 }
 
 async function fetchOnce(orderCode, userAgent, token) {
@@ -119,16 +127,36 @@ module.exports = async (req, res) => {
         computeCompensation(statusName, orderValue, codAmount, insuranceValue, packageValue, clientId)
       );
 
+      const pickWarehouseId = orderInfo.pick_warehouse_id;
+      const deliverWarehouseId = orderInfo.deliver_warehouse_id;
+      const returnWarehouseId = orderInfo.return_warehouse_id;
+      const currentWarehouseId = orderInfo.current_warehouse_id;
+
       res.status(200).json({
         ok: true,
         order_code,
+        created_date: orderInfo.created_date || "",
+        end_picktime: orderInfo.end_picktime || "",
+        status: orderInfo.status || "",
         status_name: statusName,
+        status_ops_name: orderInfo.status_ops_name || "",
         client_id: clientId,
+        from_name: orderInfo.from_name || "",
+        from_address: orderInfo.from_address || "",
+        content: orderInfo.content || "",
         order_value: orderValue,
         cod_amount: codAmount,
         insurance_value: insuranceValue,
         package_value: packageValue,
         last_action_at_vn: lastActionAtVN,
+        pick_warehouse_id: pickWarehouseId,
+        deliver_warehouse_id: deliverWarehouseId,
+        return_warehouse_id: returnWarehouseId,
+        current_warehouse_id: currentWarehouseId,
+        pickwh: warehouseName(pickWarehouseId),
+        deliverywh: warehouseName(deliverWarehouseId),
+        returnwh: warehouseName(returnWarehouseId),
+        currentwh: warehouseName(currentWarehouseId),
         compensation
       });
       return;
