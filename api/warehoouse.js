@@ -1041,7 +1041,7 @@
   "22286000": "Bưu Cục Thôn Phú Mỹ-Tự Lập-Mê Linh-HN",
   "22296000": "Kho Giao Hàng Nặng - Tiên Du - Bắc Ninh",
   "22299000": "(KHO) ĐL Bắc Cam Ranh",
-  22304000: "(LSO) Na Sầm",
+  "22304000": "(LSO) Na Sầm",
   "22305000": "(HCM) Hiệp Bình 2",
   "22306000": "(HCM) An Lạc 2",
   "22307000": "(HCM) Thới An",
