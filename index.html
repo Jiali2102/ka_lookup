@@ -2153,8 +2153,9 @@
           </div>`;
         const exportCols = [...CHK_COLUMNS, ...CHK_EXPORT_EXTRA_COLUMNS];
         el("#chk-btn-copy").onclick = () => {
+          const sanitizeForCopy = v => String(v ?? "").replace(/\r\n|\r|\n/g, " ");
           const header = exportCols.map(([, label]) => label).join("\t");
-          const lines = filtered.map(r => exportCols.map(([field]) => chkRawValue(r, field)).join("\t"));
+          const lines = filtered.map(r => exportCols.map(([field]) => sanitizeForCopy(chkRawValue(r, field))).join("\t"));
           navigator.clipboard.writeText([header, ...lines].join("\n"));
         };
         el("#chk-btn-csv").onclick = () => {
