@@ -2062,7 +2062,7 @@
         ["client_id", "Mã kh"],
         ["created_date", "Ngày tạo"],
         ["end_picktime", "Lấy tc"],
-        ["status", "Status"],
+        ["status", "Trạng thái"],
         ["status_ops_name", "TT vận hành"],
         ["last_action_at_vn", "Cập nhật cuối"],
         ["order_value", "Giá trị"],
@@ -2088,8 +2088,8 @@
         const s = String(status || "").toLowerCase();
         if (s.includes("cancel")) return "chk-status-cancel";
         if (s.includes("lost") || s.includes("damage")) return "chk-status-lost";
-        if (s.includes("return") || s.includes("scrap")) return "chk-status-return";
-        if (s.includes("deliver")) return "chk-status-delivered";
+        if (s.includes("returned") || s.includes("scrap")) return "chk-status-return";
+        if (s.includes("delivered")) return "chk-status-delivered";
         return "";
       }
 
