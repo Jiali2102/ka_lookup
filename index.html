@@ -780,7 +780,7 @@
       top: 0;
       background: var(--blue);
       color: white;
-      text-align: left;
+      text-align: center;
       padding: 11px 14px;
       font-weight: 600;
       font-size: 15px;
@@ -800,8 +800,18 @@
     table.result-table tbody td {
       padding: 11px 14px;
       border-bottom: 1px solid var(--border);
+      border-right: 1px solid var(--border);
       vertical-align: top;
       color: var(--text);
+    }
+
+    table.result-table thead th {
+      border-right: 1px solid rgba(255, 255, 255, .18);
+    }
+
+    table.result-table th:last-child,
+    table.result-table td:last-child {
+      border-right: none;
     }
 
     table.result-table tbody tr:last-child td {
@@ -854,10 +864,6 @@
     table.result-table td.date-cell {
       font-family: var(--mono);
       white-space: nowrap;
-      text-align: right;
-    }
-
-    table.result-table th.align-right {
       text-align: right;
     }
 
@@ -2065,6 +2071,7 @@
         ["status", "Trạng thái"],
         ["status_ops_name", "TT v.hành"],
         ["last_action_at_vn", "TG cập nhật cuối"],
+        ["last_operator", "Người thao tác cuối"],
         ["order_value", "Giá trị"],
         ["cod_amount", "COD"],
         ["insurance_value", "Khai giá"],
