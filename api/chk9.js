@@ -8,6 +8,7 @@ try {
 }
 
 const TRACKING_URL = process.env.GHN_TRACKING_URL;
+const HISTORY_URL = process.env.GHN_HISTORY_URL;
 const DELIVERED = "Giao hàng thành công";
 const LOST_STATUSES = ["Hàng thất lạc", "Hàng hư hỏng", "Huỷ đơn hàng"];
 
@@ -74,6 +75,41 @@ async function fetchOnce(orderCode, userAgent, token) {
     body: JSON.stringify({ order_code: orderCode, source: "inside_system" })
   });
   return res;
+}
+
+async function fetchOrderLogsOnce(orderCode, userAgent, token) {
+  const res = await fetch(`${HISTORY_URL}${encodeURIComponent(orderCode)}`, {
+    method: "GET",
+    headers: {
+      "User-Agent": userAgent,
+      Token: token,
+      "Content-Type": "application/json"
+    }
+  });
+  return res;
+}
+
+function extractMaxCodAmount(historyJson) {
+  const entries = (historyJson && historyJson.data && historyJson.data.data) || [];
+  let maxCod = 0;
+  entries.forEach(entry => {
+    const oldCod = entry.old_data && typeof entry.old_data.cod_amount === "number" ? entry.old_data.cod_amount : null;
+    const newCod = entry.new_data && typeof entry.new_data.cod_amount === "number" ? entry.new_data.cod_amount : null;
+    if (oldCod !== null && oldCod > maxCod) maxCod = oldCod;
+    if (newCod !== null && newCod > maxCod) maxCod = newCod;
+  });
+  return maxCod;
+}
+
+async function fetchMaxCodAmount(orderCode, userAgent, token) {
+  try {
+    const res = await fetchOrderLogsOnce(orderCode, userAgent, token);
+    if (!res.ok) return null;
+    const json = await res.json();
+    return extractMaxCodAmount(json);
+  } catch (err) {
+    return null;
+  }
 }
 
 module.exports = async (req, res) => {
@@ -149,7 +185,9 @@ async function handleRequest(req, res) {
       }
 
       const orderValue = Number(customField.OrderValue || 0);
-      const codAmount = Number(orderInfo.cod_amount || 0);
+      const trackingCodAmount = Number(orderInfo.cod_amount || 0);
+      const historyMaxCod = await fetchMaxCodAmount(order_code, user_agent, token);
+      const codAmount = Math.max(trackingCodAmount, historyMaxCod || 0);
       const insuranceValue = Number(orderInfo.insurance_value || 0);
       const packageValue = Number(customField.PackageValue || 0);
       const clientId = orderInfo.client_id;
