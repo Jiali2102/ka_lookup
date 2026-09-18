@@ -129,6 +129,7 @@ async function handleRequest(req, res) {
 
       let lastActionAtVN = "";
       let lastOperator = "";
+      let lastOperatorPhone = "";
       if (trackingLogs.length) {
         const lastLog = trackingLogs[trackingLogs.length - 1];
         if (lastLog.action_at) lastActionAtVN = toVNTime(lastLog.action_at);
@@ -141,6 +142,7 @@ async function handleRequest(req, res) {
             lastOperator = (i === trackingLogs.length - 1)
               ? `${opId} - ${opName}`
               : `${opId} - ${opName} ↩️`;
+            lastOperatorPhone = executor.phone || "";
             break;
           }
         }
@@ -190,6 +192,7 @@ async function handleRequest(req, res) {
         package_value: packageValue,
         last_action_at_vn: lastActionAtVN,
         last_operator: lastOperator,
+        last_operator_phone: lastOperatorPhone,
         pick_warehouse_id: pickWarehouseId,
         deliver_warehouse_id: deliverWarehouseId,
         return_warehouse_id: returnWarehouseId,
