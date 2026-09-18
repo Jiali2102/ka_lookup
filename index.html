@@ -592,6 +592,18 @@
       padding: 0;
     }
 
+    .chk-btn-comp {
+      background: #FFF4E5 !important;
+      border-color: var(--orange) !important;
+      color: var(--orange) !important;
+      font-weight: 700;
+    }
+
+    .chk-btn-comp:hover {
+      background: var(--orange) !important;
+      color: white !important;
+    }
+
     @keyframes tabFlash {
       0% { box-shadow: 0 0 0 0 rgba(254, 95, 0, .55); }
       70% { box-shadow: 0 0 0 10px rgba(254, 95, 0, 0); }
@@ -2284,6 +2296,42 @@
       const CHK_MONEY_FIELDS = new Set(["order_value", "cod_amount", "insurance_value", "package_value", "compensation"]);
       const CHK_DATE_FIELDS = new Set(["created_date", "end_picktime", "last_action_at_vn"]);
 
+      const COMPENSATION_COLUMNS = [
+        ["order_code", "MaDH"],
+        ["created_date", "ThoiGianTao"],
+        ["end_picktime", "ThoiGianKetThucLay"],
+        ["end_delivery_or_return_vn", "ThoiGianKetThucGiao"],
+        ["returned_date_vn", "ThoiGianKetThucTra"],
+        ["__blank", "ThongTinTraHang"],
+        ["from_district_name", "TuQuan"],
+        ["from_province_name", "TuTinh"],
+        ["to_district_name", "DenQuan"],
+        ["to_province_name", "DenTinh"],
+        ["pick_warehouse_name", "KhoLay"],
+        ["deliver_warehouse_name", "KhoGiao"],
+        ["current_warehouse_name", "KhoHienTai"],
+        ["return_warehouse_name", "KhoTra"],
+        ["status_vn", "TrangThai"],
+        ["weight", "TrongLuongGram"],
+        ["__dimensions", "KichThuocRDC"],
+        ["client_id", "MaKH"],
+        ["__blank", "GhiChuGHN"],
+        ["__blank", "SoLanLay"],
+        ["__blank", "SoLanGiao"],
+        ["__blank", "SoLanTra"],
+        ["package_value", "PackageValue"],
+        ["order_value", "OrderValue"],
+        ["cod_amount", "CODAmount"],
+        ["insurance_value", "InsuranceValue"],
+        ["last_operator", "NguoiCapNhatTTCuoi"]
+      ];
+
+      function chkCompensationValue(r, field) {
+        if (field === "__blank") return "";
+        if (field === "__dimensions") return `${r.length ?? ""}x${r.width ?? ""}x${r.height ?? ""}`;
+        return r[field] ?? "";
+      }
+
       function chkStatusRowClass(status) {
         const s = String(status || "").toLowerCase();
         if (s.includes("cancel")) return "chk-status-cancel";
@@ -2423,6 +2471,7 @@
               <button class="btn-ghost" id="chk-btn-copy">Copy kết quả</button>
               <button class="btn-ghost" id="chk-btn-csv">Xuất CSV</button>
               <button class="btn-ghost" id="chk-btn-xlsx">Xuất Excel</button>
+              <button class="btn-ghost chk-btn-comp" id="chk-btn-comp">📦 Tải Compensation</button>
             </div>
           </div>
           ${searchBoxHtml}<div class="results-table-wrap">
@@ -2469,6 +2518,15 @@
           XLSX.utils.book_append_sheet(wb, ws, "KetQua");
           const epoch = (Date.now() / 1000).toFixed(3);
           XLSX.writeFile(wb, `output_kiemtra_${epoch}.xlsx`);
+        };
+        el("#chk-btn-comp").onclick = () => {
+          const aoa = [COMPENSATION_COLUMNS.map(([, label]) => label)];
+          filtered.forEach(r => aoa.push(COMPENSATION_COLUMNS.map(([field]) => chkCompensationValue(r, field))));
+          const ws = XLSX.utils.aoa_to_sheet(aoa);
+          const wb = XLSX.utils.book_new();
+          XLSX.utils.book_append_sheet(wb, ws, "compensation");
+          const epoch = (Date.now() / 1000).toFixed(3);
+          XLSX.writeFile(wb, `output_compensation_${epoch}.xlsx`);
         };
         bindChkSearchEvents();
       }
