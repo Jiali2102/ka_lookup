@@ -2347,7 +2347,7 @@
               const codeVal = chkCellValue(r, field);
               const url = `https://tracuunoibo.ghn.vn/internal?order_code=${encodeURIComponent(r.order_code || "")}`;
               const staleDays = isChkStale(r.status, r.last_action_at_vn);
-              const staleBadge = staleDays ? ` <span class="stale-badge" title="Đã ${staleDays} ngày chưa cập nhật">⚠️</span>` : "";
+              const staleBadge = staleDays ` <span class="stale-badge" title="Đã ${staleDays} ngày chưa cập nhật">⚠️</span>` : "";
               return `<td${cls}><a href="${url}" target="_blank" rel="noopener" class="ticket-link">${codeVal}</a>${staleBadge}</td>`;
             }
             if (field === "last_operator") {
