@@ -1,0 +1,21 @@
+{
+  "cancel": "Hủy đơn hàng",
+  "lost": "Hàng bị thất lạc",
+  "damage": "Hàng bị hư hỏng",
+  "delivered": "Giao hàng thành công",
+  "returned": "Hoàn hàng thành công",
+  "ready_to_pick": "Chờ lấy hàng",
+  "picking": "Đang lấy hàng",
+  "money_collect_picking": "Đang lấy hàng",
+  "picked": "Lấy hàng thành công",
+  "storing": "Lưu kho",
+  "transporting": "Đang trung chuyển hàng",
+  "delivering": "Đang giao hàng",
+  "money_collect_delivering": "Đang giao hàng",
+  "delivery_fail": "Giao hàng không thành công",
+  "return": "Chuyển hoàn",
+  "return_transporting": "Đang trung chuyển hàng hoàn",
+  "returning": "Đang hoàn hàng",
+  "return_fail": "Hoàn hàng không thành công",
+  "scrap": "Hàng vô thừa nhận"
+}
