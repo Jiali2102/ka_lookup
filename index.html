@@ -2301,8 +2301,30 @@
         return CHK_MONEY_FIELDS.has(field) ? formatMoney(v) : v;
       }
 
+      function chkWarehouseNameOnly(merged) {
+        if (!merged) return "";
+        const idx = merged.indexOf(" - ");
+        return idx === -1 ? merged : merged.slice(idx + 3);
+      }
+
+      function chkOperatorIdOnly(merged) {
+        if (!merged) return "";
+        const idx = merged.indexOf(" - ");
+        return idx === -1 ? merged : merged.slice(0, idx);
+      }
+
+      function chkOperatorNameOnly(merged) {
+        if (!merged) return "";
+        const idx = merged.indexOf(" - ");
+        if (idx === -1) return "";
+        return merged.slice(idx + 3).replace(/\s*↩️\s*$/, "").trim();
+      }
+
       function chkRawValue(r, field) {
         if (r.message && field === "status_name") return "Lỗi: " + r.message;
+        if (field === "currentwh_name_only") return chkWarehouseNameOnly(r.currentwh);
+        if (field === "last_operator_id_only") return chkOperatorIdOnly(r.last_operator);
+        if (field === "last_operator_name_only") return chkOperatorNameOnly(r.last_operator);
         return r[field] ?? "";
       }
 
@@ -2411,7 +2433,19 @@
               <tbody>${rows}</tbody>
             </table>
           </div>`;
-        const exportCols = [...CHK_COLUMNS, ...CHK_EXPORT_EXTRA_COLUMNS];
+        const exportCols = [];
+        CHK_COLUMNS.forEach(([field, label]) => {
+          if (field === "last_operator") {
+            exportCols.push(["last_operator_id_only", "ID người thao tác cuối"]);
+            exportCols.push(["last_operator_name_only", "Tên người thao tác cuối"]);
+          } else if (field === "currentwh") {
+            exportCols.push(["current_warehouse_id", "ID Kho hiện tại"]);
+            exportCols.push(["currentwh_name_only", "Kho hiện tại"]);
+          } else {
+            exportCols.push([field, label]);
+          }
+        });
+        exportCols.push(...CHK_EXPORT_EXTRA_COLUMNS);
         el("#chk-btn-copy").onclick = () => {
           const sanitizeForCopy = v => String(v ?? "").replace(/\r\n|\r|\n/g, " ");
           const header = exportCols.map(([, label]) => label).join("\t");
