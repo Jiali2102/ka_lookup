@@ -7,7 +7,7 @@ try {
   warehouses = {};
 }
 
-const TRACKING_URL = process.env.GHN_TRACKING_URL || "https://fe-online-gateway.ghn.vn/order-tracking/public-api/internal/tracking-logs";
+const TRACKING_URL = process.env.GHN_TRACKING_URL;
 const DELIVERED = "Giao hàng thành công";
 const LOST_STATUSES = ["Hàng thất lạc", "Hàng hư hỏng", "Huỷ đơn hàng"];
 
