@@ -279,6 +279,7 @@ async function handleRequest(req, res) {
         to_province_name: toWard.province_name,
         content: orderInfo.content || "",
         weight: orderInfo.weight || 0,
+        converted_weight: orderInfo.converted_weight || 0,
         length: orderInfo.length || 0,
         width: orderInfo.width || 0,
         height: orderInfo.height || 0,
