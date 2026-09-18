@@ -7,7 +7,7 @@ try {
   warehouses = {};
 }
 
-const TRACKING_URL = process.env.GHN_TRACKING_URL;
+const TRACKING_URL = process.env.GHN_TRACKING_URL || "https://fe-online-gateway.ghn.vn/order-tracking/public-api/internal/tracking-logs";
 const DELIVERED = "Giao hàng thành công";
 const LOST_STATUSES = ["Hàng thất lạc", "Hàng hư hỏng", "Huỷ đơn hàng"];
 
@@ -190,7 +190,10 @@ async function handleRequest(req, res) {
           pick_id_raw: pickWarehouseId,
           pick_id_type: typeof pickWarehouseId,
           pick_found: pickWhInfo.found
-        }
+        },
+        _tracking_url_source: process.env.GHN_TRACKING_URL ? "env" : "fallback",
+        _tracking_url_env_raw: JSON.stringify(process.env.GHN_TRACKING_URL || null),
+        _tracking_url_used: TRACKING_URL
       });
       return;
     } catch (err) {
@@ -200,5 +203,12 @@ async function handleRequest(req, res) {
     }
   }
 
-  res.status(200).json({ ok: false, order_code, message: lastError || "Không xác định" });
+  res.status(200).json({
+    ok: false,
+    order_code,
+    message: lastError || "Không xác định",
+    _tracking_url_source: process.env.GHN_TRACKING_URL ? "env" : "fallback",
+    _tracking_url_env_raw: JSON.stringify(process.env.GHN_TRACKING_URL || null),
+    _tracking_url_used: TRACKING_URL
+  });
 }
