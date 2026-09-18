@@ -207,6 +207,88 @@
       transform: translateY(-1px);
     }
 
+    .chk-history-title {
+      margin-top: 16px;
+      margin-bottom: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .chk-history-item {
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 6px;
+      cursor: pointer;
+      transition: .15s;
+      font-size: 13px;
+    }
+
+    .chk-history-item:hover,
+    .chk-history-item.active {
+      background: #FFF1E8;
+      border-color: var(--orange);
+    }
+
+    .chk-history-item .h-time {
+      font-weight: 700;
+    }
+
+    .chk-history-item .h-count {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 1px;
+    }
+
+    .chk-history-empty {
+      font-size: 13px;
+      color: var(--muted);
+      padding: 8px 0;
+    }
+
+    .stale-badge {
+      display: inline-block;
+      background: var(--warn-bg);
+      color: var(--warn);
+      border-radius: 100px;
+      padding: 1px 8px;
+      font-size: 11.5px;
+      font-weight: 700;
+      margin-left: 6px;
+      cursor: help;
+    }
+
+    .wh-copyable {
+      cursor: pointer;
+      border-bottom: 1px dashed #999;
+    }
+
+    .wh-copyable:hover {
+      color: var(--orange);
+    }
+
+    .chk-toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: #1A1A1A;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      opacity: 0;
+      transition: .25s;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    .chk-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
     .ripple-wave {
       position: absolute;
       border-radius: 50%;
@@ -1314,6 +1396,9 @@
           <button class="btn-ghost" id="chk-btn-clear">Xóa</button>
           <span class="count-tag" id="chk-code-count"></span>
         </div>
+
+        <div class="chk-history-title">🕘 Lịch sử gần đây</div>
+        <div id="chk-history-list"></div>
       </div>
 
       <div class="main-col" id="main-col-normal">
@@ -2078,6 +2163,62 @@
       };
 
       let chkResults = [];
+
+      const CHK_HISTORY_KEY = "ka_lookup_chk_history_v1";
+      const CHK_HISTORY_MAX = 5;
+
+      function loadChkHistory() {
+        try {
+          const raw = localStorage.getItem(CHK_HISTORY_KEY);
+          return raw ? JSON.parse(raw) : [];
+        } catch (err) {
+          return [];
+        }
+      }
+
+      function saveChkHistoryEntry(results) {
+        if (!results.length) return;
+        const history = loadChkHistory();
+        history.unshift({
+          time: new Date().toLocaleString("vi-VN"),
+          count: results.length,
+          results
+        });
+        const trimmed = history.slice(0, CHK_HISTORY_MAX);
+        try {
+          localStorage.setItem(CHK_HISTORY_KEY, JSON.stringify(trimmed));
+        } catch (err) { }
+      }
+
+      function renderChkHistoryList() {
+        const history = loadChkHistory();
+        const listEl = el("#chk-history-list");
+        if (!listEl) return;
+        if (!history.length) {
+          listEl.innerHTML = `<div class="chk-history-empty">Chưa có lịch sử</div>`;
+          return;
+        }
+        listEl.innerHTML = history.map((h, i) => `
+          <div class="chk-history-item" data-history-index="${i}">
+            <div class="h-time">${h.time}</div>
+            <div class="h-count">${h.count} mã đơn</div>
+          </div>`).join("");
+      }
+
+      el("#chk-history-list").addEventListener("click", e => {
+        const item = e.target.closest(".chk-history-item");
+        if (!item) return;
+        const idx = Number(item.dataset.historyIndex);
+        const history = loadChkHistory();
+        if (!history[idx]) return;
+        chkResults = history[idx].results;
+        chkSearchQuery = "";
+        renderChkResults();
+        document.querySelectorAll(".chk-history-item").forEach(x => x.classList.remove("active"));
+        item.classList.add("active");
+      });
+
+      renderChkHistoryList();
       let chkSearchQuery = "";
 
       function formatMoney(v) {
@@ -2136,6 +2277,48 @@
         return r[field] ?? "";
       }
 
+      const CHK_WH_ID_FIELD_MAP = {
+        pickwh: "pick_warehouse_id",
+        deliverywh: "deliver_warehouse_id",
+        returnwh: "return_warehouse_id",
+        currentwh: "current_warehouse_id"
+      };
+
+      function isChkStale(status, lastActionAtVN) {
+        if (chkStatusRowClass(status)) return false;
+        if (!lastActionAtVN) return false;
+        const lastDateStr = String(lastActionAtVN).slice(0, 10);
+        const todayStr = new Date().toISOString().slice(0, 10);
+        const last = new Date(lastDateStr);
+        const today = new Date(todayStr);
+        if (isNaN(last.getTime())) return false;
+        const diffDays = Math.floor((today - last) / 86400000);
+        return diffDays > 5 ? diffDays : false;
+      }
+
+      function chkShowToast(msg) {
+        let toast = el("#chk-toast");
+        if (!toast) {
+          toast = document.createElement("div");
+          toast.id = "chk-toast";
+          toast.className = "chk-toast";
+          document.body.appendChild(toast);
+        }
+        toast.textContent = msg;
+        toast.classList.add("show");
+        clearTimeout(toast._hideTimer);
+        toast._hideTimer = setTimeout(() => toast.classList.remove("show"), 1500);
+      }
+
+      chkResultsArea.addEventListener("click", e => {
+        const cell = e.target.closest(".wh-copyable");
+        if (!cell) return;
+        const id = cell.dataset.copyId;
+        if (!id) return;
+        navigator.clipboard.writeText(id);
+        chkShowToast("Đã copy: " + id);
+      });
+
       function renderChkResults() {
         if (!chkResults.length) {
           chkResultsArea.innerHTML = `<div class="empty"><div class="big">🔍</div>Chưa có kết quả.</div>`;
@@ -2163,12 +2346,20 @@
             if (field === "order_code") {
               const codeVal = chkCellValue(r, field);
               const url = `https://tracuunoibo.ghn.vn/internal?order_code=${encodeURIComponent(r.order_code || "")}`;
-              return `<td${cls}><a href="${url}" target="_blank" rel="noopener" class="ticket-link">${codeVal}</a></td>`;
+              const staleDays = isChkStale(r.status, r.last_action_at_vn);
+              const staleBadge = staleDays ? ` <span class="stale-badge" title="Đã ${staleDays} ngày chưa cập nhật">⚠️ Cũ</span>` : "";
+              return `<td${cls}><a href="${url}" target="_blank" rel="noopener" class="ticket-link">${codeVal}</a>${staleBadge}</td>`;
             }
             if (field === "last_operator") {
               const val = chkCellValue(r, field);
               const phone = r.last_operator_phone;
               return `<td${cls}${phone ? ` title="SĐT: ${phone}"` : ""}>${val}</td>`;
+            }
+            if (CHK_WH_ID_FIELD_MAP[field]) {
+              const val = chkCellValue(r, field);
+              const idVal = r[CHK_WH_ID_FIELD_MAP[field]];
+              if (!val || !idVal) return `<td${cls}>${val}</td>`;
+              return `<td${cls} class="wh-copyable" data-copy-id="${idVal}" title="Bấm để copy ID: ${idVal}">${val}</td>`;
             }
             return `<td${cls}>${chkCellValue(r, field)}</td>`;
           }).join("");
@@ -2280,6 +2471,8 @@
           }
         }
         chkBtnRun.disabled = false;
+        saveChkHistoryEntry(chkResults);
+        renderChkHistoryList();
         renderChkResults();
       };
 
