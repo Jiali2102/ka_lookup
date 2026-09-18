@@ -7,6 +7,20 @@ try {
   warehouses = {};
 }
 
+let wards = {};
+try {
+  wards = require("./wards.json");
+} catch (err) {
+  wards = {};
+}
+
+let statuses = {};
+try {
+  statuses = require("./statuses.json");
+} catch (err) {
+  statuses = {};
+}
+
 const TRACKING_URL = process.env.GHN_TRACKING_URL;
 const HISTORY_URL = process.env.GHN_HISTORY_URL;
 const DELIVERED = "Giao hàng thành công";
@@ -62,6 +76,23 @@ function warehouseName(id) {
   const normalizedId = String(id).trim().split(".")[0];
   const name = warehouses[normalizedId];
   return { id: normalizedId, name: name || "", found: Boolean(name) };
+}
+
+function warehouseNameOnly(id) {
+  const info = warehouseName(id);
+  if (!info.id) return "";
+  return info.found ? info.name : info.id;
+}
+
+function wardInfo(wardCode) {
+  if (!wardCode) return { district_name: "", province_name: "" };
+  const w = wards[String(wardCode).trim()];
+  return w ? { district_name: w.district_name || "", province_name: w.province_name || "" } : { district_name: "", province_name: "" };
+}
+
+function statusVietnamese(status, fallback) {
+  if (!status) return fallback || "";
+  return statuses[status] || fallback || status;
 }
 
 async function fetchOnce(orderCode, userAgent, token) {
@@ -166,6 +197,7 @@ async function handleRequest(req, res) {
       let lastActionAtVN = "";
       let lastOperator = "";
       let lastOperatorPhone = "";
+      let firstReturnActionAtVN = "";
       if (trackingLogs.length) {
         const lastLog = trackingLogs[trackingLogs.length - 1];
         if (lastLog.action_at) lastActionAtVN = toVNTime(lastLog.action_at);
@@ -179,6 +211,13 @@ async function handleRequest(req, res) {
               ? `${opId} - ${opName}`
               : `${opId} - ${opName} ↩️`;
             lastOperatorPhone = executor.phone || "";
+            break;
+          }
+        }
+
+        for (let i = 0; i < trackingLogs.length; i++) {
+          if (trackingLogs[i].action_code === "RETURN") {
+            firstReturnActionAtVN = toVNTime(trackingLogs[i].action_at);
             break;
           }
         }
@@ -212,18 +251,37 @@ async function handleRequest(req, res) {
         return info.found ? `${info.id} - ${info.name}` : info.id;
       }
 
+      const fromWard = wardInfo(orderInfo.from_ward_code);
+      const toWard = wardInfo(orderInfo.to_ward_code);
+      const endDeliveryOrReturnVN = orderInfo.end_deliverytime
+        ? toVNTime(orderInfo.end_deliverytime)
+        : firstReturnActionAtVN;
+
       res.status(200).json({
         ok: true,
         order_code,
         created_date: toVNTime(orderInfo.created_date),
         end_picktime: toVNTime(orderInfo.end_picktime),
+        end_delivery_or_return_vn: endDeliveryOrReturnVN,
+        returned_date_vn: toVNTime(orderInfo.leadtime_order && orderInfo.leadtime_order.returned_date),
         status: orderInfo.status || "",
         status_name: statusName,
+        status_vn: statusVietnamese(orderInfo.status, statusName),
         status_ops_name: orderInfo.status_ops_name || "",
         client_id: clientId,
         from_name: orderInfo.from_name || "",
         from_address: orderInfo.from_address || "",
+        from_ward_code: orderInfo.from_ward_code || "",
+        from_district_name: fromWard.district_name,
+        from_province_name: fromWard.province_name,
+        to_ward_code: orderInfo.to_ward_code || "",
+        to_district_name: toWard.district_name,
+        to_province_name: toWard.province_name,
         content: orderInfo.content || "",
+        weight: orderInfo.weight || 0,
+        length: orderInfo.length || 0,
+        width: orderInfo.width || 0,
+        height: orderInfo.height || 0,
         order_value: orderValue,
         cod_amount: codAmount,
         insurance_value: insuranceValue,
@@ -239,6 +297,10 @@ async function handleRequest(req, res) {
         deliverywh: mergeWh(deliverWhInfo),
         returnwh: mergeWh(returnWhInfo),
         currentwh: mergeWh(currentWhInfo),
+        pick_warehouse_name: warehouseNameOnly(pickWarehouseId),
+        deliver_warehouse_name: warehouseNameOnly(deliverWarehouseId),
+        return_warehouse_name: warehouseNameOnly(returnWarehouseId),
+        current_warehouse_name: warehouseNameOnly(currentWarehouseId),
         compensation,
         _wh_loaded: Object.keys(warehouses).length,
         _wh_load_error: warehousesLoadError,
