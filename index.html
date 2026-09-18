@@ -499,6 +499,27 @@
       line-height: 1.5;
     }
 
+    .chk-hint-note {
+      background: #FFF4E5;
+      border: 1.5px solid var(--orange);
+      border-radius: 10px;
+      padding: 10px 12px;
+      color: var(--text) !important;
+      animation: chkHintPulse 1.6s ease-in-out infinite;
+    }
+
+    @keyframes chkHintPulse {
+
+      0%,
+      100% {
+        box-shadow: 0 0 0 0 rgba(254, 95, 0, 0);
+      }
+
+      50% {
+        box-shadow: 0 0 0 6px rgba(254, 95, 0, .25);
+      }
+    }
+
     label.field-label {
       display: block;
       font-size: 14px;
@@ -1376,7 +1397,7 @@
 
       <div class="side-panel" id="side-panel-checker" style="display:none;">
         <div class="app-title">Kiểm tra đơn</div>
-        <p class="hint">⚠️ = đơn &gt;5 ngày chưa cập nhật · Bấm Mã đơn để mở tra cứu nội bộ GHN · Bấm tên kho để copy nhanh ID</p>
+        <p class="hint chk-hint-note" id="chk-hint-note">⚠️ = đơn &gt;5 ngày chưa cập nhật · Bấm Mã đơn để mở tra cứu nội bộ GHN · Bấm tên kho để copy nhanh ID</p>
 
         <div id="chk-config-fields">
           <label class="field-label">User-Agent</label>
