@@ -492,6 +492,13 @@
       line-height: 1.4;
     }
 
+    p.hint {
+      margin: 0 0 14px;
+      font-size: 13.5px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
     label.field-label {
       display: block;
       font-size: 14px;
@@ -1369,6 +1376,7 @@
 
       <div class="side-panel" id="side-panel-checker" style="display:none;">
         <div class="app-title">Kiểm tra đơn</div>
+        <p class="hint">⚠️ = đơn &gt;5 ngày chưa cập nhật · Bấm Mã đơn để mở tra cứu nội bộ GHN · Bấm tên kho để copy nhanh ID</p>
 
         <div id="chk-config-fields">
           <label class="field-label">User-Agent</label>
@@ -2347,7 +2355,7 @@
               const codeVal = chkCellValue(r, field);
               const url = `https://tracuunoibo.ghn.vn/internal?order_code=${encodeURIComponent(r.order_code || "")}`;
               const staleDays = isChkStale(r.status, r.last_action_at_vn);
-              const staleBadge = staleDays ? ` <span class="stale-badge" title="Dừng hành trình ${staleDays} ngày">⚠️ </span>` : "";
+              const staleBadge = staleDays ? ` <span class="stale-badge" title="Dừng hành trình ${staleDays} ngày">⚠️</span>` : "";
               return `<td${cls}><a href="${url}" target="_blank" rel="noopener" class="ticket-link">${codeVal}</a>${staleBadge}</td>`;
             }
             if (field === "last_operator") {
