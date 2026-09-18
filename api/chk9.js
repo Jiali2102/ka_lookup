@@ -7,7 +7,7 @@ try {
   warehouses = {};
 }
 
-const TRACKING_URL = process.env.GHN_TRACKING_URL || "https://fe-online-gateway.ghn.vn/order-tracking/public-api/internal/tracking-logs";
+const TRACKING_URL = process.env.GHN_TRACKING_URL;
 const DELIVERED = "Giao hàng thành công";
 const LOST_STATUSES = ["Hàng thất lạc", "Hàng hư hỏng", "Huỷ đơn hàng"];
 
@@ -128,8 +128,15 @@ async function handleRequest(req, res) {
       const trackingLogs = (data.data && data.data.tracking_logs) || [];
 
       let lastActionAtVN = "";
+      let lastOperator = "";
       trackingLogs.forEach(log => {
-        if (log.action_at) lastActionAtVN = toVNTime(log.action_at);
+        if (log.action_at) {
+          lastActionAtVN = toVNTime(log.action_at);
+          const executor = log.executor || {};
+          const opId = executor.employee_id || executor.client_id || "";
+          const opName = executor.name || "";
+          lastOperator = opId ? (opName ? `${opId} - ${opName}` : String(opId)) : "";
+        }
       });
 
       const orderValue = Number(customField.OrderValue || 0);
@@ -175,6 +182,7 @@ async function handleRequest(req, res) {
         insurance_value: insuranceValue,
         package_value: packageValue,
         last_action_at_vn: lastActionAtVN,
+        last_operator: lastOperator,
         pick_warehouse_id: pickWarehouseId,
         deliver_warehouse_id: deliverWarehouseId,
         return_warehouse_id: returnWarehouseId,
