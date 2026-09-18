@@ -2295,6 +2295,8 @@
       ];
       const CHK_MONEY_FIELDS = new Set(["order_value", "cod_amount", "insurance_value", "package_value", "compensation"]);
       const CHK_DATE_FIELDS = new Set(["created_date", "end_picktime", "last_action_at_vn"]);
+      const CHK_XLSX_DATE_FIELDS = CHK_DATE_FIELDS;
+      const COMPENSATION_DATE_FIELDS = new Set(["created_date", "end_picktime", "end_delivery_or_return_vn", "returned_date_vn"]);
 
       const COMPENSATION_COLUMNS = [
         ["order_code", "MaDH"],
@@ -2312,7 +2314,7 @@
         ["current_warehouse_name", "KhoHienTai"],
         ["return_warehouse_name", "KhoTra"],
         ["status_vn", "TrangThai"],
-        ["weight", "TrongLuongGram"],
+        ["__weight_max", "TrongLuongGram"],
         ["__dimensions", "KichThuocRDC"],
         ["client_id", "MaKH"],
         ["__blank", "GhiChuGHN"],
@@ -2329,7 +2331,16 @@
       function chkCompensationValue(r, field) {
         if (field === "__blank") return "";
         if (field === "__dimensions") return `${r.length ?? ""}x${r.width ?? ""}x${r.height ?? ""}`;
+        if (field === "__weight_max") return Math.max(Number(r.weight) || 0, Number(r.converted_weight) || 0);
         return r[field] ?? "";
+      }
+
+      function parseVNDateTimeToDate(str) {
+        if (!str) return "";
+        const m = String(str).match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2}):(\d{2})/);
+        if (!m) return str;
+        const [, y, mo, d, h, mi, s] = m.map(Number);
+        return new Date(Date.UTC(y, mo - 1, d, h, mi, s));
       }
 
       function chkStatusRowClass(status) {
@@ -2512,7 +2523,10 @@
         };
         el("#chk-btn-xlsx").onclick = () => {
           const aoa = [exportCols.map(([, label]) => label)];
-          filtered.forEach(r => aoa.push(exportCols.map(([field]) => chkRawValue(r, field))));
+          filtered.forEach(r => aoa.push(exportCols.map(([field]) => {
+            const v = chkRawValue(r, field);
+            return CHK_XLSX_DATE_FIELDS.has(field) ? parseVNDateTimeToDate(v) : v;
+          })));
           const ws = XLSX.utils.aoa_to_sheet(aoa);
           const wb = XLSX.utils.book_new();
           XLSX.utils.book_append_sheet(wb, ws, "KetQua");
@@ -2521,7 +2535,10 @@
         };
         el("#chk-btn-comp").onclick = () => {
           const aoa = [COMPENSATION_COLUMNS.map(([, label]) => label)];
-          filtered.forEach(r => aoa.push(COMPENSATION_COLUMNS.map(([field]) => chkCompensationValue(r, field))));
+          filtered.forEach(r => aoa.push(COMPENSATION_COLUMNS.map(([field]) => {
+            const v = chkCompensationValue(r, field);
+            return COMPENSATION_DATE_FIELDS.has(field) ? parseVNDateTimeToDate(v) : v;
+          })));
           const ws = XLSX.utils.aoa_to_sheet(aoa);
           const wb = XLSX.utils.book_new();
           XLSX.utils.book_append_sheet(wb, ws, "compensation");
