@@ -196,6 +196,8 @@
     .chk-edit-link {
       cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22"><circle cx="11" cy="11" r="7" fill="%23FE5F00" opacity="0.85"/></svg>') 11 11, pointer;
       transition: transform .12s ease;
+      position: relative;
+      overflow: hidden;
     }
 
     .tab:hover,
@@ -203,6 +205,27 @@
     .btn-primary:hover,
     .file-upload-btn:hover {
       transform: translateY(-1px);
+    }
+
+    .ripple-wave {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .55);
+      transform: scale(0);
+      pointer-events: none;
+      animation: rippleAnim .55s ease-out;
+    }
+
+    .btn-ghost .ripple-wave,
+    .tab .ripple-wave {
+      background: rgba(254, 95, 0, .3);
+    }
+
+    @keyframes rippleAnim {
+      to {
+        transform: scale(2.6);
+        opacity: 0;
+      }
     }
 
     .nf-toggle {
@@ -2137,6 +2160,16 @@
           const rowClass = chkStatusRowClass(r.status);
           const cells = CHK_COLUMNS.map(([field]) => {
             const cls = CHK_MONEY_FIELDS.has(field) ? ' class="amount-cell"' : (field === "order_code" ? ' class="code-cell"' : "");
+            if (field === "order_code") {
+              const codeVal = chkCellValue(r, field);
+              const url = `https://tracuunoibo.ghn.vn/internal?order_code=${encodeURIComponent(r.order_code || "")}`;
+              return `<td${cls}><a href="${url}" target="_blank" rel="noopener" class="ticket-link">${codeVal}</a></td>`;
+            }
+            if (field === "last_operator") {
+              const val = chkCellValue(r, field);
+              const phone = r.last_operator_phone;
+              return `<td${cls}${phone ? ` title="SĐT: ${phone}"` : ""}>${val}</td>`;
+            }
             return `<td${cls}>${chkCellValue(r, field)}</td>`;
           }).join("");
           return `<tr class="${rowClass}">${cells}</tr>`;
@@ -2423,6 +2456,21 @@
       } catch (err) { }
       if (authed) unlockApp();
     })();
+  </script>
+
+  <script>document.addEventListener("click", e => {
+      const target = e.target.closest(".tab, button, .file-upload-btn, .chk-edit-link");
+      if (!target) return;
+      const rect = target.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height);
+      const ripple = document.createElement("span");
+      ripple.className = "ripple-wave";
+      ripple.style.width = ripple.style.height = size + "px";
+      ripple.style.left = (e.clientX - rect.left - size / 2) + "px";
+      ripple.style.top = (e.clientY - rect.top - size / 2) + "px";
+      target.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 550);
+    });
   </script>
 </body>
 
