@@ -129,15 +129,22 @@ async function handleRequest(req, res) {
 
       let lastActionAtVN = "";
       let lastOperator = "";
-      trackingLogs.forEach(log => {
-        if (log.action_at) {
-          lastActionAtVN = toVNTime(log.action_at);
-          const executor = log.executor || {};
+      if (trackingLogs.length) {
+        const lastLog = trackingLogs[trackingLogs.length - 1];
+        if (lastLog.action_at) lastActionAtVN = toVNTime(lastLog.action_at);
+
+        for (let i = trackingLogs.length - 1; i >= 0; i--) {
+          const executor = trackingLogs[i].executor || {};
           const opId = executor.employee_id || executor.client_id || "";
           const opName = executor.name || "";
-          lastOperator = opId ? (opName ? `${opId} - ${opName}` : String(opId)) : "";
+          if (opId && opName) {
+            lastOperator = (i === trackingLogs.length - 1)
+              ? `${opId} - ${opName}`
+              : `${opId} - ${opName} ↩️`;
+            break;
+          }
         }
-      });
+      }
 
       const orderValue = Number(customField.OrderValue || 0);
       const codAmount = Number(orderInfo.cod_amount || 0);
