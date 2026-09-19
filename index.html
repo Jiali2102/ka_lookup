@@ -954,6 +954,57 @@
       border-right: 1px solid rgba(255, 255, 255, .18);
     }
 
+    .chk-sortable-th {
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .chk-sortable-th:hover {
+      background: var(--orange-dark);
+    }
+
+    .chk-sort-arrow {
+      opacity: .7;
+      font-size: 11px;
+      margin-left: 3px;
+    }
+
+    .dl-wrap {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dl-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 4px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, .12);
+      z-index: 50;
+      min-width: 150px;
+      overflow: hidden;
+    }
+
+    .dl-menu.open {
+      display: block;
+    }
+
+    .dl-item {
+      padding: 9px 14px;
+      font-size: 14px;
+      cursor: pointer;
+      white-space: nowrap;
+      color: var(--text);
+    }
+
+    .dl-item:hover {
+      background: var(--blue-soft);
+    }
+
     table.result-table th:last-child,
     table.result-table td:last-child {
       border-right: none;
@@ -979,12 +1030,29 @@
       background: #FFF8E1;
     }
 
+    table.result-table tbody tr.chk-status-scrap {
+      background: #FFF8E1;
+      animation: chkScrapBlink 1.4s ease-in-out infinite;
+    }
+
+    @keyframes chkScrapBlink {
+
+      0%,
+      100% {
+        background: #FFF8E1;
+      }
+
+      50% {
+        background: #FFE0A3;
+      }
+    }
+
     table.result-table tbody tr.chk-status-lost {
       background: #FBEAE8;
     }
 
     table.result-table tbody tr.chk-status-cancel {
-      background: #1A1A1A;
+      background: #4B5563;
       color: white;
     }
 
@@ -1749,6 +1817,22 @@
         document.body.removeChild(a);
         setTimeout(() => URL.revokeObjectURL(a.href), 2e3);
       }
+      function downloadJsonFromAoa(aoa, filename) {
+        const [header, ...dataRows] = aoa;
+        const objs = dataRows.map(row => {
+          const obj = {};
+          header.forEach((h, i) => { obj[h] = row[i]; });
+          return obj;
+        });
+        const blob = new Blob([JSON.stringify(objs, null, 2)], { type: "application/json;charset=utf-8;" });
+        downloadBlob(blob, filename);
+      }
+      function closeAllDlMenus() {
+        document.querySelectorAll(".dl-menu.open").forEach(m => m.classList.remove("open"));
+      }
+      document.addEventListener("click", e => {
+        if (!e.target.closest(".dl-wrap")) closeAllDlMenus();
+      });
       function exportFileBaseName() {
         const epoch = (Date.now() / 1000).toFixed(3);
         return `output_${activeTab}_${epoch}`;
@@ -1772,6 +1856,12 @@
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "KetQua");
         XLSX.writeFile(wb, `${exportFileBaseName()}.xlsx`);
+      }
+      function exportJson() {
+        if (!lastResults.length) return;
+        const cfg = CONFIG.TABS[activeTab];
+        const aoa = buildExportRows(cfg);
+        downloadJsonFromAoa(aoa, `${exportFileBaseName()}.json`);
       }
       function renderNotFound(codes) {
         const area = el("#notfound-area");
@@ -1900,7 +1990,7 @@
         const startIdx = (currentPage - 1) * pageSize;
         const pageItems = items.slice(startIdx, startIdx + pageSize);
         const pageSizeOptions = [10, 20, 50, 100].map(n => `<option value="${n}" ${n === pageSize ? "selected" : ""}>${n}</option>`).join("");
-        const toolbarHtml = `\n    <div class="toolbar">\n      ${statsHtml}\n      <div class="toolbar-actions">\n        <label class="pagesize-label">Hiện <select id="page-size-select">${pageSizeOptions}</select> / trang</label>\n        <button class="btn-ghost" id="btn-copy-found">📋 Copy mã đơn</button>\n        <button class="btn-ghost" id="btn-export-csv">Xuất CSV</button>\n        <button class="btn-ghost" id="btn-export-xlsx">Xuất Excel</button>\n      </div>\n    </div>`;
+        const toolbarHtml = `\n    <div class="toolbar">\n      ${statsHtml}\n      <div class="toolbar-actions">\n        <label class="pagesize-label">Hiện <select id="page-size-select">${pageSizeOptions}</select> / trang</label>\n        <button class="btn-ghost" id="btn-copy-found">📋 Copy mã đơn</button>\n        <div class="dl-wrap">\n          <button class="btn-ghost" id="btn-dl-toggle">⬇ Tải ▾</button>\n          <div class="dl-menu" id="dl-menu">\n            <div class="dl-item" data-fmt="xlsx">Excel (.xlsx)</div>\n            <div class="dl-item" data-fmt="csv">CSV (.csv)</div>\n            <div class="dl-item" data-fmt="json">JSON (.json)</div>\n          </div>\n        </div>\n      </div>\n    </div>`;
         const headerFieldKeys = [null, ...cfg.knownFields];
         const headerCells = ["Mã đơn", ...cfg.knownFields.map(f => CONFIG.FIELD_LABELS[f] || f)];
         const theadHtml = `<tr>${headerCells.map((h, i) => {
@@ -1942,8 +2032,22 @@
         const paginationHtml = totalPages > 1 ? `\n    <div class="pagination">\n      <button class="btn-ghost" id="btn-prev-page" ${currentPage <= 1 ? "disabled" : ""}>← Trước</button>\n      <select id="page-jump-select" class="page-jump-select">${pageJumpOptions}</select>\n      <span class="page-indicator">/ ${totalPages} (${items.length} kết quả)</span>\n      <button class="btn-ghost" id="btn-next-page" ${currentPage >= totalPages ? "disabled" : ""}>Sau →</button>\n    </div>` : `<div class="pagination"><span class="page-indicator">${items.length} kết quả</span></div>`;
         resultsArea.innerHTML = `\n    ${toolbarHtml}\n    ${searchBoxHtml}\n    <div class="results-table-wrap">\n      <table class="result-table">\n        <thead>${theadHtml}</thead>\n        <tbody>${rowsHtml}</tbody>\n      </table>\n    </div>\n    ${paginationHtml}`;
         el("#btn-copy-found").onclick = copyFoundCodes;
-        el("#btn-export-csv").onclick = exportCsv;
-        el("#btn-export-xlsx").onclick = exportXlsx;
+        el("#btn-dl-toggle").onclick = e => {
+          e.stopPropagation();
+          const menu = el("#dl-menu");
+          const wasOpen = menu.classList.contains("open");
+          closeAllDlMenus();
+          if (!wasOpen) menu.classList.add("open");
+        };
+        document.querySelectorAll("#dl-menu .dl-item").forEach(item => {
+          item.onclick = () => {
+            const fmt = item.dataset.fmt;
+            if (fmt === "xlsx") exportXlsx();
+            else if (fmt === "csv") exportCsv();
+            else if (fmt === "json") exportJson();
+            closeAllDlMenus();
+          };
+        });
         el("#page-size-select").onchange = e => {
           pageSize = Number(e.target.value);
           currentPage = 1;
@@ -2201,9 +2305,13 @@
         chkResultsArea.innerHTML = "";
         chkResults = [];
         chkSearchQuery = "";
+        chkSortField = null;
+        chkSortDir = 1;
       };
 
       let chkResults = [];
+      let chkSortField = null;
+      let chkSortDir = 1;
 
       const CHK_HISTORY_KEY = "ka_lookup_chk_history_v1";
       const CHK_HISTORY_MAX = 5;
@@ -2346,8 +2454,9 @@
       function chkStatusRowClass(status) {
         const s = String(status || "").toLowerCase();
         if (s.includes("cancel")) return "chk-status-cancel";
+        if (s.includes("scrap")) return "chk-status-scrap";
         if (s.includes("lost") || s.includes("damage")) return "chk-status-lost";
-        if (s.includes("returned") || s.includes("scrap")) return "chk-status-return";
+        if (s.includes("returned")) return "chk-status-return";
         if (s.includes("delivered")) return "chk-status-delivered";
         return "";
       }
@@ -2422,11 +2531,25 @@
 
       chkResultsArea.addEventListener("click", e => {
         const cell = e.target.closest(".wh-copyable");
-        if (!cell) return;
-        const id = cell.dataset.copyId;
-        if (!id) return;
-        navigator.clipboard.writeText(id);
-        chkShowToast("Đã copy: " + id);
+        if (cell) {
+          const id = cell.dataset.copyId;
+          if (id) {
+            navigator.clipboard.writeText(id);
+            chkShowToast("Đã copy: " + id);
+          }
+          return;
+        }
+        const th = e.target.closest(".chk-sortable-th");
+        if (th) {
+          const field = th.dataset.sortField;
+          if (chkSortField === field) {
+            chkSortDir = -chkSortDir;
+          } else {
+            chkSortField = field;
+            chkSortDir = 1;
+          }
+          renderChkResults();
+        }
       });
 
       function renderChkResults() {
@@ -2438,6 +2561,14 @@
         const filtered = filterTokens.length
           ? chkResults.filter(r => filterTokens.some(t => (r.order_code || "").toUpperCase().includes(t)))
           : chkResults;
+        const displayRows = chkSortField ? [...filtered].sort((a, b) => {
+          let av = chkRawValue(a, chkSortField);
+          let bv = chkRawValue(b, chkSortField);
+          if (CHK_MONEY_FIELDS.has(chkSortField)) {
+            return ((Number(av) || 0) - (Number(bv) || 0)) * chkSortDir;
+          }
+          return String(av ?? "").localeCompare(String(bv ?? ""), "vi", { numeric: true, sensitivity: "base" }) * chkSortDir;
+        }) : filtered;
         const searchBoxHtml = `
           <div class="result-search-row">
             <input type="text" id="chk-result-search" class="result-search-input" placeholder="Lọc mã đơn trong kết quả này — dán được nhiều mã, cách nhau bằng dấu phẩy/khoảng trắng" value="${chkSearchQuery.replace(/"/g, "&quot;")}" />
@@ -2449,7 +2580,7 @@
           bindChkSearchEvents();
           return;
         }
-        const rows = filtered.map(r => {
+        const rows = displayRows.map(r => {
           const rowClass = chkStatusRowClass(r.status);
           const cells = CHK_COLUMNS.map(([field]) => {
             const cls = CHK_MONEY_FIELDS.has(field) ? ' class="amount-cell"' : (field === "order_code" ? ' class="code-cell"' : "");
@@ -2480,15 +2611,25 @@
             <span class="stats"><span class="stat-badge total">Tổng: ${chkResults.length}</span></span>
             <div class="toolbar-actions">
               <button class="btn-ghost" id="chk-btn-copy">Copy kết quả</button>
-              <button class="btn-ghost" id="chk-btn-csv">Xuất CSV</button>
-              <button class="btn-ghost" id="chk-btn-xlsx">Xuất Excel</button>
+              <div class="dl-wrap">
+                <button class="btn-ghost" id="chk-btn-dl-toggle">⬇ Tải ▾</button>
+                <div class="dl-menu" id="chk-dl-menu">
+                  <div class="dl-item" data-fmt="xlsx">Excel (.xlsx)</div>
+                  <div class="dl-item" data-fmt="csv">CSV (.csv)</div>
+                  <div class="dl-item" data-fmt="json">JSON (.json)</div>
+                </div>
+              </div>
               <button class="btn-ghost chk-btn-comp" id="chk-btn-comp">📦 Tải Compensation</button>
             </div>
           </div>
           ${searchBoxHtml}<div class="results-table-wrap">
             <table class="result-table">
               <thead>
-                <tr>${CHK_COLUMNS.map(([field, label]) => `<th${CHK_MONEY_FIELDS.has(field) ? ' class="align-right"' : ""}>${label}</th>`).join("")}</tr>
+                <tr>${CHK_COLUMNS.map(([field, label]) => {
+                  const cls = CHK_MONEY_FIELDS.has(field) ? "align-right chk-sortable-th" : "chk-sortable-th";
+                  const arrow = chkSortField === field ? (chkSortDir === 1 ? " ▲" : " ▼") : " ⇅";
+                  return `<th class="${cls}" data-sort-field="${field}">${label}<span class="chk-sort-arrow">${arrow}</span></th>`;
+                }).join("")}</tr>
               </thead>
               <tbody>${rows}</tbody>
             </table>
@@ -2506,36 +2647,55 @@
           }
         });
         exportCols.push(...CHK_EXPORT_EXTRA_COLUMNS);
-        el("#chk-btn-copy").onclick = () => {
-          const sanitizeForCopy = v => String(v ?? "").replace(/\r\n|\r|\n/g, " ");
-          const header = exportCols.map(([, label]) => label).join("\t");
-          const lines = filtered.map(r => exportCols.map(([field]) => sanitizeForCopy(chkRawValue(r, field))).join("\t"));
-          navigator.clipboard.writeText([header, ...lines].join("\n"));
-        };
-        el("#chk-btn-csv").onclick = () => {
+        function buildChkAoaForCsv() {
           const aoa = [exportCols.map(([, label]) => label)];
-          filtered.forEach(r => aoa.push(exportCols.map(([field]) => chkRawValue(r, field))));
-          const ws = XLSX.utils.aoa_to_sheet(aoa);
-          const csv = XLSX.utils.sheet_to_csv(ws);
-          const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8;" });
-          const epoch = (Date.now() / 1000).toFixed(3);
-          downloadBlob(blob, `output_kiemtra_${epoch}.csv`);
-        };
-        el("#chk-btn-xlsx").onclick = () => {
+          displayRows.forEach(r => aoa.push(exportCols.map(([field]) => chkRawValue(r, field))));
+          return aoa;
+        }
+        function buildChkAoaForXlsx() {
           const aoa = [exportCols.map(([, label]) => label)];
-          filtered.forEach(r => aoa.push(exportCols.map(([field]) => {
+          displayRows.forEach(r => aoa.push(exportCols.map(([field]) => {
             const v = chkRawValue(r, field);
             return CHK_XLSX_DATE_FIELDS.has(field) ? parseVNDateTimeToDate(v) : v;
           })));
-          const ws = XLSX.utils.aoa_to_sheet(aoa);
-          const wb = XLSX.utils.book_new();
-          XLSX.utils.book_append_sheet(wb, ws, "KetQua");
-          const epoch = (Date.now() / 1000).toFixed(3);
-          XLSX.writeFile(wb, `output_kiemtra_${epoch}.xlsx`);
+          return aoa;
+        }
+        el("#chk-btn-dl-toggle").onclick = e => {
+          e.stopPropagation();
+          const menu = el("#chk-dl-menu");
+          const wasOpen = menu.classList.contains("open");
+          closeAllDlMenus();
+          if (!wasOpen) menu.classList.add("open");
+        };
+        document.querySelectorAll("#chk-dl-menu .dl-item").forEach(item => {
+          item.onclick = () => {
+            const fmt = item.dataset.fmt;
+            const epoch = (Date.now() / 1000).toFixed(3);
+            if (fmt === "csv") {
+              const ws = XLSX.utils.aoa_to_sheet(buildChkAoaForCsv());
+              const csv = XLSX.utils.sheet_to_csv(ws);
+              const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8;" });
+              downloadBlob(blob, `output_kiemtra_${epoch}.csv`);
+            } else if (fmt === "xlsx") {
+              const ws = XLSX.utils.aoa_to_sheet(buildChkAoaForXlsx());
+              const wb = XLSX.utils.book_new();
+              XLSX.utils.book_append_sheet(wb, ws, "KetQua");
+              XLSX.writeFile(wb, `output_kiemtra_${epoch}.xlsx`);
+            } else if (fmt === "json") {
+              downloadJsonFromAoa(buildChkAoaForCsv(), `output_kiemtra_${epoch}.json`);
+            }
+            closeAllDlMenus();
+          };
+        });
+        el("#chk-btn-copy").onclick = () => {
+          const sanitizeForCopy = v => String(v ?? "").replace(/\r\n|\r|\n/g, " ");
+          const header = exportCols.map(([, label]) => label).join("\t");
+          const lines = displayRows.map(r => exportCols.map(([field]) => sanitizeForCopy(chkRawValue(r, field))).join("\t"));
+          navigator.clipboard.writeText([header, ...lines].join("\n"));
         };
         el("#chk-btn-comp").onclick = () => {
           const aoa = [COMPENSATION_COLUMNS.map(([, label]) => label)];
-          filtered.forEach(r => aoa.push(COMPENSATION_COLUMNS.map(([field]) => {
+          displayRows.forEach(r => aoa.push(COMPENSATION_COLUMNS.map(([field]) => {
             const v = chkCompensationValue(r, field);
             return COMPENSATION_DATE_FIELDS.has(field) ? parseVNDateTimeToDate(v) : v;
           })));
@@ -2599,6 +2759,8 @@
         chkBtnRun.disabled = true;
         chkResults = [];
         chkSearchQuery = "";
+        chkSortField = null;
+        chkSortDir = 1;
         for (let i = 0; i < codes.length; i++) {
           chkResultsArea.innerHTML = `<div class="state loading"><span class="spinner"></span>Đang chạy... ${i + 1}/${codes.length}</div>`;
           try {
