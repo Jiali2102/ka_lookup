@@ -963,6 +963,15 @@
       background: var(--orange-dark);
     }
 
+    th.chk-th-compensation {
+      background: var(--danger) !important;
+      color: #FFD54A !important;
+    }
+
+    th.chk-th-compensation:hover {
+      background: #B91C1C !important;
+    }
+
     .chk-sort-arrow {
       opacity: .7;
       font-size: 11px;
@@ -1030,20 +1039,25 @@
       background: #FFF8E1;
     }
 
-    table.result-table tbody tr.chk-status-scrap {
-      background: #FFF8E1;
-      animation: chkScrapBlink 1.4s ease-in-out infinite;
+    .chk-scrap-blink {
+      display: inline-block;
+      animation: chkScrapBlink 1s ease-in-out infinite;
+      font-weight: 700;
+      border-radius: 6px;
+      padding: 1px 6px;
     }
 
     @keyframes chkScrapBlink {
 
       0%,
       100% {
-        background: #FFF8E1;
+        background: transparent;
+        color: var(--text);
       }
 
       50% {
-        background: #FFE0A3;
+        background: var(--danger);
+        color: white;
       }
     }
 
@@ -2402,6 +2416,7 @@
         ["from_address", "Địa chỉ gửi"]
       ];
       const CHK_MONEY_FIELDS = new Set(["order_value", "cod_amount", "insurance_value", "package_value", "compensation"]);
+      const CHK_COPYABLE_NUMBER_FIELDS = new Set(["order_value", "cod_amount", "insurance_value", "compensation"]);
       const CHK_DATE_FIELDS = new Set(["created_date", "end_picktime", "last_action_at_vn"]);
       const CHK_XLSX_DATE_FIELDS = CHK_DATE_FIELDS;
       const COMPENSATION_DATE_FIELDS = new Set(["created_date", "end_picktime", "end_delivery_or_return_vn", "returned_date_vn"]);
@@ -2443,20 +2458,31 @@
         return r[field] ?? "";
       }
 
-      function parseVNDateTimeToDate(str) {
+      function vnDateTimeToExcelSerial(str) {
         if (!str) return "";
         const m = String(str).match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2}):(\d{2})/);
         if (!m) return str;
         const [, y, mo, d, h, mi, s] = m.map(Number);
-        return new Date(Date.UTC(y, mo - 1, d, h, mi, s));
+        const excelEpochUTC = Date.UTC(1899, 11, 30);
+        const targetUTC = Date.UTC(y, mo - 1, d, h, mi, s);
+        return (targetUTC - excelEpochUTC) / 86400000;
+      }
+
+      function applyDateTimeFormat(ws, aoa, dateFieldIndexes) {
+        for (let r = 1; r < aoa.length; r++) {
+          dateFieldIndexes.forEach(c => {
+            const addr = XLSX.utils.encode_cell({ r, c });
+            const cell = ws[addr];
+            if (cell && cell.t === "n") cell.z = "yyyy-mm-dd hh:mm:ss";
+          });
+        }
       }
 
       function chkStatusRowClass(status) {
         const s = String(status || "").toLowerCase();
         if (s.includes("cancel")) return "chk-status-cancel";
-        if (s.includes("scrap")) return "chk-status-scrap";
         if (s.includes("lost") || s.includes("damage")) return "chk-status-lost";
-        if (s.includes("returned")) return "chk-status-return";
+        if (s.includes("returned") || s.includes("scrap")) return "chk-status-return";
         if (s.includes("delivered")) return "chk-status-delivered";
         return "";
       }
@@ -2594,7 +2620,24 @@
             if (field === "last_operator") {
               const val = chkCellValue(r, field);
               const phone = r.last_operator_phone;
-              return `<td${cls}${phone ? ` title="SĐT: ${phone}"` : ""}>${val}</td>`;
+              const opId = chkOperatorIdOnly(r.last_operator);
+              const titleParts = [];
+              if (opId) titleParts.push(`Bấm để copy ID: ${opId}`);
+              if (phone) titleParts.push(`SĐT: ${phone}`);
+              const copyAttr = opId ? ` class="wh-copyable" data-copy-id="${opId}"` : "";
+              return `<td${cls}${copyAttr}${titleParts.length ? ` title="${titleParts.join(" | ")}"` : ""}>${val}</td>`;
+            }
+            if (CHK_COPYABLE_NUMBER_FIELDS.has(field)) {
+              const val = chkCellValue(r, field);
+              const rawNum = r[field];
+              if (rawNum === undefined || rawNum === null || rawNum === "") return `<td${cls}>${val}</td>`;
+              const mergedCls = CHK_MONEY_FIELDS.has(field) ? "amount-cell wh-copyable" : "wh-copyable";
+              return `<td class="${mergedCls}" data-copy-id="${rawNum}" title="Bấm để copy số: ${rawNum}">${val}</td>`;
+            }
+            if (field === "status_vn") {
+              const val = chkCellValue(r, field);
+              const isScrap = String(r.status || "").toLowerCase().includes("scrap");
+              return `<td${cls}>${isScrap ? `<span class="chk-scrap-blink">${val}</span>` : val}</td>`;
             }
             if (CHK_WH_ID_FIELD_MAP[field]) {
               const val = chkCellValue(r, field);
@@ -2626,7 +2669,8 @@
             <table class="result-table">
               <thead>
                 <tr>${CHK_COLUMNS.map(([field, label]) => {
-                  const cls = CHK_MONEY_FIELDS.has(field) ? "align-right chk-sortable-th" : "chk-sortable-th";
+                  let cls = CHK_MONEY_FIELDS.has(field) ? "align-right chk-sortable-th" : "chk-sortable-th";
+                  if (field === "compensation") cls += " chk-th-compensation";
                   const arrow = chkSortField === field ? (chkSortDir === 1 ? " ▲" : " ▼") : " ⇅";
                   return `<th class="${cls}" data-sort-field="${field}">${label}<span class="chk-sort-arrow">${arrow}</span></th>`;
                 }).join("")}</tr>
@@ -2656,10 +2700,11 @@
           const aoa = [exportCols.map(([, label]) => label)];
           displayRows.forEach(r => aoa.push(exportCols.map(([field]) => {
             const v = chkRawValue(r, field);
-            return CHK_XLSX_DATE_FIELDS.has(field) ? parseVNDateTimeToDate(v) : v;
+            return CHK_XLSX_DATE_FIELDS.has(field) ? vnDateTimeToExcelSerial(v) : v;
           })));
           return aoa;
         }
+        const chkDateColIndexes = exportCols.map(([field], i) => CHK_XLSX_DATE_FIELDS.has(field) ? i : -1).filter(i => i >= 0);
         el("#chk-btn-dl-toggle").onclick = e => {
           e.stopPropagation();
           const menu = el("#chk-dl-menu");
@@ -2677,7 +2722,9 @@
               const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8;" });
               downloadBlob(blob, `output_kiemtra_${epoch}.csv`);
             } else if (fmt === "xlsx") {
-              const ws = XLSX.utils.aoa_to_sheet(buildChkAoaForXlsx());
+              const aoaXlsx = buildChkAoaForXlsx();
+              const ws = XLSX.utils.aoa_to_sheet(aoaXlsx);
+              applyDateTimeFormat(ws, aoaXlsx, chkDateColIndexes);
               const wb = XLSX.utils.book_new();
               XLSX.utils.book_append_sheet(wb, ws, "KetQua");
               XLSX.writeFile(wb, `output_kiemtra_${epoch}.xlsx`);
@@ -2697,9 +2744,11 @@
           const aoa = [COMPENSATION_COLUMNS.map(([, label]) => label)];
           displayRows.forEach(r => aoa.push(COMPENSATION_COLUMNS.map(([field]) => {
             const v = chkCompensationValue(r, field);
-            return COMPENSATION_DATE_FIELDS.has(field) ? parseVNDateTimeToDate(v) : v;
+            return COMPENSATION_DATE_FIELDS.has(field) ? vnDateTimeToExcelSerial(v) : v;
           })));
+          const compDateColIndexes = COMPENSATION_COLUMNS.map(([field], i) => COMPENSATION_DATE_FIELDS.has(field) ? i : -1).filter(i => i >= 0);
           const ws = XLSX.utils.aoa_to_sheet(aoa);
+          applyDateTimeFormat(ws, aoa, compDateColIndexes);
           const wb = XLSX.utils.book_new();
           XLSX.utils.book_append_sheet(wb, ws, "compensation");
           const epoch = (Date.now() / 1000).toFixed(3);
