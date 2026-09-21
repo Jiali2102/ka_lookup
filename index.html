@@ -1108,6 +1108,30 @@
       right: 20px;
     }
 
+    .pod-lb-magnifier {
+      position: fixed;
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      border: 3px solid rgba(255, 255, 255, .55);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, .55);
+      pointer-events: none;
+      display: none;
+      background-repeat: no-repeat;
+      background-color: #0c0d16;
+      z-index: 5010;
+    }
+
+    .pod-lb-magnifier.show {
+      display: block;
+    }
+
+    @media (hover: none) {
+      .pod-lb-magnifier {
+        display: none !important;
+      }
+    }
+
     .file-upload-btn {
       display: inline-flex;
       align-items: center;
@@ -1948,6 +1972,7 @@
       <img id="pod-lb-img" alt="" />
       <button type="button" class="pod-lb-nav pod-lb-next" id="pod-lb-next">›</button>
       <div class="pod-lb-caption" id="pod-lb-caption"></div>
+      <div class="pod-lb-magnifier" id="pod-lb-magnifier"></div>
     </div>
 
     <button type="button" id="btn-toggle-notfound" class="nf-toggle">⚠️ Không tìm thấy</button>
@@ -2769,6 +2794,10 @@
       const podLightbox = el("#pod-lightbox");
       const podLbImg = el("#pod-lb-img");
       const podLbCaption = el("#pod-lb-caption");
+      const podLbMagnifier = el("#pod-lb-magnifier");
+      const POD_MAG_ZOOM = 2.5;
+      const POD_MAG_SIZE = 240;
+      const podMagSupported = !window.matchMedia || window.matchMedia("(hover: hover)").matches;
 
       const POD_THEME_KEY = "ka_lookup_pod_theme_v1";
       const POD_PHASE_DEFS = [
@@ -2834,19 +2863,46 @@
       function closePodLightbox() {
         podLightbox.classList.remove("show");
         podLbImg.src = "";
+        podLbMagnifier.classList.remove("show");
       }
 
+      function hidePodMagnifier() {
+        podLbMagnifier.classList.remove("show");
+      }
+
+      function updatePodMagnifier(e) {
+        if (!podMagSupported || !podLbImg.src) return;
+        const rect = podLbImg.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        if (x < 0 || y < 0 || x > rect.width || y > rect.height) {
+          hidePodMagnifier();
+          return;
+        }
+        podLbMagnifier.classList.add("show");
+        podLbMagnifier.style.left = (e.clientX - POD_MAG_SIZE / 2) + "px";
+        podLbMagnifier.style.top = (e.clientY - POD_MAG_SIZE / 2) + "px";
+        podLbMagnifier.style.backgroundImage = `url("${podLbImg.src}")`;
+        podLbMagnifier.style.backgroundSize = `${rect.width * POD_MAG_ZOOM}px ${rect.height * POD_MAG_ZOOM}px`;
+        podLbMagnifier.style.backgroundPosition =
+          `${-(x * POD_MAG_ZOOM - POD_MAG_SIZE / 2)}px ${-(y * POD_MAG_ZOOM - POD_MAG_SIZE / 2)}px`;
+      }
+
+      podLbImg.addEventListener("mousemove", updatePodMagnifier);
+      podLbImg.addEventListener("mouseleave", hidePodMagnifier);
+      podLbImg.addEventListener("mousedown", hidePodMagnifier);
+
       el("#pod-lb-close").onclick = closePodLightbox;
-      el("#pod-lb-prev").onclick = () => openPodLightbox(podLbIdx - 1);
-      el("#pod-lb-next").onclick = () => openPodLightbox(podLbIdx + 1);
+      el("#pod-lb-prev").onclick = () => { hidePodMagnifier(); openPodLightbox(podLbIdx - 1); };
+      el("#pod-lb-next").onclick = () => { hidePodMagnifier(); openPodLightbox(podLbIdx + 1); };
       podLightbox.addEventListener("click", e => {
         if (e.target === podLightbox) closePodLightbox();
       });
       document.addEventListener("keydown", e => {
         if (!podLightbox.classList.contains("show")) return;
         if (e.key === "Escape") closePodLightbox();
-        if (e.key === "ArrowLeft") openPodLightbox(podLbIdx - 1);
-        if (e.key === "ArrowRight") openPodLightbox(podLbIdx + 1);
+        if (e.key === "ArrowLeft") { hidePodMagnifier(); openPodLightbox(podLbIdx - 1); }
+        if (e.key === "ArrowRight") { hidePodMagnifier(); openPodLightbox(podLbIdx + 1); }
       });
 
       function makePodThumb(item, orderCode) {
