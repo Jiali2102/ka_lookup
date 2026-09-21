@@ -729,6 +729,187 @@
       flex-wrap: wrap;
     }
 
+    /* ───────────────────── POD gallery ───────────────────── */
+    #pod-results-area {
+      width: 100%;
+      overflow-y: auto;
+      padding: 20px 24px;
+    }
+
+    .pod-stat-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .pod-stat {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 14px;
+      display: flex;
+      flex-direction: column;
+      min-width: 90px;
+    }
+
+    .pod-stat-num {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+      font-family: var(--mono);
+    }
+
+    .pod-stat-lbl {
+      font-size: 12.5px;
+      color: var(--muted);
+    }
+
+    .pod-group {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      margin-bottom: 16px;
+    }
+
+    .pod-group-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .pod-group-code {
+      font-weight: 700;
+      font-size: 17px;
+      color: var(--blue);
+      cursor: pointer;
+    }
+
+    .pod-group-code:hover {
+      text-decoration: underline;
+    }
+
+    .pod-group-meta {
+      font-size: 13.5px;
+      color: var(--muted);
+    }
+
+    .pod-group-empty {
+      color: var(--danger);
+      font-size: 13.5px;
+    }
+
+    .pod-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 10px;
+    }
+
+    .pod-thumb {
+      position: relative;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      background: #FBFAF8;
+      aspect-ratio: 1 / 1;
+    }
+
+    .pod-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .pod-thumb-badge {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      background: rgba(0, 0, 0, .6);
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 6px;
+      text-transform: uppercase;
+    }
+
+    .pod-thumb.pod-thumb-error {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: var(--danger);
+      font-size: 12px;
+      padding: 6px;
+    }
+
+    .pod-lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .85);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 5000;
+      flex-direction: column;
+    }
+
+    .pod-lightbox.show {
+      display: flex;
+    }
+
+    .pod-lightbox img {
+      max-width: 88vw;
+      max-height: 80vh;
+      border-radius: 8px;
+    }
+
+    .pod-lb-caption {
+      color: white;
+      margin-top: 10px;
+      font-size: 13.5px;
+      font-family: var(--mono);
+    }
+
+    .pod-lb-close {
+      position: absolute;
+      top: 18px;
+      right: 24px;
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 26px;
+      cursor: pointer;
+    }
+
+    .pod-lb-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, .12);
+      border: none;
+      color: white;
+      font-size: 32px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .pod-lb-prev {
+      left: 20px;
+    }
+
+    .pod-lb-next {
+      right: 20px;
+    }
+
     .file-upload-btn {
       display: inline-flex;
       align-items: center;
@@ -1490,7 +1671,15 @@
       </div>
 
       <div class="side-panel" id="side-panel-checker" style="display:none;">
-        <div class="app-title">Kiểm tra đơn</div>
+        <div class="app-title" id="chk-app-title">Kiểm tra đơn</div>
+
+        <label class="field-label">Chế độ</label>
+        <select id="chk-mode-select" class="chk-input" style="margin-bottom:12px;">
+          <option value="tra-cuu">🔎 Tra cứu</option>
+          <option value="calllog">🕘 CallLog</option>
+          <option value="pod">🖼️ POD</option>
+        </select>
+
         <p class="hint chk-hint-note" id="chk-hint-note">⚠️ = đơn &gt;5 ngày chưa cập nhật · Bấm Mã đơn để mở tra cứu nội bộ GHN · Bấm tên kho để copy nhanh ID</p>
 
         <div id="chk-config-fields">
@@ -1510,18 +1699,36 @@
 
         <div class="divider-or">sau đó</div>
 
-        <label class="field-label">Danh sách mã đơn</label>
-        <textarea id="chk-codes-input"
-          placeholder="Dán mã đơn cần kiểm tra, mỗi dòng 1 mã."></textarea>
+        <div id="chk-mode-panel-tracuu">
+          <label class="field-label">Danh sách mã đơn</label>
+          <textarea id="chk-codes-input"
+            placeholder="Dán mã đơn cần kiểm tra, mỗi dòng 1 mã."></textarea>
 
-        <div class="actions">
-          <button class="btn-primary" id="chk-btn-run">Chạy kiểm tra</button>
-          <button class="btn-ghost" id="chk-btn-clear">Xóa</button>
-          <span class="count-tag" id="chk-code-count"></span>
+          <div class="actions">
+            <button class="btn-primary" id="chk-btn-run">Chạy kiểm tra</button>
+            <button class="btn-ghost" id="chk-btn-clear">Xóa</button>
+            <span class="count-tag" id="chk-code-count"></span>
+          </div>
+
+          <div class="chk-history-title">🕘 Lịch sử gần đây</div>
+          <div id="chk-history-list"></div>
         </div>
 
-        <div class="chk-history-title">🕘 Lịch sử gần đây</div>
-        <div id="chk-history-list"></div>
+        <div id="chk-mode-panel-pod" style="display:none;">
+          <label class="field-label">Danh sách mã đơn (POD)</label>
+          <textarea id="pod-codes-input"
+            placeholder="Dán mã đơn cần lấy ảnh POD, mỗi dòng 1 mã."></textarea>
+
+          <div class="actions">
+            <button class="btn-primary" id="pod-btn-run">Lấy ảnh POD</button>
+            <button class="btn-ghost" id="pod-btn-clear">Xóa</button>
+            <span class="count-tag" id="pod-code-count"></span>
+          </div>
+        </div>
+
+        <div id="chk-mode-panel-calllog" style="display:none;">
+          <p class="hint">🚧 CallLog đang được phát triển — sẽ hoàn thiện sau khi xong POD.</p>
+        </div>
       </div>
 
       <div class="main-col" id="main-col-normal">
@@ -1530,7 +1737,19 @@
 
       <div class="main-col" id="main-col-checker" style="display:none;">
         <div id="chk-results-area"></div>
+        <div id="pod-results-area" style="display:none;"></div>
+        <div id="calllog-results-area" style="display:none;">
+          <div class="state" style="padding:40px 0;text-align:center;color:var(--muted);">🚧 CallLog đang được phát triển.</div>
+        </div>
       </div>
+    </div>
+
+    <div class="pod-lightbox" id="pod-lightbox">
+      <button type="button" class="pod-lb-close" id="pod-lb-close">✕</button>
+      <button type="button" class="pod-lb-nav pod-lb-prev" id="pod-lb-prev">‹</button>
+      <img id="pod-lb-img" alt="" />
+      <button type="button" class="pod-lb-nav pod-lb-next" id="pod-lb-next">›</button>
+      <div class="pod-lb-caption" id="pod-lb-caption"></div>
     </div>
 
     <button type="button" id="btn-toggle-notfound" class="nf-toggle">⚠️ Không tìm thấy</button>
@@ -2302,6 +2521,239 @@
       switchTab = function (key) {
         showNormalView();
         originalSwitchTab(key);
+      };
+
+      /* ───────────────────── Chế độ trong tab Kiểm tra đơn ───────────────────── */
+      const CHK_MODE_KEY = "ka_lookup_chk_mode_v1";
+      const chkModeSelect = el("#chk-mode-select");
+      const chkAppTitle = el("#chk-app-title");
+      const chkModePanels = {
+        "tra-cuu": el("#chk-mode-panel-tracuu"),
+        "pod": el("#chk-mode-panel-pod"),
+        "calllog": el("#chk-mode-panel-calllog")
+      };
+      const chkResultPanels = {
+        "tra-cuu": chkResultsArea,
+        "pod": el("#pod-results-area"),
+        "calllog": el("#calllog-results-area")
+      };
+      const CHK_MODE_TITLES = {
+        "tra-cuu": "Kiểm tra đơn",
+        "pod": "POD",
+        "calllog": "CallLog"
+      };
+
+      function setChkMode(mode) {
+        if (!chkModePanels[mode]) mode = "tra-cuu";
+        Object.keys(chkModePanels).forEach(k => {
+          chkModePanels[k].style.display = k === mode ? "block" : "none";
+          chkResultPanels[k].style.display = k === mode ? "block" : "none";
+        });
+        chkModeSelect.value = mode;
+        chkAppTitle.textContent = CHK_MODE_TITLES[mode] || "Kiểm tra đơn";
+        try { localStorage.setItem(CHK_MODE_KEY, mode); } catch (err) { }
+      }
+
+      chkModeSelect.addEventListener("change", () => setChkMode(chkModeSelect.value));
+
+      (function initChkMode() {
+        let saved = "tra-cuu";
+        try { saved = localStorage.getItem(CHK_MODE_KEY) || "tra-cuu"; } catch (err) { }
+        setChkMode(saved);
+      })();
+
+      /* ───────────────────── Tab POD ───────────────────── */
+      const podCodesInput = el("#pod-codes-input");
+      const podCodeCount = el("#pod-code-count");
+      const podBtnRun = el("#pod-btn-run");
+      const podBtnClear = el("#pod-btn-clear");
+      const podResultsArea = el("#pod-results-area");
+      const podLightbox = el("#pod-lightbox");
+      const podLbImg = el("#pod-lb-img");
+      const podLbCaption = el("#pod-lb-caption");
+
+      let podResults = [];
+      let podFlatUrls = [];
+      let podLbIdx = 0;
+
+      function parsePodCodes(raw) {
+        return [...new Set(raw.split(/[\s,;]+/).map(s => s.trim().toUpperCase()).filter(Boolean))];
+      }
+
+      podCodesInput.addEventListener("input", () => {
+        const n = parsePodCodes(podCodesInput.value).length;
+        podCodeCount.textContent = n > 0 ? n + " mã đơn" : "";
+      });
+
+      podBtnClear.onclick = () => {
+        podCodesInput.value = "";
+        podCodeCount.textContent = "";
+        podResultsArea.innerHTML = "";
+        podResults = [];
+        podFlatUrls = [];
+      };
+
+      function openPodLightbox(idx) {
+        if (!podFlatUrls.length) return;
+        podLbIdx = ((idx % podFlatUrls.length) + podFlatUrls.length) % podFlatUrls.length;
+        const item = podFlatUrls[podLbIdx];
+        podLbImg.src = item.url;
+        podLbCaption.textContent = `${podLbIdx + 1} / ${podFlatUrls.length} — ${item.orderCode} (${item.type})`;
+        podLightbox.classList.add("show");
+      }
+
+      function closePodLightbox() {
+        podLightbox.classList.remove("show");
+        podLbImg.src = "";
+      }
+
+      el("#pod-lb-close").onclick = closePodLightbox;
+      el("#pod-lb-prev").onclick = () => openPodLightbox(podLbIdx - 1);
+      el("#pod-lb-next").onclick = () => openPodLightbox(podLbIdx + 1);
+      podLightbox.addEventListener("click", e => {
+        if (e.target === podLightbox) closePodLightbox();
+      });
+      document.addEventListener("keydown", e => {
+        if (!podLightbox.classList.contains("show")) return;
+        if (e.key === "Escape") closePodLightbox();
+        if (e.key === "ArrowLeft") openPodLightbox(podLbIdx - 1);
+        if (e.key === "ArrowRight") openPodLightbox(podLbIdx + 1);
+      });
+
+      function renderPodResults() {
+        podFlatUrls = [];
+        podResultsArea.innerHTML = "";
+        if (!podResults.length) return;
+
+        let totalImgs = 0, pickCount = 0, deliverCount = 0, returnCount = 0, errorCount = 0;
+        podResults.forEach(r => {
+          if (r.ok) {
+            totalImgs += (r.urls || []).length;
+            pickCount += r.pick_count || 0;
+            deliverCount += r.deliver_count || 0;
+            returnCount += r.return_count || 0;
+          } else {
+            errorCount++;
+          }
+        });
+
+        const statRow = document.createElement("div");
+        statRow.className = "pod-stat-row";
+        const stats = [
+          [podResults.length, "Mã đơn"],
+          [totalImgs, "Tổng ảnh"],
+          [pickCount, "Lấy hàng"],
+          [deliverCount, "Giao hàng"],
+          [returnCount, "Trả hàng"]
+        ];
+        if (errorCount > 0) stats.push([errorCount, "Lỗi"]);
+        stats.forEach(([num, lbl]) => {
+          const s = document.createElement("div");
+          s.className = "pod-stat";
+          s.innerHTML = `<span class="pod-stat-num">${num}</span><span class="pod-stat-lbl">${lbl}</span>`;
+          statRow.appendChild(s);
+        });
+        podResultsArea.appendChild(statRow);
+
+        podResults.forEach(r => {
+          const groupEl = document.createElement("div");
+          groupEl.className = "pod-group";
+
+          const head = document.createElement("div");
+          head.className = "pod-group-head";
+          const codeSpan = document.createElement("span");
+          codeSpan.className = "pod-group-code";
+          codeSpan.textContent = r.order_code;
+          head.appendChild(codeSpan);
+
+          if (!r.ok) {
+            const errSpan = document.createElement("span");
+            errSpan.className = "pod-group-empty";
+            errSpan.textContent = r.message || "Lỗi không xác định";
+            head.appendChild(errSpan);
+            groupEl.appendChild(head);
+            podResultsArea.appendChild(groupEl);
+            return;
+          }
+
+          const urls = r.urls || [];
+          const meta = document.createElement("span");
+          meta.className = urls.length ? "pod-group-meta" : "pod-group-empty";
+          meta.textContent = urls.length
+            ? `${urls.length} ảnh · P:${r.pick_count || 0} D:${r.deliver_count || 0} R:${r.return_count || 0}`
+            : "Không có ảnh POD";
+          head.appendChild(meta);
+          groupEl.appendChild(head);
+
+          if (urls.length) {
+            const grid = document.createElement("div");
+            grid.className = "pod-grid";
+            urls.forEach(item => {
+              const flatIdx = podFlatUrls.length;
+              podFlatUrls.push({ url: item.url, type: item.type, orderCode: r.order_code });
+              const thumb = document.createElement("div");
+              thumb.className = "pod-thumb";
+              const img = document.createElement("img");
+              img.loading = "lazy";
+              img.src = item.url;
+              img.alt = `${r.order_code} - ${item.type}`;
+              img.addEventListener("error", () => {
+                thumb.classList.add("pod-thumb-error");
+                thumb.innerHTML = "<span>Không tải được ảnh<br>(bấm mở link gốc)</span>";
+                thumb.onclick = () => window.open(item.url, "_blank");
+              });
+              thumb.appendChild(img);
+              const badge = document.createElement("span");
+              badge.className = "pod-thumb-badge";
+              badge.textContent = item.type || "?";
+              thumb.appendChild(badge);
+              thumb.addEventListener("click", () => {
+                if (!thumb.classList.contains("pod-thumb-error")) openPodLightbox(flatIdx);
+              });
+              grid.appendChild(thumb);
+            });
+            groupEl.appendChild(grid);
+          }
+          podResultsArea.appendChild(groupEl);
+        });
+      }
+
+      async function fetchOnePod(orderCode, userAgent, token) {
+        const res = await fetch("/api/pod7", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ order_code: orderCode, user_agent: userAgent, token })
+        });
+        return res.json();
+      }
+
+      podBtnRun.onclick = async () => {
+        const userAgent = chkUserAgentInput.value.trim();
+        const token = chkTokenInput.value.trim();
+        if (!userAgent || !token) {
+          alert("Vui lòng nhập đầy đủ User-Agent và Token.");
+          return;
+        }
+        const codes = parsePodCodes(podCodesInput.value);
+        if (!codes.length) {
+          alert("Vui lòng nhập ít nhất 1 mã đơn.");
+          return;
+        }
+        saveChkConfig();
+        updateChkConfigView();
+        podBtnRun.disabled = true;
+        podResults = [];
+        for (let i = 0; i < codes.length; i++) {
+          podResultsArea.innerHTML = `<div class="state loading"><span class="spinner"></span>Đang lấy ảnh POD... ${i + 1}/${codes.length}</div>`;
+          try {
+            const data = await fetchOnePod(codes[i], userAgent, token);
+            podResults.push({ order_code: codes[i], ...data });
+          } catch (err) {
+            podResults.push({ order_code: codes[i], ok: false, message: "Lỗi kết nối" });
+          }
+        }
+        podBtnRun.disabled = false;
+        renderPodResults();
       };
 
       function parseChkCodes(raw) {
