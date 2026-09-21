@@ -14,18 +14,27 @@ function extractEpodUrls(callbackEntries) {
   const seen = new Set();
   const urlsWithType = [];
 
+  function addUrl(url) {
+    if (url && !seen.has(url)) {
+      seen.add(url);
+      const type = getEpodType(url);
+      urlsWithType.push({ order: TYPE_ORDER[type] !== undefined ? TYPE_ORDER[type] : 99, type: type || "?", url });
+    }
+  }
+
   (callbackEntries || []).forEach(entry => {
     const trackings = ((entry.request || {}).request || {}).trackings || [];
     trackings.forEach(tr => {
-      const epodDetails = ((tr.extend_fields || {}).epod_details) || [];
-      epodDetails.forEach(detail => {
-        const url = detail.url;
-        if (url && !seen.has(url)) {
-          seen.add(url);
-          const type = getEpodType(url);
-          urlsWithType.push({ order: TYPE_ORDER[type] !== undefined ? TYPE_ORDER[type] : 99, type: type || "?", url });
-        }
-      });
+      const extendFields = tr.extend_fields || {};
+
+      // Một số tracking chỉ có "epod" là 1 URL trực tiếp (không có epod_details)
+      if (typeof extendFields.epod === "string") {
+        addUrl(extendFields.epod);
+      }
+
+      // Một số tracking khác có "epod_details" là mảng { url }
+      const epodDetails = extendFields.epod_details || [];
+      epodDetails.forEach(detail => addUrl(detail && detail.url));
     });
   });
 
