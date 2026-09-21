@@ -2760,6 +2760,11 @@
         "pod": el("#pod-results-area"),
         "calllog": el("#calllog-results-area")
       };
+      const CHK_RESULT_DISPLAY = {
+        "tra-cuu": "flex",
+        "pod": "block",
+        "calllog": "block"
+      };
       const CHK_MODE_TITLES = {
         "tra-cuu": "Kiểm tra đơn",
         "pod": "POD",
@@ -2770,7 +2775,7 @@
         if (!chkModePanels[mode]) mode = "tra-cuu";
         Object.keys(chkModePanels).forEach(k => {
           chkModePanels[k].style.display = k === mode ? "block" : "none";
-          chkResultPanels[k].style.display = k === mode ? "block" : "none";
+          chkResultPanels[k].style.display = k === mode ? CHK_RESULT_DISPLAY[k] : "none";
         });
         chkModeSelect.value = mode;
         chkAppTitle.textContent = CHK_MODE_TITLES[mode] || "Kiểm tra đơn";
