@@ -214,9 +214,32 @@
       font-size: 13px;
       font-weight: 700;
       color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .chk-history-clear-all {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-decoration: underline;
+      padding: 0;
+    }
+
+    .chk-history-clear-all:hover {
+      color: var(--danger);
     }
 
     .chk-history-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
       padding: 8px 10px;
       border: 1px solid var(--border);
       border-radius: 8px;
@@ -232,6 +255,11 @@
       border-color: var(--orange);
     }
 
+    .chk-history-item .h-main {
+      flex: 1;
+      min-width: 0;
+    }
+
     .chk-history-item .h-time {
       font-weight: 700;
     }
@@ -240,6 +268,32 @@
       color: var(--muted);
       font-size: 12px;
       margin-top: 1px;
+    }
+
+    .chk-history-item-actions {
+      display: flex;
+      gap: 2px;
+      flex: none;
+    }
+
+    .chk-history-item-actions button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+      padding: 4px 6px;
+      border-radius: 6px;
+      color: var(--muted);
+      line-height: 1;
+    }
+
+    .chk-history-item-actions button:hover {
+      background: rgba(0, 0, 0, .06);
+      color: var(--text);
+    }
+
+    .chk-history-item-actions .h-delete-btn:hover {
+      color: var(--danger);
     }
 
     .chk-history-empty {
@@ -1150,29 +1204,50 @@
       justify-content: center;
       z-index: 5000;
       flex-direction: column;
+      gap: 14px;
+      padding: 70px 20px 24px;
     }
 
     .pod-lightbox.show {
       display: flex;
     }
 
+    .pod-lb-stage {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      max-width: 92vw;
+      min-height: 0;
+    }
+
     .pod-lightbox img {
-      max-width: 88vw;
-      max-height: 80vh;
+      max-width: 84vw;
+      max-height: 62vh;
       border-radius: 8px;
       box-shadow: 0 16px 40px rgba(0, 0, 0, .65);
+      transition: transform .15s ease, max-width .15s ease, max-height .15s ease;
+      display: block;
     }
 
     .pod-lb-caption {
-      position: absolute;
-      bottom: 18px;
-      left: 50%;
-      transform: translateX(-50%);
+      flex: none;
       color: #b2b6ca;
       font-size: 12.5px;
       max-width: 80vw;
       text-align: center;
-      word-break: break-all;
+      word-break: break-word;
+    }
+
+    .pod-lb-cap-time {
+      font-family: 'Courier New', monospace;
+      font-weight: 700;
+      color: #e9e9ed;
+    }
+
+    .pod-lb-cap-reason {
+      margin-top: 3px;
+      color: #b2b6ca;
     }
 
     .pod-lb-close,
@@ -1196,6 +1271,32 @@
       right: 24px;
       font-size: 19px;
       padding: 9px 15px;
+      z-index: 5011;
+    }
+
+    .pod-lb-toolbar {
+      position: absolute;
+      top: 18px;
+      left: 24px;
+      display: flex;
+      gap: 8px;
+      z-index: 5011;
+    }
+
+    .pod-lb-rotate {
+      background: rgba(255, 255, 255, .08);
+      color: #e9e9ed;
+      border: 1px solid rgba(255, 255, 255, .14);
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 19px;
+      padding: 9px 13px;
+      line-height: 1;
+    }
+
+    .pod-lb-rotate:hover {
+      background: rgba(145, 132, 217, .25);
+      border-color: #9184d9;
     }
 
     .pod-lb-nav {
@@ -2021,7 +2122,10 @@
             <span class="count-tag" id="chk-code-count"></span>
           </div>
 
-          <div class="chk-history-title">🕘 Lịch sử gần đây</div>
+          <div class="chk-history-title">
+            <span>🕘 Lịch sử gần đây</span>
+            <button type="button" class="chk-history-clear-all" id="chk-history-clear-all">Xóa tất cả</button>
+          </div>
           <div id="chk-history-list"></div>
         </div>
 
@@ -2036,18 +2140,35 @@
             <span class="count-tag" id="pod-code-count"></span>
           </div>
 
-          <div class="chk-history-title">🕘 Lịch sử gần đây</div>
+          <div class="chk-history-title">
+            <span>🕘 Lịch sử gần đây</span>
+            <button type="button" class="chk-history-clear-all" id="pod-history-clear-all">Xóa tất cả</button>
+          </div>
           <div id="pod-history-list"></div>
         </div>
 
         <div id="chk-mode-panel-calllog" style="display:none;">
           <p class="hint">🚧 CallLog đang được phát triển — sẽ hoàn thiện sau khi xong POD.</p>
 
-          <div class="chk-history-title">🕘 Lịch sử gần đây</div>
+          <label class="field-label">Danh sách mã đơn (CallLog)</label>
+          <textarea id="calllog-codes-input"
+            placeholder="Dán mã đơn cần tra CallLog, mỗi dòng 1 mã."></textarea>
+
+          <div class="actions">
+            <button class="btn-primary" id="calllog-btn-run">Chạy CallLog</button>
+            <button class="btn-ghost" id="calllog-btn-clear">Xóa</button>
+            <span class="count-tag" id="calllog-code-count"></span>
+          </div>
+
+          <div class="chk-history-title">
+            <span>🕘 Lịch sử gần đây</span>
+            <button type="button" class="chk-history-clear-all" id="calllog-history-clear-all">Xóa tất cả</button>
+          </div>
           <div id="calllog-history-list">
             <div class="chk-history-empty">Chưa có lịch sử</div>
           </div>
         </div>
+
 
         <div class="divider-or">Cấu hình chung</div>
 
@@ -2081,10 +2202,16 @@
     </div>
 
     <div class="pod-lightbox" id="pod-lightbox">
+      <div class="pod-lb-toolbar">
+        <button type="button" class="pod-lb-rotate" id="pod-lb-rotate-left" title="Xoay trái 90°">⟲</button>
+        <button type="button" class="pod-lb-rotate" id="pod-lb-rotate-right" title="Xoay phải 90°">⟳</button>
+      </div>
       <button type="button" class="pod-lb-close" id="pod-lb-close">✕</button>
       <button type="button" class="pod-lb-nav pod-lb-prev" id="pod-lb-prev">‹</button>
-      <img id="pod-lb-img" alt="" />
       <button type="button" class="pod-lb-nav pod-lb-next" id="pod-lb-next">›</button>
+      <div class="pod-lb-stage">
+        <img id="pod-lb-img" alt="" />
+      </div>
       <div class="pod-lb-caption" id="pod-lb-caption"></div>
       <div class="pod-lb-magnifier" id="pod-lb-magnifier"></div>
     </div>
@@ -2972,14 +3099,21 @@
         podSearchQuery = "";
       };
 
+      function escapePodHtml(s) {
+        return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      }
+
       function openPodLightbox(idx) {
         if (!podFlatUrls.length) return;
         podLbIdx = ((idx % podFlatUrls.length) + podFlatUrls.length) % podFlatUrls.length;
         const item = podFlatUrls[podLbIdx];
         podLbImg.src = item.url;
         const timeStr = formatPodTime(item.time);
-        podLbCaption.textContent = `${podLbIdx + 1} / ${podFlatUrls.length} — ${item.orderCode} (${item.type})${timeStr ? " — " + timeStr : ""}`;
+        const timeLine = `${podLbIdx + 1} / ${podFlatUrls.length} — ${item.orderCode} (${item.type})${timeStr ? " — " + timeStr : ""}`;
+        podLbCaption.innerHTML = `<div class="pod-lb-cap-time">${escapePodHtml(timeLine)}</div>` +
+          (item.reason ? `<div class="pod-lb-cap-reason">Lý do: ${escapePodHtml(item.reason)}</div>` : "");
         podLightbox.classList.add("show");
+        applyPodRotationToImg();
       }
 
       function closePodLightbox() {
@@ -2988,12 +3122,47 @@
         podLbMagnifier.classList.remove("show");
       }
 
+      /* ───────────────────── Xoay ảnh trong lightbox ───────────────────── */
+      const podRotationMap = new Map();
+
+      function getPodRotation(url) {
+        return podRotationMap.get(url) || 0;
+      }
+
+      function applyPodRotationToImg() {
+        const item = podFlatUrls[podLbIdx];
+        if (!item) return;
+        const deg = getPodRotation(item.url);
+        podLbImg.style.transform = deg ? `rotate(${deg}deg)` : "";
+        if (deg === 90 || deg === 270) {
+          podLbImg.style.maxWidth = "62vh";
+          podLbImg.style.maxHeight = "84vw";
+        } else {
+          podLbImg.style.maxWidth = "";
+          podLbImg.style.maxHeight = "";
+        }
+      }
+
+      function rotatePodImg(delta) {
+        const item = podFlatUrls[podLbIdx];
+        if (!item) return;
+        const next = ((getPodRotation(item.url) + delta) % 360 + 360) % 360;
+        podRotationMap.set(item.url, next);
+        applyPodRotationToImg();
+        hidePodMagnifier();
+      }
+
+      el("#pod-lb-rotate-left").onclick = () => rotatePodImg(-90);
+      el("#pod-lb-rotate-right").onclick = () => rotatePodImg(90);
+
       function hidePodMagnifier() {
         podLbMagnifier.classList.remove("show");
       }
 
       function updatePodMagnifier(e) {
         if (!podMagSupported || !podLbImg.src) return;
+        const item = podFlatUrls[podLbIdx];
+        if (item && getPodRotation(item.url) !== 0) return;
         const rect = podLbImg.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
@@ -3025,6 +3194,8 @@
         if (e.key === "Escape") closePodLightbox();
         if (e.key === "ArrowLeft") { hidePodMagnifier(); openPodLightbox(podLbIdx - 1); }
         if (e.key === "ArrowRight") { hidePodMagnifier(); openPodLightbox(podLbIdx + 1); }
+        if (e.key === "[" ) rotatePodImg(-90);
+        if (e.key === "]") rotatePodImg(90);
       });
 
       function formatPodTime(unixSeconds) {
@@ -3037,7 +3208,7 @@
 
       function makePodThumbImg(item, orderCode) {
         const flatIdx = podFlatUrls.length;
-        podFlatUrls.push({ url: item.url, type: item.type, orderCode, time: item.time });
+        podFlatUrls.push({ url: item.url, type: item.type, orderCode, time: item.time, reason: item.reason });
         const thumb = document.createElement("div");
         thumb.className = "pod-timeline-thumb";
         const img = document.createElement("img");
@@ -3325,70 +3496,122 @@
         return res.json();
       }
 
-      const POD_HISTORY_KEY = "ka_lookup_pod_history_v1";
-      const POD_HISTORY_MAX = 5;
+      /* ───────────────────── Lịch sử gần đây (dùng chung cho Tra cứu / POD / CallLog) ───────────────────── */
+      const HISTORY_MAX = 10;
+      const HISTORY_STORAGE_KEYS = {
+        "tra-cuu": "ka_lookup_chk_history_v1",
+        "pod": "ka_lookup_pod_history_v1",
+        "calllog": "ka_lookup_calllog_history_v1"
+      };
 
-      function loadPodHistory() {
+      function loadHistory(modeKey) {
         try {
-          const raw = localStorage.getItem(POD_HISTORY_KEY);
+          const raw = localStorage.getItem(HISTORY_STORAGE_KEYS[modeKey]);
           return raw ? JSON.parse(raw) : [];
         } catch (err) {
           return [];
         }
       }
 
-      function savePodHistoryEntry(results) {
-        if (!results.length) return;
-        const history = loadPodHistory();
+      function saveHistorySafely(modeKey, list) {
+        for (let n = list.length; n >= 0; n--) {
+          try {
+            localStorage.setItem(HISTORY_STORAGE_KEYS[modeKey], JSON.stringify(list.slice(0, n)));
+            return;
+          } catch (err) { }
+        }
+      }
+
+      function saveHistoryEntry(modeKey, results) {
+        if (!results || !results.length) return;
+        const history = loadHistory(modeKey);
         history.unshift({
           time: new Date().toLocaleString("vi-VN"),
           count: results.length,
           results
         });
-        const trimmed = history.slice(0, POD_HISTORY_MAX);
-        try {
-          localStorage.setItem(POD_HISTORY_KEY, JSON.stringify(trimmed));
-        } catch (err) { }
+        saveHistorySafely(modeKey, history.slice(0, HISTORY_MAX));
       }
 
-      function renderPodHistoryList() {
-        const history = loadPodHistory();
-        const listEl = el("#pod-history-list");
+      function deleteHistoryEntry(modeKey, idx) {
+        const history = loadHistory(modeKey);
+        history.splice(idx, 1);
+        saveHistorySafely(modeKey, history);
+      }
+
+      function clearHistoryAll(modeKey) {
+        try { localStorage.removeItem(HISTORY_STORAGE_KEYS[modeKey]); } catch (err) { }
+      }
+
+      function renderHistoryList(modeKey, listSelector, onRestore, onRerun) {
+        const history = loadHistory(modeKey);
+        const listEl = el(listSelector);
         if (!listEl) return;
         if (!history.length) {
           listEl.innerHTML = `<div class="chk-history-empty">Chưa có lịch sử</div>`;
           return;
         }
         listEl.innerHTML = history.map((h, i) => `
-          <div class="chk-history-item" data-pod-history-index="${i}">
-            <div class="h-time">${h.time}</div>
-            <div class="h-count">${h.count} mã đơn</div>
+          <div class="chk-history-item" data-idx="${i}">
+            <div class="h-main">
+              <div class="h-time">${h.time}</div>
+              <div class="h-count">${h.count} mã đơn</div>
+            </div>
+            <div class="chk-history-item-actions">
+              <button type="button" class="h-rerun-btn" data-action="rerun" title="Chạy lại">🔁</button>
+              <button type="button" class="h-delete-btn" data-action="delete" title="Xóa">✕</button>
+            </div>
           </div>`).join("");
+
+        listEl.querySelectorAll(".chk-history-item").forEach(itemEl => {
+          const idx = Number(itemEl.dataset.idx);
+          itemEl.addEventListener("click", e => {
+            const actionBtn = e.target.closest("[data-action]");
+            const hist = loadHistory(modeKey);
+            if (!hist[idx]) return;
+            if (actionBtn) {
+              e.stopPropagation();
+              if (actionBtn.dataset.action === "delete") {
+                deleteHistoryEntry(modeKey, idx);
+                renderHistoryList(modeKey, listSelector, onRestore, onRerun);
+              } else if (actionBtn.dataset.action === "rerun") {
+                const codes = hist[idx].results.map(r => r.order_code).filter(Boolean);
+                onRerun(codes);
+              }
+              return;
+            }
+            onRestore(hist[idx].results);
+            listEl.querySelectorAll(".chk-history-item").forEach(x => x.classList.remove("active"));
+            itemEl.classList.add("active");
+          });
+        });
       }
 
-      el("#pod-history-list").addEventListener("click", e => {
-        const item = e.target.closest(".chk-history-item");
-        if (!item) return;
-        const idx = Number(item.dataset.podHistoryIndex);
-        const history = loadPodHistory();
-        if (!history[idx]) return;
-        podResults = history[idx].results;
+      function wireHistoryClearAll(modeKey, clearBtnSelector, listSelector, onRestore, onRerun) {
+        const btn = el(clearBtnSelector);
+        if (!btn) return;
+        btn.onclick = () => {
+          if (!loadHistory(modeKey).length) return;
+          if (!confirm("Xóa toàn bộ lịch sử của chế độ này?")) return;
+          clearHistoryAll(modeKey);
+          renderHistoryList(modeKey, listSelector, onRestore, onRerun);
+        };
+      }
+
+      /* ───────────────────── POD: gắn lịch sử + chạy lại ───────────────────── */
+      function restorePodResults(results) {
+        podResults = results;
         podSearchQuery = "";
         renderPodResults();
-        document.querySelectorAll("#pod-history-list .chk-history-item").forEach(x => x.classList.remove("active"));
-        item.classList.add("active");
-      });
+      }
 
-      renderPodHistoryList();
-
-      podBtnRun.onclick = async () => {
+      async function runPodCheck(codes) {
         const userAgent = chkUserAgentInput.value.trim();
         const token = chkTokenInput.value.trim();
         if (!userAgent || !token) {
           alert("Vui lòng nhập đầy đủ User-Agent và Token.");
           return;
         }
-        const codes = parsePodCodes(podCodesInput.value);
         if (!codes.length) {
           alert("Vui lòng nhập ít nhất 1 mã đơn.");
           return;
@@ -3409,9 +3632,64 @@
         }
         podBtnRun.disabled = false;
         renderPodResults();
-        savePodHistoryEntry(podResults);
-        renderPodHistoryList();
+        saveHistoryEntry("pod", podResults);
+        renderHistoryList("pod", "#pod-history-list", restorePodResults, rerunPod);
+      }
+
+      function rerunPod(codes) {
+        podCodesInput.value = codes.join("\n");
+        podCodeCount.textContent = codes.length ? codes.length + " mã đơn" : "";
+        runPodCheck(codes);
+      }
+
+      podBtnRun.onclick = () => runPodCheck(parsePodCodes(podCodesInput.value));
+
+      renderHistoryList("pod", "#pod-history-list", restorePodResults, rerunPod);
+      wireHistoryClearAll("pod", "#pod-history-clear-all", "#pod-history-list", restorePodResults, rerunPod);
+
+      /* ───────────────────── CallLog (dùng chung toàn bộ cơ chế Tra cứu/POD, chờ API thật) ───────────────────── */
+      const callLogCodesInput = el("#calllog-codes-input");
+      const callLogCodeCount = el("#calllog-code-count");
+      const callLogBtnRun = el("#calllog-btn-run");
+      const callLogBtnClear = el("#calllog-btn-clear");
+      const callLogResultsArea = el("#calllog-results-area");
+
+      function parseCallLogCodes(raw) {
+        return [...new Set(raw.split(/[\s,;]+/).map(s => s.trim().toUpperCase()).filter(Boolean))];
+      }
+
+      callLogCodesInput.addEventListener("input", () => {
+        const n = parseCallLogCodes(callLogCodesInput.value).length;
+        callLogCodeCount.textContent = n > 0 ? n + " mã đơn" : "";
+      });
+
+      callLogBtnClear.onclick = () => {
+        callLogCodesInput.value = "";
+        callLogCodeCount.textContent = "";
       };
+
+      function restoreCallLogResults(results) {
+        callLogResultsArea.innerHTML = `<div class="state" style="padding:40px 0;text-align:center;color:var(--muted);">🚧 CallLog đang được phát triển — chưa có dữ liệu để xem lại.</div>`;
+      }
+
+      async function runCallLogCheck(codes) {
+        if (!codes.length) {
+          alert("Vui lòng nhập ít nhất 1 mã đơn.");
+          return;
+        }
+        callLogResultsArea.innerHTML = `<div class="state" style="padding:40px 0;text-align:center;color:var(--muted);">🚧 CallLog đang được phát triển — chưa thể chạy thật với ${codes.length} mã đơn này.</div>`;
+      }
+
+      function rerunCallLog(codes) {
+        callLogCodesInput.value = codes.join("\n");
+        callLogCodeCount.textContent = codes.length ? codes.length + " mã đơn" : "";
+        runCallLogCheck(codes);
+      }
+
+      callLogBtnRun.onclick = () => runCallLogCheck(parseCallLogCodes(callLogCodesInput.value));
+
+      renderHistoryList("calllog", "#calllog-history-list", restoreCallLogResults, rerunCallLog);
+      wireHistoryClearAll("calllog", "#calllog-history-clear-all", "#calllog-history-list", restoreCallLogResults, rerunCallLog);
 
       function parseChkCodes(raw) {
         return [...new Set(raw.split(/[\s,;]+/).map(s => s.trim().toUpperCase()).filter(Boolean))];
@@ -3435,63 +3713,22 @@
       let chkResults = [];
       let chkSortField = null;
       let chkSortDir = 1;
+      let chkSearchQuery = "";
 
-      const CHK_HISTORY_KEY = "ka_lookup_chk_history_v1";
-      const CHK_HISTORY_MAX = 5;
-
-      function loadChkHistory() {
-        try {
-          const raw = localStorage.getItem(CHK_HISTORY_KEY);
-          return raw ? JSON.parse(raw) : [];
-        } catch (err) {
-          return [];
-        }
-      }
-
-      function saveChkHistoryEntry(results) {
-        if (!results.length) return;
-        const history = loadChkHistory();
-        history.unshift({
-          time: new Date().toLocaleString("vi-VN"),
-          count: results.length,
-          results
-        });
-        const trimmed = history.slice(0, CHK_HISTORY_MAX);
-        try {
-          localStorage.setItem(CHK_HISTORY_KEY, JSON.stringify(trimmed));
-        } catch (err) { }
-      }
-
-      function renderChkHistoryList() {
-        const history = loadChkHistory();
-        const listEl = el("#chk-history-list");
-        if (!listEl) return;
-        if (!history.length) {
-          listEl.innerHTML = `<div class="chk-history-empty">Chưa có lịch sử</div>`;
-          return;
-        }
-        listEl.innerHTML = history.map((h, i) => `
-          <div class="chk-history-item" data-history-index="${i}">
-            <div class="h-time">${h.time}</div>
-            <div class="h-count">${h.count} mã đơn</div>
-          </div>`).join("");
-      }
-
-      el("#chk-history-list").addEventListener("click", e => {
-        const item = e.target.closest(".chk-history-item");
-        if (!item) return;
-        const idx = Number(item.dataset.historyIndex);
-        const history = loadChkHistory();
-        if (!history[idx]) return;
-        chkResults = history[idx].results;
+      function restoreChkResults(results) {
+        chkResults = results;
         chkSearchQuery = "";
         renderChkResults();
-        document.querySelectorAll(".chk-history-item").forEach(x => x.classList.remove("active"));
-        item.classList.add("active");
-      });
+      }
 
-      renderChkHistoryList();
-      let chkSearchQuery = "";
+      function rerunChk(codes) {
+        chkCodesInput.value = codes.join("\n");
+        chkCodeCount.textContent = codes.length ? codes.length + " mã đơn" : "";
+        runChkCheck(codes);
+      }
+
+      renderHistoryList("tra-cuu", "#chk-history-list", restoreChkResults, rerunChk);
+      wireHistoryClearAll("tra-cuu", "#chk-history-clear-all", "#chk-history-list", restoreChkResults, rerunChk);
 
       function formatMoney(v) {
         const n = Number(v);
@@ -3900,14 +4137,13 @@
         return res.json();
       }
 
-      chkBtnRun.onclick = async () => {
+      async function runChkCheck(codes) {
         const userAgent = chkUserAgentInput.value.trim();
         const token = chkTokenInput.value.trim();
         if (!userAgent || !token) {
           alert("Vui lòng nhập đầy đủ User-Agent và Token.");
           return;
         }
-        const codes = parseChkCodes(chkCodesInput.value);
         if (!codes.length) {
           alert("Vui lòng nhập ít nhất 1 mã đơn.");
           return;
@@ -3929,10 +4165,12 @@
           }
         }
         chkBtnRun.disabled = false;
-        saveChkHistoryEntry(chkResults);
-        renderChkHistoryList();
+        saveHistoryEntry("tra-cuu", chkResults);
+        renderHistoryList("tra-cuu", "#chk-history-list", restoreChkResults, rerunChk);
         renderChkResults();
-      };
+      }
+
+      chkBtnRun.onclick = () => runChkCheck(parseChkCodes(chkCodesInput.value));
 
       codesInput.addEventListener("keydown", e => {
         if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) doSearch();
