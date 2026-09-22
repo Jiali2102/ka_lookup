@@ -14,11 +14,17 @@ function extractEpodUrls(callbackEntries) {
   const seen = new Set();
   const urlsWithType = [];
 
-  function addUrl(url) {
+  function addUrl(url, time, reason) {
     if (url && !seen.has(url)) {
       seen.add(url);
       const type = getEpodType(url);
-      urlsWithType.push({ order: TYPE_ORDER[type] !== undefined ? TYPE_ORDER[type] : 99, type: type || "?", url });
+      urlsWithType.push({
+        order: TYPE_ORDER[type] !== undefined ? TYPE_ORDER[type] : 99,
+        type: type || "?",
+        url,
+        time: time || null,
+        reason: reason || null
+      });
     }
   }
 
@@ -26,20 +32,20 @@ function extractEpodUrls(callbackEntries) {
     const trackings = ((entry.request || {}).request || {}).trackings || [];
     trackings.forEach(tr => {
       const extendFields = tr.extend_fields || {};
-
-      // Một số tracking chỉ có "epod" là 1 URL trực tiếp (không có epod_details)
-      if (typeof extendFields.epod === "string") {
-        addUrl(extendFields.epod);
-      }
-
-      // Một số tracking khác có "epod_details" là mảng { url }
       const epodDetails = extendFields.epod_details || [];
-      epodDetails.forEach(detail => addUrl(detail && detail.url));
+
+      if (epodDetails.length) {
+        // Cùng 1 tracking có thể vừa có "epod" vừa có "epod_details" trỏ tới CÙNG 1 ảnh
+        // (khác endpoint, khác URL) — ưu tiên "epod_details" để không lấy trùng ảnh
+        epodDetails.forEach(detail => addUrl(detail && detail.url, tr.update_time, tr.reason));
+      } else if (typeof extendFields.epod === "string") {
+        addUrl(extendFields.epod, tr.update_time, tr.reason);
+      }
     });
   });
 
-  urlsWithType.sort((a, b) => a.order - b.order);
-  return urlsWithType.map(({ type, url }) => ({ type, url }));
+  urlsWithType.sort((a, b) => a.order - b.order || (a.time || 0) - (b.time || 0));
+  return urlsWithType.map(({ type, url, time, reason }) => ({ type, url, time, reason }));
 }
 
 async function fetchCallbackLogsOnce(orderCode, userAgent, token) {
