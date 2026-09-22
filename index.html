@@ -2010,23 +2010,6 @@
 
         <p class="hint chk-hint-note" id="chk-hint-note">⚠️ = đơn &gt;5 ngày chưa cập nhật · Bấm Mã đơn để mở tra cứu nội bộ GHN · Bấm tên kho để copy nhanh ID</p>
 
-        <div id="chk-config-fields">
-          <label class="field-label">User-Agent</label>
-          <input type="text" id="chk-user-agent" class="chk-input" placeholder="User-Agent tài khoản của bạn" />
-
-          <label class="field-label" style="margin-top:10px;">Token</label>
-          <input type="password" id="chk-token" class="chk-input" placeholder="Token tài khoản của bạn" />
-
-          <button class="btn-ghost" id="chk-btn-save-config" style="margin-top:8px;">💾 Lưu cấu hình</button>
-        </div>
-
-        <div id="chk-config-summary" class="chk-config-summary" style="display:none;">
-          <span>🔒 Đã cấu hình User-Agent &amp; Token</span>
-          <button type="button" class="chk-edit-link" id="chk-btn-edit-config">Thay đổi</button>
-        </div>
-
-        <div class="divider-or">sau đó</div>
-
         <div id="chk-mode-panel-tracuu">
           <label class="field-label">Danh sách mã đơn</label>
           <textarea id="chk-codes-input"
@@ -2052,10 +2035,35 @@
             <button class="btn-ghost" id="pod-btn-clear">Xóa</button>
             <span class="count-tag" id="pod-code-count"></span>
           </div>
+
+          <div class="chk-history-title">🕘 Lịch sử gần đây</div>
+          <div id="pod-history-list"></div>
         </div>
 
         <div id="chk-mode-panel-calllog" style="display:none;">
           <p class="hint">🚧 CallLog đang được phát triển — sẽ hoàn thiện sau khi xong POD.</p>
+
+          <div class="chk-history-title">🕘 Lịch sử gần đây</div>
+          <div id="calllog-history-list">
+            <div class="chk-history-empty">Chưa có lịch sử</div>
+          </div>
+        </div>
+
+        <div class="divider-or">Cấu hình chung</div>
+
+        <div id="chk-config-fields">
+          <label class="field-label">User-Agent</label>
+          <input type="text" id="chk-user-agent" class="chk-input" placeholder="User-Agent tài khoản của bạn" />
+
+          <label class="field-label" style="margin-top:10px;">Token</label>
+          <input type="password" id="chk-token" class="chk-input" placeholder="Token tài khoản của bạn" />
+
+          <button class="btn-ghost" id="chk-btn-save-config" style="margin-top:8px;">💾 Lưu cấu hình</button>
+        </div>
+
+        <div id="chk-config-summary" class="chk-config-summary" style="display:none;">
+          <span>🔒 Đã cấu hình User-Agent &amp; Token</span>
+          <button type="button" class="chk-edit-link" id="chk-btn-edit-config">Thay đổi</button>
         </div>
       </div>
 
@@ -2856,6 +2864,7 @@
       const CHK_MODE_KEY = "ka_lookup_chk_mode_v1";
       const chkModeSelect = el("#chk-mode-select");
       const chkAppTitle = el("#chk-app-title");
+      const chkHintNote = el("#chk-hint-note");
       const chkModePanels = {
         "tra-cuu": el("#chk-mode-panel-tracuu"),
         "pod": el("#chk-mode-panel-pod"),
@@ -2883,6 +2892,7 @@
           chkModePanels[k].style.display = k === mode ? "block" : "none";
           chkResultPanels[k].style.display = k === mode ? CHK_RESULT_DISPLAY[k] : "none";
         });
+        chkHintNote.style.display = mode === "tra-cuu" ? "block" : "none";
         chkModeSelect.value = mode;
         chkAppTitle.textContent = CHK_MODE_TITLES[mode] || "Kiểm tra đơn";
         try { localStorage.setItem(CHK_MODE_KEY, mode); } catch (err) { }
@@ -3315,6 +3325,62 @@
         return res.json();
       }
 
+      const POD_HISTORY_KEY = "ka_lookup_pod_history_v1";
+      const POD_HISTORY_MAX = 5;
+
+      function loadPodHistory() {
+        try {
+          const raw = localStorage.getItem(POD_HISTORY_KEY);
+          return raw ? JSON.parse(raw) : [];
+        } catch (err) {
+          return [];
+        }
+      }
+
+      function savePodHistoryEntry(results) {
+        if (!results.length) return;
+        const history = loadPodHistory();
+        history.unshift({
+          time: new Date().toLocaleString("vi-VN"),
+          count: results.length,
+          results
+        });
+        const trimmed = history.slice(0, POD_HISTORY_MAX);
+        try {
+          localStorage.setItem(POD_HISTORY_KEY, JSON.stringify(trimmed));
+        } catch (err) { }
+      }
+
+      function renderPodHistoryList() {
+        const history = loadPodHistory();
+        const listEl = el("#pod-history-list");
+        if (!listEl) return;
+        if (!history.length) {
+          listEl.innerHTML = `<div class="chk-history-empty">Chưa có lịch sử</div>`;
+          return;
+        }
+        listEl.innerHTML = history.map((h, i) => `
+          <div class="chk-history-item" data-pod-history-index="${i}">
+            <div class="h-time">${h.time}</div>
+            <div class="h-count">${h.count} mã đơn</div>
+          </div>`).join("");
+      }
+
+      el("#pod-history-list").addEventListener("click", e => {
+        const item = e.target.closest(".chk-history-item");
+        if (!item) return;
+        const idx = Number(item.dataset.podHistoryIndex);
+        const history = loadPodHistory();
+        if (!history[idx]) return;
+        podResults = history[idx].results;
+        podSearchQuery = "";
+        renderPodResults();
+        document.querySelectorAll("#pod-history-list .chk-history-item").forEach(x => x.classList.remove("active"));
+        item.classList.add("active");
+      });
+
+      renderPodHistoryList();
+
       podBtnRun.onclick = async () => {
         const userAgent = chkUserAgentInput.value.trim();
         const token = chkTokenInput.value.trim();
@@ -3343,6 +3409,8 @@
         }
         podBtnRun.disabled = false;
         renderPodResults();
+        savePodHistoryEntry(podResults);
+        renderPodHistoryList();
       };
 
       function parseChkCodes(raw) {
