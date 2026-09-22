@@ -997,6 +997,18 @@
       color: var(--pod-faint);
     }
 
+    .pod-phase-col--pick .pod-timeline-item::before {
+      background: var(--pod-pick);
+    }
+
+    .pod-phase-col--deliver .pod-timeline-item::before {
+      background: var(--pod-ok);
+    }
+
+    .pod-phase-col--return .pod-timeline-item::before {
+      background: var(--pod-bad);
+    }
+
     .pod-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
@@ -1033,6 +1045,100 @@
       font-size: 10.5px;
       padding: 6px;
       cursor: pointer;
+    }
+
+    /* Phương án C — timeline dọc theo mốc thời gian */
+    .pod-timeline {
+      position: relative;
+      padding-left: 20px;
+    }
+
+    .pod-timeline::before {
+      content: "";
+      position: absolute;
+      left: 5px;
+      top: 6px;
+      bottom: 6px;
+      width: 2px;
+      background: var(--pod-line);
+    }
+
+    .pod-timeline-item {
+      position: relative;
+      display: flex;
+      gap: 10px;
+      padding-bottom: 14px;
+    }
+
+    .pod-timeline-item:last-child {
+      padding-bottom: 0;
+    }
+
+    .pod-timeline-item::before {
+      content: "";
+      position: absolute;
+      left: -20px;
+      top: 4px;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--pod-dot-color, var(--pod-faint));
+      border: 2px solid var(--pod-panel);
+    }
+
+    .pod-timeline-thumb {
+      position: relative;
+      width: 64px;
+      height: 64px;
+      flex: none;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1.5px solid var(--pod-line);
+      cursor: zoom-in;
+      background: var(--pod-sunken);
+    }
+
+    .pod-timeline-thumb:hover {
+      border-color: var(--pod-accent);
+    }
+
+    .pod-timeline-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .pod-timeline-thumb.pod-thumb-error {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: var(--pod-bad);
+      font-size: 9px;
+      padding: 3px;
+      cursor: pointer;
+    }
+
+    .pod-timeline-meta {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .pod-timeline-time {
+      font-size: 12px;
+      font-weight: 700;
+      font-family: var(--mono);
+      color: var(--pod-text);
+    }
+
+    .pod-timeline-reason {
+      font-size: 11.5px;
+      color: var(--pod-muted);
+      overflow-wrap: anywhere;
     }
 
     .pod-lightbox {
@@ -2861,7 +2967,8 @@
         podLbIdx = ((idx % podFlatUrls.length) + podFlatUrls.length) % podFlatUrls.length;
         const item = podFlatUrls[podLbIdx];
         podLbImg.src = item.url;
-        podLbCaption.textContent = `${podLbIdx + 1} / ${podFlatUrls.length} — ${item.orderCode} (${item.type})`;
+        const timeStr = formatPodTime(item.time);
+        podLbCaption.textContent = `${podLbIdx + 1} / ${podFlatUrls.length} — ${item.orderCode} (${item.type})${timeStr ? " — " + timeStr : ""}`;
         podLightbox.classList.add("show");
       }
 
@@ -2910,18 +3017,26 @@
         if (e.key === "ArrowRight") { hidePodMagnifier(); openPodLightbox(podLbIdx + 1); }
       });
 
-      function makePodThumb(item, orderCode) {
+      function formatPodTime(unixSeconds) {
+        if (!unixSeconds) return "";
+        const d = new Date(unixSeconds * 1000);
+        if (isNaN(d.getTime())) return "";
+        const pad = n => String(n).padStart(2, "0");
+        return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+      }
+
+      function makePodThumbImg(item, orderCode) {
         const flatIdx = podFlatUrls.length;
-        podFlatUrls.push({ url: item.url, type: item.type, orderCode });
+        podFlatUrls.push({ url: item.url, type: item.type, orderCode, time: item.time });
         const thumb = document.createElement("div");
-        thumb.className = "pod-thumb";
+        thumb.className = "pod-timeline-thumb";
         const img = document.createElement("img");
         img.loading = "lazy";
         img.src = item.url;
         img.alt = `${orderCode} - ${item.type}`;
         img.addEventListener("error", () => {
           thumb.classList.add("pod-thumb-error");
-          thumb.innerHTML = "<span>Không tải được ảnh<br>(bấm mở link gốc)</span>";
+          thumb.innerHTML = "<span>Lỗi</span>";
           thumb.onclick = () => window.open(item.url, "_blank");
         });
         thumb.appendChild(img);
@@ -2929,6 +3044,26 @@
           if (!thumb.classList.contains("pod-thumb-error")) openPodLightbox(flatIdx);
         });
         return thumb;
+      }
+
+      function makePodTimelineItem(item, orderCode) {
+        const row = document.createElement("div");
+        row.className = "pod-timeline-item";
+        row.appendChild(makePodThumbImg(item, orderCode));
+        const meta = document.createElement("div");
+        meta.className = "pod-timeline-meta";
+        const timeSpan = document.createElement("span");
+        timeSpan.className = "pod-timeline-time";
+        timeSpan.textContent = formatPodTime(item.time) || "Không rõ thời gian";
+        meta.appendChild(timeSpan);
+        if (item.reason) {
+          const reasonSpan = document.createElement("span");
+          reasonSpan.className = "pod-timeline-reason";
+          reasonSpan.textContent = item.reason;
+          meta.appendChild(reasonSpan);
+        }
+        row.appendChild(meta);
+        return row;
       }
 
       function sanitizePodFileName(s) {
@@ -3157,10 +3292,10 @@
               empty.textContent = "Không có ảnh.";
               col.appendChild(empty);
             } else {
-              const grid = document.createElement("div");
-              grid.className = "pod-grid";
-              buckets[p.key].forEach(item => grid.appendChild(makePodThumb(item, r.order_code)));
-              col.appendChild(grid);
+              const timeline = document.createElement("div");
+              timeline.className = "pod-timeline";
+              buckets[p.key].forEach(item => timeline.appendChild(makePodTimelineItem(item, r.order_code)));
+              col.appendChild(timeline);
             }
             cols.appendChild(col);
           });
