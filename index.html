@@ -1317,16 +1317,28 @@
 
     .pod-lb-magnifier {
       position: fixed;
-      width: 240px;
-      height: 240px;
-      border-radius: 50%;
-      border: 3px solid rgba(255, 255, 255, .55);
+      top: 76px;
+      right: 24px;
+      width: 220px;
+      height: 220px;
+      border-radius: 12px;
+      border: 2px solid rgba(255, 255, 255, .55);
       box-shadow: 0 8px 28px rgba(0, 0, 0, .55);
       pointer-events: none;
       display: none;
       background-repeat: no-repeat;
       background-color: #0c0d16;
       z-index: 5010;
+    }
+
+    .pod-lb-magnifier::before {
+      content: "🔍 Phóng to";
+      position: absolute;
+      top: -22px;
+      left: 0;
+      font-size: 11px;
+      color: #b2b6ca;
+      font-family: var(--sans, sans-serif);
     }
 
     .pod-lb-magnifier.show {
@@ -3044,7 +3056,7 @@
       const podLbCaption = el("#pod-lb-caption");
       const podLbMagnifier = el("#pod-lb-magnifier");
       const POD_MAG_ZOOM = 2.5;
-      const POD_MAG_SIZE = 240;
+      const POD_MAG_SIZE = 220;
       const podMagSupported = !window.matchMedia || window.matchMedia("(hover: hover)").matches;
 
       const POD_THEME_KEY = "ka_lookup_pod_theme_v1";
@@ -3171,8 +3183,6 @@
           return;
         }
         podLbMagnifier.classList.add("show");
-        podLbMagnifier.style.left = (e.clientX - POD_MAG_SIZE / 2) + "px";
-        podLbMagnifier.style.top = (e.clientY - POD_MAG_SIZE / 2) + "px";
         podLbMagnifier.style.backgroundImage = `url("${podLbImg.src}")`;
         podLbMagnifier.style.backgroundSize = `${rect.width * POD_MAG_ZOOM}px ${rect.height * POD_MAG_ZOOM}px`;
         podLbMagnifier.style.backgroundPosition =
