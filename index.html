@@ -1204,8 +1204,9 @@
       justify-content: center;
       z-index: 5000;
       flex-direction: column;
-      gap: 14px;
-      padding: 70px 20px 24px;
+      gap: 12px;
+      padding: 64px 20px 20px;
+      overflow-y: auto;
     }
 
     .pod-lightbox.show {
@@ -1217,17 +1218,36 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      max-width: 92vw;
+      max-width: 94vw;
       min-height: 0;
+      overflow: visible;
+    }
+
+    .pod-lb-stage.zoomed img {
+      cursor: grab;
+    }
+
+    .pod-lb-stage.zoomed.dragging img {
+      cursor: grabbing;
     }
 
     .pod-lightbox img {
-      max-width: 84vw;
-      max-height: 62vh;
+      max-width: 92vw;
+      max-height: 78vh;
       border-radius: 8px;
       box-shadow: 0 16px 40px rgba(0, 0, 0, .65);
-      transition: transform .15s ease, max-width .15s ease, max-height .15s ease;
+      transition: transform .1s ease, max-width .15s ease, max-height .15s ease;
       display: block;
+      transform-origin: center center;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .pod-lb-zoom-hint {
+      flex: none;
+      color: #767a8f;
+      font-size: 11px;
+      text-align: center;
     }
 
     .pod-lb-caption {
@@ -1313,42 +1333,6 @@
 
     .pod-lb-next {
       right: 20px;
-    }
-
-    .pod-lb-magnifier {
-      position: fixed;
-      top: 76px;
-      right: 24px;
-      width: 220px;
-      height: 220px;
-      border-radius: 12px;
-      border: 2px solid rgba(255, 255, 255, .55);
-      box-shadow: 0 8px 28px rgba(0, 0, 0, .55);
-      pointer-events: none;
-      display: none;
-      background-repeat: no-repeat;
-      background-color: #0c0d16;
-      z-index: 5010;
-    }
-
-    .pod-lb-magnifier::before {
-      content: "🔍 Phóng to";
-      position: absolute;
-      top: -22px;
-      left: 0;
-      font-size: 11px;
-      color: #b2b6ca;
-      font-family: var(--sans, sans-serif);
-    }
-
-    .pod-lb-magnifier.show {
-      display: block;
-    }
-
-    @media (hover: none) {
-      .pod-lb-magnifier {
-        display: none !important;
-      }
     }
 
     .file-upload-btn {
@@ -2221,11 +2205,11 @@
       <button type="button" class="pod-lb-close" id="pod-lb-close">✕</button>
       <button type="button" class="pod-lb-nav pod-lb-prev" id="pod-lb-prev">‹</button>
       <button type="button" class="pod-lb-nav pod-lb-next" id="pod-lb-next">›</button>
-      <div class="pod-lb-stage">
+      <div class="pod-lb-stage" id="pod-lb-stage">
         <img id="pod-lb-img" alt="" />
       </div>
+      <div class="pod-lb-zoom-hint">Ctrl + cuộn chuột để phóng to · kéo ảnh để di chuyển · nhấp đúp để về cỡ gốc</div>
       <div class="pod-lb-caption" id="pod-lb-caption"></div>
-      <div class="pod-lb-magnifier" id="pod-lb-magnifier"></div>
     </div>
 
     <button type="button" id="btn-toggle-notfound" class="nf-toggle">⚠️ Không tìm thấy</button>
@@ -3054,10 +3038,7 @@
       const podLightbox = el("#pod-lightbox");
       const podLbImg = el("#pod-lb-img");
       const podLbCaption = el("#pod-lb-caption");
-      const podLbMagnifier = el("#pod-lb-magnifier");
-      const POD_MAG_ZOOM = 2.5;
-      const POD_MAG_SIZE = 220;
-      const podMagSupported = !window.matchMedia || window.matchMedia("(hover: hover)").matches;
+      const podLbStage = el("#pod-lb-stage");
 
       const POD_THEME_KEY = "ka_lookup_pod_theme_v1";
       const POD_PHASE_DEFS = [
@@ -3125,34 +3106,46 @@
         podLbCaption.innerHTML = `<div class="pod-lb-cap-time">${escapePodHtml(timeLine)}</div>` +
           (item.reason ? `<div class="pod-lb-cap-reason">Lý do: ${escapePodHtml(item.reason)}</div>` : "");
         podLightbox.classList.add("show");
-        applyPodRotationToImg();
+        resetPodZoom();
+        applyPodImgTransform();
       }
 
       function closePodLightbox() {
         podLightbox.classList.remove("show");
         podLbImg.src = "";
-        podLbMagnifier.classList.remove("show");
       }
 
-      /* ───────────────────── Xoay ảnh trong lightbox ───────────────────── */
+      /* ───────────────────── Xoay + phóng to (Ctrl+cuộn) trong lightbox ───────────────────── */
       const podRotationMap = new Map();
+      const POD_ZOOM_MIN = 1;
+      const POD_ZOOM_MAX = 5;
+      let podZoomScale = 1;
+      let podZoomX = 0;
+      let podZoomY = 0;
 
       function getPodRotation(url) {
         return podRotationMap.get(url) || 0;
       }
 
-      function applyPodRotationToImg() {
+      function resetPodZoom() {
+        podZoomScale = 1;
+        podZoomX = 0;
+        podZoomY = 0;
+      }
+
+      function applyPodImgTransform() {
         const item = podFlatUrls[podLbIdx];
-        if (!item) return;
-        const deg = getPodRotation(item.url);
-        podLbImg.style.transform = deg ? `rotate(${deg}deg)` : "";
+        const deg = item ? getPodRotation(item.url) : 0;
+        podLbImg.style.transform =
+          `translate(${podZoomX}px, ${podZoomY}px) rotate(${deg}deg) scale(${podZoomScale})`;
         if (deg === 90 || deg === 270) {
-          podLbImg.style.maxWidth = "62vh";
-          podLbImg.style.maxHeight = "84vw";
+          podLbImg.style.maxWidth = "78vh";
+          podLbImg.style.maxHeight = "92vw";
         } else {
           podLbImg.style.maxWidth = "";
           podLbImg.style.maxHeight = "";
         }
+        podLbStage.classList.toggle("zoomed", podZoomScale > POD_ZOOM_MIN);
       }
 
       function rotatePodImg(delta) {
@@ -3160,51 +3153,73 @@
         if (!item) return;
         const next = ((getPodRotation(item.url) + delta) % 360 + 360) % 360;
         podRotationMap.set(item.url, next);
-        applyPodRotationToImg();
-        hidePodMagnifier();
+        applyPodImgTransform();
       }
 
       el("#pod-lb-rotate-left").onclick = () => rotatePodImg(-90);
       el("#pod-lb-rotate-right").onclick = () => rotatePodImg(90);
 
-      function hidePodMagnifier() {
-        podLbMagnifier.classList.remove("show");
-      }
-
-      function updatePodMagnifier(e) {
-        if (!podMagSupported || !podLbImg.src) return;
-        const item = podFlatUrls[podLbIdx];
-        if (item && getPodRotation(item.url) !== 0) return;
-        const rect = podLbImg.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        if (x < 0 || y < 0 || x > rect.width || y > rect.height) {
-          hidePodMagnifier();
-          return;
+      podLbStage.addEventListener("wheel", e => {
+        if (!e.ctrlKey && !e.metaKey) return;
+        e.preventDefault();
+        const factor = Math.exp(-e.deltaY * 0.0015);
+        const next = Math.min(POD_ZOOM_MAX, Math.max(POD_ZOOM_MIN, podZoomScale * factor));
+        podZoomScale = next;
+        if (podZoomScale <= POD_ZOOM_MIN) {
+          podZoomScale = POD_ZOOM_MIN;
+          podZoomX = 0;
+          podZoomY = 0;
         }
-        podLbMagnifier.classList.add("show");
-        podLbMagnifier.style.backgroundImage = `url("${podLbImg.src}")`;
-        podLbMagnifier.style.backgroundSize = `${rect.width * POD_MAG_ZOOM}px ${rect.height * POD_MAG_ZOOM}px`;
-        podLbMagnifier.style.backgroundPosition =
-          `${-(x * POD_MAG_ZOOM - POD_MAG_SIZE / 2)}px ${-(y * POD_MAG_ZOOM - POD_MAG_SIZE / 2)}px`;
-      }
+        applyPodImgTransform();
+      }, { passive: false });
 
-      podLbImg.addEventListener("mousemove", updatePodMagnifier);
-      podLbImg.addEventListener("mouseleave", hidePodMagnifier);
-      podLbImg.addEventListener("mousedown", hidePodMagnifier);
+      let podDragActive = false;
+      let podDragStartX = 0;
+      let podDragStartY = 0;
+      let podDragOrigX = 0;
+      let podDragOrigY = 0;
+
+      podLbImg.addEventListener("mousedown", e => {
+        if (podZoomScale <= POD_ZOOM_MIN) return;
+        podDragActive = true;
+        podDragStartX = e.clientX;
+        podDragStartY = e.clientY;
+        podDragOrigX = podZoomX;
+        podDragOrigY = podZoomY;
+        podLbStage.classList.add("dragging");
+        e.preventDefault();
+      });
+
+      window.addEventListener("mousemove", e => {
+        if (!podDragActive) return;
+        podZoomX = podDragOrigX + (e.clientX - podDragStartX);
+        podZoomY = podDragOrigY + (e.clientY - podDragStartY);
+        applyPodImgTransform();
+      });
+
+      window.addEventListener("mouseup", () => {
+        if (!podDragActive) return;
+        podDragActive = false;
+        podLbStage.classList.remove("dragging");
+      });
+
+      podLbImg.addEventListener("dblclick", () => {
+        resetPodZoom();
+        applyPodImgTransform();
+      });
 
       el("#pod-lb-close").onclick = closePodLightbox;
-      el("#pod-lb-prev").onclick = () => { hidePodMagnifier(); openPodLightbox(podLbIdx - 1); };
-      el("#pod-lb-next").onclick = () => { hidePodMagnifier(); openPodLightbox(podLbIdx + 1); };
+      el("#pod-lb-prev").onclick = () => openPodLightbox(podLbIdx - 1);
+      el("#pod-lb-next").onclick = () => openPodLightbox(podLbIdx + 1);
       podLightbox.addEventListener("click", e => {
         if (e.target === podLightbox) closePodLightbox();
       });
       document.addEventListener("keydown", e => {
         if (!podLightbox.classList.contains("show")) return;
         if (e.key === "Escape") closePodLightbox();
-        if (e.key === "ArrowLeft") { hidePodMagnifier(); openPodLightbox(podLbIdx - 1); }
-        if (e.key === "ArrowRight") { hidePodMagnifier(); openPodLightbox(podLbIdx + 1); }
-        if (e.key === "[" ) rotatePodImg(-90);
+        if (e.key === "ArrowLeft") openPodLightbox(podLbIdx - 1);
+        if (e.key === "ArrowRight") openPodLightbox(podLbIdx + 1);
+        if (e.key === "[") rotatePodImg(-90);
         if (e.key === "]") rotatePodImg(90);
       });
 
