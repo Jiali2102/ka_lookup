@@ -4361,6 +4361,13 @@
       setTimeout(() => ripple.remove(), 550);
     });
   </script>
+  <script>document.addEventListener("keydown", e => {
+      const key = (e.key || "").toLowerCase();
+      if ((e.ctrlKey || e.metaKey) && key === "s") {
+        e.preventDefault();
+      }
+    });
+  </script>
 </body>
 
 </html>
