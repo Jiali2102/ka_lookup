@@ -2852,25 +2852,6 @@
       const DV2_CHUNK = 500;
       const DV2_HISTORY_KEY = "ka_lookup_dv2_history_v1";
       const DV2_HISTORY_MAX = 5;
-      const DV2_LABELS = {
-        dt: "Ngày phân vùng", order_code: "Mã đơn", client_id: "Mã KH", pick_type: "Hình thức lấy",
-        created_date: "Ngày tạo", order_date: "Ngày hẹn lấy", first_picked_time: "Lấy lần đầu", end_pick_time: "Lấy thành công",
-        first_delivered_time: "Giao lần đầu", end_delivery_time: "Giao thành công", first_return_time: "Hoàn lần đầu",
-        end_return_time: "Hoàn thành công", end_success_time: "Kết thúc", lost_time: "Thời điểm thất lạc",
-        updated_employee: "NV cập nhật cuối", from_name: "Người gửi", from_phone: "SĐT gửi", from_address: "Địa chỉ gửi",
-        to_address: "Địa chỉ nhận", weight: "KL tính cước (g)", order_value: "Giá trị", cod_amount: "COD",
-        insurance_value: "Khai giá", content: "Nội dung", status: "Trạng thái", from_ward: "Phường/xã gửi",
-        from_province: "Tỉnh gửi", from_region: "Vùng gửi", to_ward: "Phường/xã nhận", to_province: "Tỉnh nhận",
-        to_region: "Vùng nhận", from_ward_code: "Mã phường gửi", to_ward_code: "Mã phường nhận",
-        from_ward_id_v2: "ID phường gửi v2", from_province_id_v2: "ID tỉnh gửi v2", to_ward_id_v2: "ID phường nhận v2",
-        to_province_id_v2: "ID tỉnh nhận v2", pick_wh: "Kho lấy", delivery_wh: "Kho giao", return_wh: "Kho trả",
-        current_wh: "Kho hiện tại", next_wh: "Kho kế tiếp", num_pick: "Số lần lấy", num_deliver: "Số lần giao",
-        num_return: "Số lần hoàn", cat_level1: "Ngành hàng 1", cat_level2: "Ngành hàng 2", cat_level3: "Ngành hàng 3"
-      };
-      const DV2_MAIN_COLUMNS = ["order_code", "client_id", "status", "pick_type", "created_date", "end_pick_time",
-        "end_delivery_time", "end_return_time", "lost_time", "order_value", "cod_amount", "insurance_value", "weight",
-        "from_province", "to_province", "pick_wh", "delivery_wh", "current_wh", "next_wh", "num_pick", "num_deliver",
-        "num_return", "updated_employee", "content"];
       const DV2_MONEY = new Set(["order_value", "cod_amount", "insurance_value"]);
       const DV2_NUMBER = new Set(["weight", "num_pick", "num_deliver", "num_return"]);
 
@@ -2882,14 +2863,9 @@
       let dv2Search = "";
       let dv2SortField = null;
       let dv2SortDir = 1;
-      let dv2ShowAll = false;
 
       function dv2Esc(v) {
         return String(v ?? "").replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
-      }
-
-      function dv2Label(f) {
-        return DV2_LABELS[f] || f;
       }
 
       function dv2Display(r, f) {
@@ -2910,14 +2886,11 @@
       }
 
       function dv2Columns() {
-        const all = dv2State.columns.length ? dv2State.columns : Object.keys(dv2State.items[0] || {});
-        if (dv2ShowAll) return ["order_code", ...all.filter(c => c !== "order_code")];
-        return DV2_MAIN_COLUMNS.filter(c => all.includes(c));
+        return dv2State.columns.length ? dv2State.columns : Object.keys(dv2State.items[0] || {});
       }
 
       function dv2ExportColumns() {
-        const all = dv2State.columns.length ? dv2State.columns : Object.keys(dv2State.items[0] || {});
-        return ["order_code", ...all.filter(c => c !== "order_code")];
+        return Array.isArray(dv2State.exportColumns) ? dv2State.exportColumns : dv2Columns();
       }
 
       function dv2UpdateCount() {
@@ -2993,7 +2966,7 @@
         dv2BtnRun.disabled = true;
         const chunks = [];
         for (let i = 0; i < codes.length; i += DV2_CHUNK) chunks.push(codes.slice(i, i + DV2_CHUNK));
-        const next = { items: [], columns: [], notFound: [], invalid: [], requested: codes.length, ms: 0, duplicates: 0, errors: [], allCodes: codes };
+        const next = { items: [], columns: [], missingColumns: [], notFound: [], invalid: [], requested: codes.length, ms: 0, duplicates: 0, errors: [], allCodes: codes };
         const t0 = Date.now();
         for (let i = 0; i < chunks.length; i++) {
           dv2ResultsArea.innerHTML = `<div class="state loading"><span class="spinner"></span>Đang tra cứu${chunks.length > 1 ? ` — lượt ${i + 1}/${chunks.length} (${chunks[i].length} mã)` : "..."}</div>`;
@@ -3007,6 +2980,8 @@
             if (data.ok !== true) throw new Error(data.message || `HTTP ${res.status}`);
             next.items.push(...(data.items || []));
             if (!next.columns.length && Array.isArray(data.columns)) next.columns = data.columns;
+            if (!next.exportColumns && Array.isArray(data.exportColumns)) next.exportColumns = data.exportColumns;
+            if (!next.missingColumns.length && Array.isArray(data.missingColumns)) next.missingColumns = data.missingColumns;
             next.notFound.push(...(data.notFound || []));
             next.invalid.push(...(data.invalid || []));
             next.duplicates += Number(data.duplicates || 0);
@@ -3074,6 +3049,9 @@
           </div>` : "";
         const errHtml = s.errors.length ? `<div class="state error" style="margin-top:10px;">⚠️ ${s.errors.length} lượt bị lỗi, kết quả có thể chưa đầy đủ: ${s.errors.map(e => `lượt ${e.index} (${e.count} mã): ${dv2Esc(e.message)}`).join("; ")}</div>` : "";
         const invHtml = s.invalid.length ? `<div style="margin-top:8px;font-size:13.5px;color:var(--muted);">Bỏ qua ${s.invalid.length} mã sai định dạng: ${s.invalid.map(dv2Esc).join(", ")}</div>` : "";
+        const noExp = dv2Columns().filter(c => !dv2ExportColumns().includes(c));
+        const neHtml = noExp.length ? `<div style="margin-top:8px;font-size:13.5px;color:var(--muted);">🔒 Chỉ xem, không có trong file tải và Copy: ${noExp.map(dv2Esc).join(", ")}</div>` : "";
+        const mcHtml = (s.missingColumns || []).length ? `<div style="margin-top:8px;font-size:13.5px;color:var(--muted);">ℹ️ Cột khai báo nhưng card không có: ${s.missingColumns.map(dv2Esc).join(", ")}</div>` : "";
         const dupHtml = s.duplicates ? `<div style="margin-top:8px;font-size:13.5px;color:var(--muted);">ℹ️ Nguồn dữ liệu trả ${s.duplicates} dòng trùng mã đơn, đã giữ dòng đầu tiên.</div>` : "";
         dv2ResultsArea.innerHTML = `
           <div class="toolbar">
@@ -3083,7 +3061,6 @@
               ${statusChips}
             </span>
             <div class="toolbar-actions"${s.items.length ? "" : ' style="display:none;"'}>
-              <button class="btn-ghost" id="dv2-btn-cols">${dv2ShowAll ? "▤ Cột chính" : "▦ Tất cả cột"}</button>
               <button class="btn-ghost" id="dv2-btn-copy">Copy kết quả</button>
               <button class="btn-ghost" id="dv2-btn-realtime" title="Đưa các mã đang xem sang nguồn Realtime">↪ Kiểm tra Realtime</button>
               <div class="dl-wrap">
@@ -3104,12 +3081,12 @@
               <thead><tr>${cols.map(f => {
                 const arrow = dv2SortField === f ? (dv2SortDir === 1 ? " ▲" : " ▼") : " ⇅";
                 const cls = DV2_MONEY.has(f) || DV2_NUMBER.has(f) ? "align-right chk-sortable-th" : "chk-sortable-th";
-                return `<th class="${cls}" data-dv2-sort="${f}">${dv2Esc(dv2Label(f))}<span class="chk-sort-arrow">${arrow}</span></th>`;
+                return `<th class="${cls}" data-dv2-sort="${f}" style="text-transform:none;">${dv2Esc(f)}<span class="chk-sort-arrow">${arrow}</span></th>`;
               }).join("")}</tr></thead>
               <tbody>${body}</tbody>
             </table>
           </div>` : ""}
-          ${nfHtml}${errHtml}${invHtml}${dupHtml}`;
+          ${nfHtml}${errHtml}${invHtml}${dupHtml}${mcHtml}${neHtml}`;
         dv2BindResultEvents();
       }
 
@@ -3121,7 +3098,7 @@
 
       function dv2Aoa() {
         const cols = dv2ExportColumns();
-        return [cols.map(dv2Label), ...dv2FilteredRows().rows.map(r => cols.map(f => {
+        return [cols, ...dv2FilteredRows().rows.map(r => cols.map(f => {
           const v = r[f];
           if (v === undefined || v === null) return "";
           return DV2_MONEY.has(f) || DV2_NUMBER.has(f) ? Number(v) : v;
@@ -3155,8 +3132,6 @@
             dv2RenderResults();
           };
         });
-        const colsBtn = el("#dv2-btn-cols");
-        if (colsBtn) colsBtn.onclick = () => { dv2ShowAll = !dv2ShowAll; dv2RenderResults(); };
         const copyBtn = el("#dv2-btn-copy");
         if (copyBtn) copyBtn.onclick = async () => {
           const text = dv2Aoa().map(r => r.join("\t")).join("\n");
