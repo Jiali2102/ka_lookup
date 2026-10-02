@@ -53,6 +53,7 @@ module.exports = async (req, res) => {
     const s = kl2sRead(req);
     res.status(200).json({
       ok: missing.length === 0,
+      version: "2026-10-02.9",
       missing,
       lookup_host: LOOKUP_URL ? new URL(LOOKUP_URL).host : "",
       lookup_path: LOOKUP_URL ? new URL(LOOKUP_URL).pathname : "",
