@@ -26,12 +26,21 @@ async function verifyUser(email, password) {
 
 module.exports = async (req, res) => {
   res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
+  const missing = [
+    ["N8N_WEBHOOK_URL", AUTH_URL],
+    ["N8N_LOOKUP_V2_URL", LOOKUP_URL],
+    ["N8N_LOOKUP_V2_KEY", LOOKUP_KEY]
+  ].filter(([, v]) => !v).map(([k]) => k);
+  if (req.method === "GET") {
+    res.status(200).json({ ok: missing.length === 0, missing, lookup_host: LOOKUP_URL ? new URL(LOOKUP_URL).host : "" });
+    return;
+  }
   if (req.method !== "POST") {
     res.status(405).json({ ok: false, message: "Chỉ hỗ trợ POST." });
     return;
   }
-  if (!AUTH_URL || !LOOKUP_URL || !LOOKUP_KEY) {
-    res.status(500).json({ ok: false, message: "Server chưa cấu hình N8N_LOOKUP_V2_URL / N8N_LOOKUP_V2_KEY." });
+  if (missing.length) {
+    res.status(500).json({ ok: false, message: `Vercel chưa có biến môi trường: ${missing.join(", ")}. Thêm ở Settings → Environment Variables (Production) rồi Redeploy.` });
     return;
   }
   const { c, e, k } = req.body || {};
