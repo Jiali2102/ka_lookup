@@ -1,1 +1,4472 @@
+<!DOCTYPE html>
+<html lang="vi">
 
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tra cứu</title>
+  <meta name="description" content="Tra cứu đền bù, đơn quá hạn, miễn cước" />
+  <link rel="icon" type="image/png"
+    href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAJm0lEQVR42u2bf4xUVxXHP/e9mdn5tTv7A9giCMvSGKytJVSp0XQbSqxKg7WmrQ1tUStqQg1NpBrS1J+Jtv5jUxtrovUHmig/KgVLa0toYrEoRLpSuqYIxBLK0gKBhd3Z3dmdeff6x7lv35thdpn9wULLvOTmvXn3vvfu+d5zzznfc+8osx5DHsgDhZLi2bMOFQPGAIAygFGgDcYolDagFRiD0aBCz8jztq1f5wV1ck/q8YJ7F/pwuMyPKgBVAKoAVAGoAlAFoArA5XtELshblbIFKdizUhI+Sghpb5rQM46tp/jZoSMUhl6SADiudLCgoWCKwufScFpkN0PykzegPan3Qm1L9TXiyMPau4QAUEoE6fOkk+kGiCSLBTYBF6DgQdc7EIvL78EBmDpjiFcMC0B/D3R1y3XSAa0vAQCUIwJp4OP3wYLl0PwhVCxZpLmAjJrjov65Fh5fCUvvgoEcvLgOteaP0PoREcpxArIVfkl/DxzYjdnyU2jfAWl33JowPgAcBwY8iNailq2DDyyp7LnXNgtgjbMgPwh9wGvPwbw2mRZKlX+uJgULb0UtvBXz1CrY+ARkIuAVLoIXcBzIa4jVwpe3ivBeHoxnDVVJ0Zb7njyEObgD4kCqAZL1EAP2bIL8gB1sbe1DmeIVQGvUip/BLcvhTAHc6CQD4AsfTcOXtsLsNtB56Yhy7QiWFmv59m6Gnhy4QHqKgFADpvMQHNhp7YkJeZKS4kbkrD3UN34DbZ+Bs3m5PykAqJDwX3zOCl8A5zyjoFwBoX2DTDwFpBoh2SC9yAO7N5QYjfO5WQf1rY1w7ULoKYwJBGdMwkeSqHv/IsJ7g3Lf6OGLLohQxzrgcDvEXAEgUQ+JjJ3fwL+fhYFeeZ/2Rn6nb1RjSdRDW2D2XMgWhgzoxAOgFHgGUs2or74MLYvkvhuzAcwIxYnIee+fxVUqR7SgYQZkrpBeRKNw7Bjs32Gfcc//Xn861F+BevTvMHMuDBqpm1gvoMRH48CND0IkAUd3iWClGlvu2ljD9up6MXi6ADEHuo5CLgtRGxSh4KVfQu1U8MRlVtQ3XYBYAnX7aswvVo0qmRipePQLGqa2QqYFOv9lo75ygpZc+wYt1wtdb4nx8y36o23SxrUARQwc2Qed+22QoyrXZe2JUZ11JfxvP9Q4FQFRuQZoIDEVPnj72PyNMbD1+9DbC471CloHgCklGejGmXDDPWOPTV74OXj7g+h0QgMhUwj8eaWj42tAX5fECKXu1ACeDghTIW8N4AgBUdnvaJn7owyKRuk3lJ2XYwCgdD4rK3gJKRxqO2oAfDapLqAbHPdhitU9nYF0vVz7HR+lAO+ehIhPfZX9bB64fxOsfBoGL15uZvI1wHEkarv7EZh3E1y1GO76DnQPgqveywAY4QrdGhYvh0+tEf+tC3DbD1GfWArdZswx/aUPgONC9hRcdR3qnl+JpVc22jMGvr4WZjYL53/3AWDExelhitEwkBX+/7UNgUfw84DaE1b4wO8hErX2Qts4QReHl8bGD1pPSH5w/Prm+1/ljuwZ3Ris2g5Nc8rU2W5cfTM0zpZpMRzH95ngJZEUNZZ46Dx0tkOu2xIRP9mpxNdPuxIa58Dh3XD8oNTNmg+10+Q93SfgrQ55X22TaEjnGxIUOVGY3mpJl4Luk3DyqFxPb4VE3bg0ITLukT+6G55egXmnA+VvqLAarAzQD7TMhdV74MklcPI0ZgDU6g1w3R3yro5tmJ/cKwPb0grffh6+eQ2m4EEvqK/8AO74rrR9ZR3m8VXCH9o+i1qzxQ7EZNoAn7n1d8GfboPODoi6NsuTgtqkLWmoT8ocz+cgXgdxR4obK84z+PeTGSgMWiOpIAbmhSehtyv4tqOEQZ7qHHfwFBnz6DsROLYHTr0Nqajw8Dt/B603gS7YAVFirCIxiKVEMKMDeqxt3O7lbTa4lIIbiEfg6HF4+Q+wZJW09adYrOYi2wBv0Ia1eaibBvPvDnIEpcdAtpieJuqCtrFEiAu4IS1DgIkpzPNPoJasCmi4b2MqSaFdOC8QTgA4MNAD8Qwc2QUn3wTXrhnEa2FuW9DWBd54CfrsIsd/d0DEZpyGyFbI6iccOHAI/vM3SNQGCybKudheQBd31E9jPXM/Zt9eVMoaweYpsOZ1q9ZATMEzj8AAQUIk7kLWCyiysQa1qQmuXgTPrsdsfQz14ZuDqTIB7nD8bpCwOtqe1b8fZpwAnQXVC8lGK7yfzAQaMuDUyLO5fujrk+uwBjhAPof69ErMq3+F9m2YwRwklNgcZ/wa4EyoBvgLIF9Yi3qoA2bMh5xNghqLlEI6v/wp+NF++PF++Nz3pJ1DIJTPHHO90DIfblwGXTnYt10WSE1oCphJB8CEVnCsGjoRqKmVEUw0SHFrZLR9VQ0HLKkmWRNINsiSlwlxhnA7xwEvj7rlAbEFpiQqvPihsIFIBPrPwOsbId4gkaFyIXtCjJu/KOIPq6NkHviCeoUghzfkRaxwblQyxzPmwUc/Cf/YBnVRed73GKPJUE0IAH64O/NjkE5DdxaiZ+G3dxZvfY1aHRvsDTK3GNkLEE55DfbLfgInpGGe/e0VhtYa1dLVmJ0v2vXBidko4YwZAGOgbgYs2wQt18sqT6YW6urknKkVlxVLw7Wfh5q0XSCJwvtmCT/w9bllATQ2StwfS8hoRmMyHeqmQiItTa9ZDNcvAu1CPDYhgZCqaLO0caHfg9kL4b7dgcqFRzF73EZ26lyyVDddrruOyIJHuilYEvOPnhPQl4V4GlL1cLoTCgVIZSAzLfjWYD90HZfP1CSlLsRNzMM3QPsrkKps70BkzAbQN0LGWvl08/kzw42zz73nX9dOC9ghwLQ559JgP2psbrmYdFiVgBAOXU359kOC6nPvDQEZMpJKDd+26DtlcgOjjA4jFY+6C5w5DPl+ITelH1OMYIlD6XDDuS6x+CUB22S4tmUA0VpC7zNvB8tvE2YEjRa6e/oE7HrMZn9czt0EUUFRF6LYleKd6+HNg0KrK1wgrXwKaC0LjtsfxuT7UAtWQHJKZSo3Vo9lKmyUy8LuzZhfPwhRNaoMkRrTX2b6gXQcFW8UJSr3lxlT8peZ0Da5cn+nGfrLjBnlX2YU0J+FU2dlk4U7OsDHFgglXcnw5I4FmyBNMUhFe/1KN0r6xRumbrh9giOBkHKDzVUXPBL001URFWxu9M/+KDrlAPDb2N9OKQC23hklAEO70CaVC/hb19QwZ8qUkeqGqX/vLI1dmkcVgCoAVQCqAFQBqAJQBeDyPf4P7BtqF9VGJCIAAAAASUVORK5CYII=">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <style>
+    :root {
+      --orange: #FE5F00;
+      --orange-dark: #E0500A;
+      --blue: #0E4174;
+      --blue-soft: #EAF1F8;
+      --bg: #F6F5F2;
+      --surface: #FFFFFF;
+      --border: #E7E4DE;
+      --text: #1A1A1A;
+      --muted: #6B7280;
+      --ok: #16A34A;
+      --ok-bg: #EAF7EE;
+      --warn: #D97706;
+      --warn-bg: #FDF3E3;
+      --danger: #DC2626;
+      --danger-bg: #FCEAEA;
+      --pending: #6B7280;
+      --pending-bg: #EEF0F2;
+      --radius: 14px;
+      --mono: 'Cambria', 'Times New Roman', serif;
+      --sans: 'Cambria', Georgia, 'Times New Roman', serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      font-family: var(--sans);
+      font-size: 23px;
+
+      background:
+        radial-gradient(1200px 400px at 100% -10%, rgba(254, 95, 0, 0.06), transparent 60%),
+        var(--bg);
+      color: var(--text);
+    }
+
+    .app-shell {
+      display: flex;
+      height: 100vh;
+    }
+
+    .rail {
+      width: 96px;
+      flex: none;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 18px 0;
+      gap: 8px;
+      overflow-y: auto;
+    }
+
+    .rail,
+    .side-panel,
+    .results-table-wrap,
+    #notfound-area {
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+
+    .rail::-webkit-scrollbar,
+    .side-panel::-webkit-scrollbar,
+    .results-table-wrap::-webkit-scrollbar,
+    #notfound-area::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+
+    .rail::-webkit-scrollbar-track,
+    .side-panel::-webkit-scrollbar-track,
+    .results-table-wrap::-webkit-scrollbar-track,
+    #notfound-area::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .rail::-webkit-scrollbar-thumb,
+    .side-panel::-webkit-scrollbar-thumb,
+    .results-table-wrap::-webkit-scrollbar-thumb,
+    #notfound-area::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 8px;
+    }
+
+    .rail-mark {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--orange), var(--orange-dark));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 800;
+      font-size: 16px;
+      flex-shrink: 0;
+      margin-bottom: 10px;
+    }
+
+    .rail-logout {
+      margin-top: auto;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: transparent;
+      border: 1.5px solid var(--border);
+      color: var(--muted);
+      font-size: 17px;
+      cursor: pointer;
+      transition: all .15s;
+      flex-shrink: 0;
+    }
+
+    .rail-logout:hover {
+      color: var(--danger);
+      border-color: var(--danger);
+      background: var(--danger-bg);
+    }
+
+    .side-panel {
+      width: 320px;
+      flex: none;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 18px;
+      overflow-y: auto;
+    }
+
+    .app-title {
+      font-weight: 800;
+      font-size: 15px;
+      color: var(--muted);
+      margin-bottom: 14px;
+      letter-spacing: .02em;
+      text-transform: uppercase;
+    }
+
+    .main-col {
+      flex: 1;
+      min-width: 0;
+      padding: 18px 24px;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    #results-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    #chk-results-area,
+    #dv2-results-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .dv2-chip {
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .dv2-chip.chk-status-delivered {
+      background: #E9F7EF;
+      border-color: #7BC69A;
+      color: #1E7B45;
+    }
+
+    .dv2-chip.chk-status-return {
+      background: #FFF8E1;
+      border-color: #E8C468;
+      color: #8A6200;
+    }
+
+    .dv2-chip.chk-status-lost {
+      background: #FBEAE8;
+      border-color: #E8A39C;
+      color: #B42318;
+    }
+
+    .dv2-chip.chk-status-cancel {
+      background: #4B5563;
+      border-color: #4B5563;
+      color: #fff;
+    }
+
+    .dv2-toolbar {
+      flex-wrap: nowrap !important;
+      align-items: flex-start !important;
+      gap: 12px;
+    }
+
+    .dv2-toolbar .stats {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .dv2-toolbar .toolbar-actions {
+      flex-shrink: 0;
+      display: flex;
+      gap: 6px;
+    }
+
+    .dv2-mode {
+      font-size: 13px !important;
+      font-weight: 600 !important;
+      color: var(--muted) !important;
+    }
+
+    .dv2-chip.active {
+      background: var(--orange);
+      color: #fff;
+      border-color: var(--orange);
+    }
+
+    .dv2-money-high {
+      background: #FDE2E1 !important;
+      color: #B42318;
+      font-weight: 700;
+    }
+
+    .dv2-version {
+      margin-top: 14px;
+      font-size: 12px;
+      color: var(--muted);
+      text-align: right;
+    }
+
+    .result-table th,
+    .result-table td {
+      white-space: nowrap;
+    }
+
+    .result-table tbody tr {
+      background: var(--surface);
+    }
+
+    .tab,
+    button,
+    .file-upload-btn,
+    .chk-edit-link {
+      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22"><circle cx="11" cy="11" r="7" fill="%23FE5F00" opacity="0.85"/></svg>') 11 11, pointer;
+      transition: transform .12s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tab:hover,
+    .btn-ghost:hover,
+    .btn-primary:hover,
+    .file-upload-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .chk-history-title {
+      margin-top: 16px;
+      margin-bottom: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .chk-history-item {
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 6px;
+      cursor: pointer;
+      transition: .15s;
+      font-size: 13px;
+    }
+
+    .chk-history-item:hover,
+    .chk-history-item.active {
+      background: #FFF1E8;
+      border-color: var(--orange);
+    }
+
+    .chk-history-item .h-time {
+      font-weight: 700;
+    }
+
+    .chk-history-item .h-count {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 1px;
+    }
+
+    .chk-history-empty {
+      font-size: 13px;
+      color: var(--muted);
+      padding: 8px 0;
+    }
+
+    .stale-badge {
+      display: inline-block;
+      background: var(--warn-bg);
+      color: var(--warn);
+      border-radius: 100px;
+      padding: 1px 8px;
+      font-size: 11.5px;
+      font-weight: 700;
+      margin-left: 6px;
+      cursor: help;
+    }
+
+    .wh-copyable {
+      cursor: pointer;
+      border-bottom: 1px dashed #999;
+    }
+
+    .wh-copyable:hover {
+      color: var(--orange);
+    }
+
+    .chk-toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: #1A1A1A;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      opacity: 0;
+      transition: .25s;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    .chk-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .ripple-wave {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .55);
+      transform: scale(0);
+      pointer-events: none;
+      animation: rippleAnim .55s ease-out;
+    }
+
+    .btn-ghost .ripple-wave,
+    .tab .ripple-wave {
+      background: rgba(254, 95, 0, .3);
+    }
+
+    @keyframes rippleAnim {
+      to {
+        transform: scale(2.6);
+        opacity: 0;
+      }
+    }
+
+    .nf-toggle {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      background: var(--danger);
+      color: white;
+      border: none;
+      border-radius: 100px;
+      padding: 13px 20px;
+      font-family: var(--sans);
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(192, 57, 43, .3);
+      z-index: 60;
+    }
+
+    .nf-toggle:hover {
+      opacity: .9;
+    }
+
+    .nf-drawer {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      right: -380px;
+      width: 360px;
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      box-shadow: -8px 0 24px rgba(0, 0, 0, .08);
+      display: flex;
+      flex-direction: column;
+      transition: right .25s ease;
+      z-index: 70;
+    }
+
+    .nf-drawer.open {
+      right: 0;
+    }
+
+    .nf-drawer-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--border);
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .nf-close {
+      background: transparent;
+      border: none;
+      font-size: 18px;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    #notfound-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      overflow-y: auto;
+    }
+
+    @media (max-width:1000px) {
+
+      html,
+      body {
+        overflow: auto;
+      }
+
+      .app-shell {
+        flex-direction: column;
+        height: auto;
+      }
+
+      .rail {
+        width: 100%;
+        flex-direction: row;
+        overflow-x: auto;
+      }
+
+      .rail-logout {
+        margin-top: 0;
+        margin-left: auto;
+      }
+
+      .side-panel,
+      .main-col {
+        width: 100%;
+      }
+
+      .nf-drawer {
+        width: 100%;
+        right: -100%;
+      }
+    }
+
+    .rail-logout,
+    .logout-btn {
+      white-space: nowrap;
+    }
+
+    .brand .mark {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--orange), var(--orange-dark));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 800;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+
+    .tabs {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+      align-items: center;
+    }
+
+    .tab {
+      width: 74px;
+      text-align: center;
+      padding: 10px 4px;
+      border-radius: 13px;
+      font-weight: 600;
+      font-size: 12.5px;
+      line-height: 1.3;
+      color: var(--muted);
+      cursor: pointer;
+      user-select: none;
+      transition: all .15s ease;
+      border: 1px solid transparent;
+    }
+
+    .tab.active {
+      background: var(--orange);
+      color: white;
+      box-shadow: 0 2px 8px rgba(254, 95, 0, 0.28);
+    }
+
+    .tab:not(.active):hover {
+      background: #F2F1ED;
+      color: var(--text);
+    }
+
+    .tab .cnt {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      opacity: .85;
+      margin-top: 1px;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+      margin-bottom: 0;
+    }
+
+    .panel h2 {
+      margin: 0 0 3px;
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .panel p.hint {
+      margin: 0 0 8px;
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    p.hint {
+      margin: 0 0 14px;
+      font-size: 13.5px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .chk-source-wrap {
+      margin-bottom: 12px;
+    }
+
+    .chk-source-toggle {
+      display: flex;
+      gap: 0;
+      border: 1.5px solid var(--orange);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .chk-source-opt {
+      flex: 1;
+      margin: 0;
+      cursor: pointer;
+    }
+
+    .chk-source-opt input {
+      display: none;
+    }
+
+    .chk-source-opt span {
+      display: block;
+      text-align: center;
+      padding: 8px 6px;
+      font-family: Cambria, Georgia, serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--orange);
+      background: var(--surface);
+      transition: background .15s ease, color .15s ease;
+    }
+
+    .chk-source-opt + .chk-source-opt span {
+      border-left: 1.5px solid var(--orange);
+    }
+
+    .chk-source-opt input:checked + span {
+      background: var(--orange);
+      color: #fff;
+    }
+
+    .chk-hint-note {
+      background: #FFF4E5;
+      border: 1.5px solid var(--orange);
+      border-radius: 10px;
+      padding: 10px 12px;
+      color: var(--text) !important;
+      animation: chkHintPulse 1.6s ease-in-out infinite;
+    }
+
+    @keyframes chkHintPulse {
+
+      0%,
+      100% {
+        box-shadow: 0 0 0 0 rgba(254, 95, 0, 0);
+      }
+
+      50% {
+        box-shadow: 0 0 0 6px rgba(254, 95, 0, .25);
+      }
+    }
+
+    label.field-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 150px;
+      resize: vertical;
+      font-family: var(--mono);
+      font-size: 15px;
+      line-height: 1.5;
+      padding: 9px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      background: #FBFAF8;
+      color: var(--text);
+      outline: none;
+      transition: border-color .15s;
+    }
+
+    textarea:focus {
+      border-color: var(--orange);
+      background: white;
+    }
+
+    .chk-input {
+      width: 100%;
+      font-family: var(--sans);
+      font-size: 15px;
+      padding: 9px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      background: #FBFAF8;
+      color: var(--text);
+      outline: none;
+      transition: border-color .15s;
+      margin-top: 4px;
+    }
+
+    .chk-input:focus {
+      border-color: var(--orange);
+      background: white;
+    }
+
+    .chk-config-summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      background: var(--ok-bg, #E9F7EF);
+      border: 1px solid #C9E9D4;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 13.5px;
+      color: var(--ok, #1E8E5A);
+    }
+
+    .chk-edit-link {
+      background: none;
+      border: none;
+      color: var(--blue);
+      font-weight: 700;
+      font-size: 13px;
+      text-decoration: underline;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .chk-btn-comp {
+      background: #FFF4E5 !important;
+      border-color: var(--orange) !important;
+      color: var(--orange) !important;
+      font-weight: 700;
+    }
+
+    .chk-btn-comp:hover {
+      background: var(--orange) !important;
+      color: white !important;
+    }
+
+    @keyframes tabFlash {
+      0% { box-shadow: 0 0 0 0 rgba(254, 95, 0, .55); }
+      70% { box-shadow: 0 0 0 10px rgba(254, 95, 0, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(254, 95, 0, 0); }
+    }
+
+    .tab.flash {
+      animation: tabFlash .6s ease-out;
+    }
+
+    .row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .row .col {
+      flex: 1;
+      min-width: 150px;
+    }
+
+    input[type=date] {
+      width: 100%;
+      font-family: var(--sans);
+      font-size: 16px;
+      padding: 10px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      background: #FBFAF8;
+      color: var(--text);
+      outline: none;
+    }
+
+    input[type=date]:focus {
+      border-color: var(--orange);
+      background: white;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    button {
+      font-family: var(--sans);
+      font-weight: 700;
+      font-size: 15px;
+      border: none;
+      border-radius: 10px;
+      padding: 8px 16px;
+      cursor: pointer;
+      transition: transform .1s, opacity .15s;
+    }
+
+    button:active {
+      transform: scale(0.97);
+    }
+
+    .btn-primary {
+      background: var(--orange);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--orange-dark);
+    }
+
+    .btn-primary:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1.5px solid var(--border);
+    }
+
+    .btn-ghost:hover {
+      color: var(--text);
+      border-color: #c9c5bd;
+    }
+
+    .btn-ghost:disabled {
+      opacity: .4;
+      cursor: not-allowed;
+    }
+
+    .count-tag {
+      margin-left: auto;
+      font-size: 15px;
+      color: var(--muted);
+      font-family: var(--mono);
+    }
+
+    .divider-or {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 8px 0;
+      color: var(--muted);
+      font-size: 12.5px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    .divider-or::before,
+    .divider-or::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .file-upload-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* ───────────────────── POD gallery (Demo B — 3 cột Pick/Deliver/Return) ───────────────────── */
+    #pod-results-area {
+      width: 100%;
+      overflow-y: auto;
+    }
+
+    #pod-root {
+      /* Mặc định: theme sáng, đồng bộ với bảng màu chung của tool */
+      --pod-bg: #F6F5F2;
+      --pod-panel: #FFFFFF;
+      --pod-sunken: #FBFAF8;
+      --pod-line: #E7E4DE;
+      --pod-line-soft: #EDEAE3;
+      --pod-text: #1A1A1A;
+      --pod-muted: #6B7280;
+      --pod-faint: #9AA0AC;
+      --pod-accent: #FE5F00;
+      --pod-accent-soft: rgba(254, 95, 0, .1);
+      --pod-ok: #16A34A;
+      --pod-ok-dim: rgba(22, 163, 74, .1);
+      --pod-bad: #DC2626;
+      --pod-bad-dim: rgba(220, 38, 38, .1);
+      --pod-pick: #2563EB;
+      --pod-pick-dim: rgba(37, 99, 235, .08);
+
+      background: var(--pod-bg);
+      color: var(--pod-text);
+      padding: 20px 24px;
+      min-height: 100%;
+    }
+
+    #pod-root.pod-theme-dark {
+      --pod-bg: #161826;
+      --pod-panel: #232532;
+      --pod-sunken: #1b1d2a;
+      --pod-line: #333648;
+      --pod-line-soft: #2a2d3c;
+      --pod-text: #e9e9ed;
+      --pod-muted: #b2b6ca;
+      --pod-faint: #8d91a6;
+      --pod-accent: #9184d9;
+      --pod-accent-soft: rgba(145, 132, 217, .12);
+      --pod-ok: #4cc38a;
+      --pod-ok-dim: rgba(76, 195, 138, .13);
+      --pod-bad: #f0736c;
+      --pod-bad-dim: rgba(240, 115, 108, .13);
+      --pod-pick: #7fa8d9;
+      --pod-pick-dim: rgba(127, 168, 217, .08);
+    }
+
+    .pod-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .pod-theme-toggle {
+      background: var(--pod-panel);
+      border: 1.5px solid var(--pod-line);
+      color: var(--pod-muted);
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .pod-theme-toggle:hover {
+      color: var(--pod-text);
+      border-color: var(--pod-accent);
+    }
+
+    .pod-stat-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .pod-stat {
+      background: var(--pod-panel);
+      border: 1.5px solid var(--pod-line-soft);
+      border-radius: 10px;
+      padding: 10px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      min-width: 100px;
+    }
+
+    .pod-stat-num {
+      font-size: 21px;
+      font-weight: 700;
+      color: var(--pod-text);
+      font-family: var(--mono);
+      line-height: 1.15;
+    }
+
+    .pod-stat-lbl {
+      font-size: 11.5px;
+      color: var(--pod-faint);
+    }
+
+    .pod-stat-accent { border-color: var(--pod-accent); background: var(--pod-accent-soft); }
+    .pod-stat-accent .pod-stat-num { color: var(--pod-accent); }
+    .pod-stat-pick { border-color: var(--pod-pick); background: var(--pod-pick-dim); }
+    .pod-stat-pick .pod-stat-num { color: var(--pod-pick); }
+    .pod-stat-ok { border-color: var(--pod-ok); background: var(--pod-ok-dim); }
+    .pod-stat-ok .pod-stat-num { color: var(--pod-ok); }
+    .pod-stat-bad { border-color: var(--pod-bad); background: var(--pod-bad-dim); }
+    .pod-stat-bad .pod-stat-num { color: var(--pod-bad); }
+
+    .pod-filter-bar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+      background: var(--pod-panel);
+      border: 1.5px solid var(--pod-line-soft);
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-bottom: 12px;
+    }
+
+    .pod-filter-bar input[type="text"] {
+      flex: 1 1 260px;
+      min-width: 200px;
+      font-family: var(--sans);
+      font-size: 14px;
+      color: var(--pod-text);
+      background: var(--pod-sunken);
+      border: 1.5px solid var(--pod-line);
+      border-radius: 8px;
+      padding: 8px 12px;
+      outline: none;
+    }
+
+    .pod-filter-bar input[type="text"]:focus {
+      border-color: var(--pod-accent);
+    }
+
+    .pod-filter-count {
+      font-size: 12.5px;
+      color: var(--pod-faint);
+      white-space: nowrap;
+      margin-left: auto;
+    }
+
+    .pod-actions-row {
+      margin-bottom: 14px;
+    }
+
+    .pod-zip-btn {
+      font-family: var(--sans);
+      font-weight: 700;
+      font-size: 14px;
+      border-radius: 10px;
+      padding: 8px 16px;
+      cursor: pointer;
+      background: var(--pod-panel);
+      color: var(--pod-text);
+      border: 1.5px solid var(--pod-line);
+    }
+
+    .pod-zip-btn:hover {
+      border-color: var(--pod-accent);
+      color: var(--pod-accent);
+    }
+
+    .pod-zip-btn:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+
+    .pod-group {
+      background: var(--pod-panel);
+      border: 1.5px solid var(--pod-line-soft);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 14px;
+    }
+
+    .pod-group-head {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 12.5px;
+      color: var(--pod-faint);
+      margin-bottom: 10px;
+    }
+
+    .pod-group-code {
+      font-weight: 700;
+      font-size: 14.5px;
+      color: var(--pod-accent);
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .pod-group-code:hover {
+      text-decoration: underline;
+    }
+
+    .pod-group-empty {
+      color: var(--pod-bad);
+      font-size: 13px;
+    }
+
+    .pod-phase-cols {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .pod-phase-col {
+      flex: 1 1 240px;
+      min-width: 220px;
+      border-radius: 10px;
+      padding: 10px;
+      border: 1.5px solid var(--pod-line);
+      background: var(--pod-sunken);
+    }
+
+    .pod-phase-col-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--pod-faint);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+
+    .pod-phase-col--pick {
+      background: var(--pod-pick-dim);
+      border-color: var(--pod-pick);
+    }
+
+    .pod-phase-col--pick .pod-phase-col-title {
+      color: var(--pod-pick);
+    }
+
+    .pod-phase-col--deliver {
+      background: var(--pod-ok-dim);
+      border-color: var(--pod-ok);
+    }
+
+    .pod-phase-col--deliver .pod-phase-col-title {
+      color: var(--pod-ok);
+    }
+
+    .pod-phase-col--return {
+      background: var(--pod-bad-dim);
+      border-color: var(--pod-bad);
+    }
+
+    .pod-phase-col--return .pod-phase-col-title {
+      color: var(--pod-bad);
+    }
+
+    .pod-phase-empty {
+      font-size: 11.5px;
+      color: var(--pod-faint);
+    }
+
+    .pod-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
+      gap: 8px;
+    }
+
+    .pod-thumb {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1.5px solid var(--pod-line);
+      cursor: zoom-in;
+      background: var(--pod-sunken);
+    }
+
+    .pod-thumb:hover {
+      border-color: var(--pod-accent);
+    }
+
+    .pod-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .pod-thumb.pod-thumb-error {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: var(--pod-bad);
+      font-size: 10.5px;
+      padding: 6px;
+      cursor: pointer;
+    }
+
+    .pod-lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(12, 13, 22, .94);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 5000;
+      flex-direction: column;
+    }
+
+    .pod-lightbox.show {
+      display: flex;
+    }
+
+    .pod-lightbox img {
+      max-width: 88vw;
+      max-height: 80vh;
+      border-radius: 8px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, .65);
+    }
+
+    .pod-lb-caption {
+      position: absolute;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #b2b6ca;
+      font-size: 12.5px;
+      max-width: 80vw;
+      text-align: center;
+      word-break: break-all;
+    }
+
+    .pod-lb-close,
+    .pod-lb-nav {
+      position: absolute;
+      background: rgba(255, 255, 255, .08);
+      color: #e9e9ed;
+      border: 1px solid rgba(255, 255, 255, .14);
+      border-radius: 999px;
+      cursor: pointer;
+    }
+
+    .pod-lb-close:hover,
+    .pod-lb-nav:hover {
+      background: rgba(145, 132, 217, .25);
+      border-color: #9184d9;
+    }
+
+    .pod-lb-close {
+      top: 18px;
+      right: 24px;
+      font-size: 19px;
+      padding: 9px 15px;
+    }
+
+    .pod-lb-nav {
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 22px;
+      width: 46px;
+      height: 46px;
+    }
+
+    .pod-lb-prev {
+      left: 20px;
+    }
+
+    .pod-lb-next {
+      right: 20px;
+    }
+
+    .file-upload-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+      font-size: 14px;
+      background: var(--blue-soft);
+      color: var(--blue);
+      padding: 7px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      border: 1.5px dashed var(--blue);
+      transition: background .15s;
+    }
+
+    .file-upload-btn:hover {
+      background: #dfeafb;
+    }
+
+    .file-upload-hint {
+      font-size: 12.5px;
+      color: var(--muted);
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+      flex: none;
+    }
+
+    .result-search-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .result-search-input {
+      flex: 1;
+      min-width: 220px;
+      font-family: var(--sans);
+      font-size: 16px;
+      padding: 9px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      background: var(--surface);
+      color: var(--text);
+      outline: none;
+      transition: border-color .15s;
+    }
+
+    .result-search-input:focus {
+      border-color: var(--orange);
+    }
+
+    .result-search-count {
+      font-size: 15px;
+      color: var(--muted);
+      font-family: var(--mono);
+      white-space: nowrap;
+    }
+
+    .stats {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .stat-badge {
+      font-size: 15px;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 100px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .stat-badge.total {
+      color: var(--blue);
+      border-color: #cfe0f0;
+      background: var(--blue-soft);
+    }
+
+    .stat-badge.found {
+      color: var(--ok);
+      border-color: #bfe6cc;
+      background: var(--ok-bg);
+    }
+
+    .stat-badge.notfound {
+      color: var(--danger);
+      border-color: #f3c9c9;
+      background: var(--danger-bg);
+    }
+
+    .toolbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .pagesize-label {
+      font-size: 15.5px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    select#page-size-select {
+      font-family: var(--sans);
+      font-size: 16px;
+      font-weight: 600;
+      padding: 7px 10px;
+      border-radius: 8px;
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .pagination {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+
+    .pagination .page-indicator {
+      font-size: 15.5px;
+      color: var(--muted);
+      font-family: var(--mono);
+    }
+
+    .pagination button {
+      padding: 8px 16px;
+      font-size: 16px;
+    }
+
+    .page-jump-select {
+      font-family: var(--sans);
+      font-size: 16px;
+      font-weight: 600;
+      padding: 7px 10px;
+      border-radius: 8px;
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .results-table-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow-x: auto;
+      overflow-y: auto;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .result-table th:first-child,
+    .result-table td:first-child {
+      position: sticky;
+      left: 0;
+      z-index: 2;
+      background: inherit;
+      box-shadow: 2px 0 4px rgba(0, 0, 0, .06);
+    }
+
+    .result-table thead th:first-child {
+      background: var(--blue);
+      z-index: 3;
+    }
+
+    table.result-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 16px;
+      min-width: 520px;
+    }
+
+    table.result-table thead th {
+      position: sticky;
+      top: 0;
+      background: var(--blue);
+      color: white;
+      text-align: center;
+      padding: 11px 14px;
+      font-weight: 600;
+      font-size: 15px;
+      text-transform: uppercase;
+      letter-spacing: .02em;
+      white-space: nowrap;
+    }
+
+    table.result-table thead th:first-child {
+      border-top-left-radius: var(--radius);
+    }
+
+    table.result-table thead th:last-child {
+      border-top-right-radius: var(--radius);
+    }
+
+    table.result-table tbody td {
+      padding: 11px 14px;
+      border-bottom: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      vertical-align: top;
+      color: var(--text);
+    }
+
+    table.result-table thead th {
+      border-right: 1px solid rgba(255, 255, 255, .18);
+    }
+
+    .chk-sortable-th {
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .chk-sortable-th:hover {
+      background: var(--orange-dark);
+    }
+
+    th.chk-th-compensation {
+      background: #9B3B3B !important;
+      color: #F5E1A4 !important;
+    }
+
+    th.chk-th-compensation:hover {
+      background: #7F2F2F !important;
+    }
+
+    .chk-sort-arrow {
+      opacity: .7;
+      font-size: 11px;
+      margin-left: 3px;
+    }
+
+    .dl-wrap {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dl-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 4px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, .12);
+      z-index: 50;
+      min-width: 150px;
+      overflow: hidden;
+    }
+
+    .dl-menu.open {
+      display: block;
+    }
+
+    .dl-item {
+      padding: 9px 14px;
+      font-size: 14px;
+      cursor: pointer;
+      white-space: nowrap;
+      color: var(--text);
+    }
+
+    .dl-item:hover {
+      background: var(--blue-soft);
+    }
+
+    table.result-table th:last-child,
+    table.result-table td:last-child {
+      border-right: none;
+    }
+
+    table.result-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    table.result-table tbody tr:nth-child(even) {
+      background: #FBFAF8;
+    }
+
+    table.result-table tbody tr:hover {
+      background: var(--blue-soft);
+    }
+
+    table.result-table tbody tr.chk-status-delivered {
+      background: #E9F7EF;
+    }
+
+    table.result-table tbody tr.chk-status-return {
+      background: #FFF8E1;
+    }
+
+    .chk-scrap-blink {
+      display: inline-block;
+      animation: chkScrapBlink 2s ease-in-out infinite;
+      font-weight: 700;
+      border-radius: 6px;
+      padding: 1px 6px;
+    }
+
+    @keyframes chkScrapBlink {
+
+      0%,
+      50% {
+        background: transparent;
+        color: var(--text);
+      }
+
+      50% {
+        background: var(--danger);
+        color: white;
+      }
+    }
+
+    table.result-table tbody tr.chk-status-lost {
+      background: #FBEAE8;
+    }
+
+    table.result-table tbody tr.chk-status-cancel {
+      background: #4B5563;
+      color: white;
+    }
+
+    table.result-table tbody tr.chk-status-cancel td {
+      color: white;
+    }
+
+    table.result-table td.code-cell {
+      font-family: var(--mono);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    table.result-table td.amount-cell {
+      font-family: var(--mono);
+      color: var(--blue);
+      font-weight: 600;
+      white-space: nowrap;
+      text-align: right;
+    }
+
+    table.result-table td.date-cell {
+      font-family: var(--mono);
+      white-space: nowrap;
+      text-align: right;
+    }
+
+    table.result-table td.align-right {
+      text-align: right;
+    }
+
+    table.result-table td.badge-cell .badge {
+      display: inline-block;
+    }
+
+    .ticket-link {
+      color: var(--orange);
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .ticket-link:hover {
+      text-decoration: underline;
+    }
+
+    .dup-badge {
+      font-size: 16px;
+      cursor: help;
+    }
+
+    .badge {
+      font-size: 14px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 100px;
+      background: var(--pending-bg);
+      color: var(--pending);
+      white-space: nowrap;
+    }
+
+    .badge.ok {
+      background: var(--ok-bg);
+      color: var(--ok);
+    }
+
+    .badge.warn {
+      background: var(--warn-bg);
+      color: var(--warn);
+    }
+
+    .badge.danger {
+      background: var(--danger-bg);
+      color: var(--danger);
+    }
+
+    .empty,
+    .state {
+      text-align: center;
+      padding: 44px 20px;
+      color: var(--muted);
+      font-size: 16.5px;
+      background: var(--surface);
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+    }
+
+    .empty .big {
+      font-size: 31px;
+      margin-bottom: 8px;
+    }
+
+    .state.error {
+      color: var(--danger);
+      border-color: #f3c9c9;
+      background: var(--danger-bg);
+    }
+
+    .state.loading {
+      color: var(--muted);
+    }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2.5px solid var(--border);
+      border-top-color: var(--orange);
+      border-radius: 50%;
+      display: inline-block;
+      animation: spin .7s linear infinite;
+      vertical-align: -4px;
+      margin-right: 8px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .notfound-list {
+      margin-top: 10px;
+      font-size: 15px;
+      color: var(--muted);
+      font-family: var(--mono);
+      word-break: break-all;
+    }
+
+    .notfound-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .notfound-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--danger);
+      background: var(--danger-bg);
+      flex: none;
+    }
+
+    .btn-copy-all {
+      font-family: var(--sans);
+      font-weight: 700;
+      font-size: 14.5px;
+      border: 1.5px solid var(--danger);
+      border-radius: 8px;
+      background: white;
+      color: var(--danger);
+      padding: 5px 10px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: opacity .15s;
+    }
+
+    .btn-copy-all:hover {
+      opacity: .8;
+    }
+
+    .btn-copy-all:disabled {
+      opacity: .7;
+      cursor: default;
+    }
+
+    .notfound-body {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      padding: 6px 14px;
+    }
+
+    .notfound-item {
+      font-family: var(--mono);
+      font-size: 15.5px;
+      color: var(--text);
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .notfound-item:last-child {
+      border-bottom: none;
+    }
+
+    .notfound-empty {
+      padding: 30px 16px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 15.5px;
+      background: var(--surface);
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+    }
+
+    @media (max-width:600px) {
+      .tab {
+        font-size: 15px;
+        padding: 9px 4px;
+      }
+
+      .fields {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    #auth-gate {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(1200px 400px at 100% -10%, rgba(254, 95, 0, 0.08), transparent 60%),
+        var(--bg);
+      padding: 20px;
+    }
+
+    .auth-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      width: 100%;
+      max-width: 340px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+    }
+
+    .auth-mark {
+      width: 44px;
+      height: 44px;
+      margin: 0 auto 14px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--orange), var(--orange-dark));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 800;
+      font-size: 18px;
+    }
+
+    .auth-card h2 {
+      margin: 0 0 4px;
+      font-size: 19px;
+      font-weight: 800;
+    }
+
+    .auth-card p {
+      margin: 0 0 18px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    #auth-password {
+      width: 100%;
+      font-family: var(--sans);
+      font-size: 16px;
+      padding: 10px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      background: #FBFAF8;
+      color: var(--text);
+      outline: none;
+      margin-bottom: 12px;
+      text-align: center;
+      transition: border-color .15s;
+    }
+
+    #auth-password:focus {
+      border-color: var(--orange);
+      background: white;
+    }
+
+    .auth-submit {
+      width: 100%;
+    }
+
+    .auth-error {
+      margin: 10px 0 0 !important;
+      color: var(--danger) !important;
+      font-size: 13px !important;
+      min-height: 16px;
+    }
+
+    .auth-link-btn {
+      background: none;
+      border: none;
+      color: var(--blue);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 10px 0 0;
+      width: 100%;
+      text-decoration: underline;
+    }
+
+    .get-userid-btn {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      text-align: center;
+      text-decoration: none;
+      margin-top: 4px;
+      font-family: var(--sans);
+      font-weight: 700;
+      font-size: 15px;
+      border-radius: 10px;
+      padding: 8px 16px;
+      cursor: pointer;
+      transition: transform .1s, opacity .15s;
+    }
+
+    .get-userid-btn:active {
+      transform: scale(0.97);
+    }
+
+    .auth-link-btn:hover {
+      opacity: .8;
+    }
+
+    .request-status {
+      margin: 10px 0 0;
+      font-size: 13px;
+      min-height: 16px;
+      color: var(--muted);
+    }
+
+    .request-status.ok {
+      color: var(--ok);
+    }
+
+    .request-status.error {
+      color: var(--danger);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ============ GATE: BƯỚC 1 - GOOGLE SSO ============ -->
+  <div id="auth-gate">
+    <div id="google-step" class="auth-card">
+      <div class="auth-mark">JL212</div>
+      <h2>Tra cứu</h2>
+      <p>Đăng nhập tài khoản <strong>GIAO HÀNG NHANH</ strong></p>
+      <div id="g_id_onload"
+        data-client_id="382454937501-sn3ire0hsbbscpsjtr9blff6d9ruiujs.apps.googleusercontent.com"
+        data-callback="handleGoogleCredential"
+        data-auto_prompt="false">
+      </div>
+      <div class="g_id_signin" data-type="standard" data-shape="pill" data-width="280"
+        style="display:flex;justify-content:center;margin-top:6px;"></div>
+      <p id="google-error" class="auth-error"></p>
+    </div>
+
+    <form id="auth-form" class="auth-card" style="display:none;">
+      <div class="auth-mark">JL212</div>
+      <h2>Tra cứu</h2>
+      <p>Xin chào <strong id="google-email-display"></strong></p>
+      <input type="password" id="auth-password" placeholder="Mật khẩu" autocomplete="off" autofocus />
+      <button type="submit" class="btn-primary auth-submit">Vào trang</button>
+      <button type="button" id="btn-switch-google" class="auth-link-btn">← Đăng nhập Google khác</button>
+      <p id="auth-error" class="auth-error"></p>
+      <p class="request-status">Liên hệ admin để nhận mật khẩu.</p>
+    </form>
+  </div>
+
+  <div id="app-root" style="display:none;">
+    <div class="app-shell">
+      <div class="rail">
+        <div class="rail-mark">JL212</div>
+        <div class="tab" id="tab-checker">🔎 Kiểm tra đơn</div>
+        <div class="tabs" id="tabs"></div>
+        <button type="button" id="btn-logout" class="rail-logout" title="Đăng xuất">⏻</button>
+      </div>
+
+      <div class="side-panel" id="side-panel-normal">
+        <div class="app-title">Tra cứu</div>
+        <p class="hint" id="panel-hint"></p>
+
+        <label class="field-label">Danh sách mã đơn</label>
+        <textarea id="codes-input"
+          placeholder="Dán mã đơn vào đây — mỗi dòng, cách nhau bằng dấu phẩy hoặc khoảng trắng đều được.&#10;Mã trùng sẽ tự động loại bỏ."></textarea>
+
+        <div class="divider-or">hoặc</div>
+        <div class="file-upload-row">
+          <label class="file-upload-btn" for="file-input">📎 Tải file Excel / CSV</label>
+          <input type="file" id="file-input" accept=".xlsx,.xls,.csv" multiple style="display:none" />
+          <span class="file-upload-hint" id="file-upload-status">Chọn nhiều file, tự dò cột mã đơn trong mọi
+            sheet</span>
+        </div>
+
+        <div class="row" id="date-row" style="display:none;">
+          <div class="col">
+            <label class="field-label">Từ ngày</label>
+            <input type="date" id="date-from" />
+          </div>
+          <div class="col">
+            <label class="field-label">Đến ngày</label>
+            <input type="date" id="date-to" />
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn-primary" id="btn-search">Tra cứu</button>
+          <button class="btn-ghost" id="btn-clear">Xóa</button>
+          <span class="count-tag" id="code-count"></span>
+        </div>
+      </div>
+
+      <div class="side-panel" id="side-panel-checker" style="display:none;">
+        <div class="app-title" id="chk-app-title">Kiểm tra đơn</div>
+
+        <label class="field-label">Chế độ</label>
+        <select id="chk-mode-select" class="chk-input" style="margin-bottom:12px;">
+          <option value="tra-cuu">🔎 Tra cứu</option>
+          <option value="calllog">🕘 CallLog</option>
+          <option value="pod">🖼️ POD</option>
+        </select>
+
+        <div class="chk-source-wrap" id="chk-source-wrap">
+          <label class="field-label">Nguồn tra cứu</label>
+          <div class="chk-source-toggle" role="radiogroup">
+            <label class="chk-source-opt"><input type="radio" name="chk-source" value="realtime" /><span>⚡ Realtime</span></label>
+            <label class="chk-source-opt"><input type="radio" name="chk-source" value="bi" /><span>🗄️ BI</span></label>
+          </div>
+        </div>
+
+        <p class="hint chk-hint-note" id="chk-hint-note">⚠️ = đơn &gt;5 ngày chưa cập nhật · Bấm Mã đơn để mở tra cứu nội bộ GHN · Bấm tên kho để copy nhanh ID</p>
+
+        <div id="chk-config-fields">
+          <label class="field-label">User-Agent</label>
+          <input type="text" id="chk-user-agent" class="chk-input" placeholder="User-Agent tài khoản của bạn" />
+
+          <label class="field-label" style="margin-top:10px;">Token</label>
+          <input type="password" id="chk-token" class="chk-input" placeholder="Token tài khoản của bạn" />
+
+          <button class="btn-ghost" id="chk-btn-save-config" style="margin-top:8px;">💾 Lưu cấu hình</button>
+        </div>
+
+        <div id="chk-config-summary" class="chk-config-summary" style="display:none;">
+          <span>🔒 Đã cấu hình User-Agent &amp; Token</span>
+          <button type="button" class="chk-edit-link" id="chk-btn-edit-config">Thay đổi</button>
+        </div>
+
+        <div class="divider-or">sau đó</div>
+
+        <div id="chk-mode-panel-tracuu">
+          <label class="field-label">Danh sách mã đơn</label>
+          <textarea id="chk-codes-input"
+            placeholder="Dán mã đơn cần kiểm tra, mỗi dòng 1 mã."></textarea>
+
+          <div class="actions">
+            <button class="btn-primary" id="chk-btn-run">Chạy kiểm tra</button>
+            <button class="btn-ghost" id="chk-btn-clear">Xóa</button>
+            <span class="count-tag" id="chk-code-count"></span>
+          </div>
+
+          <div class="chk-history-title">🕘 Lịch sử gần đây</div>
+          <div id="chk-history-list"></div>
+        </div>
+
+        <div id="chk-mode-panel-v2" style="display:none;">
+          <p class="hint">Tra từ nguồn dữ liệu BI, không cần User-Agent/Token. Dữ liệu có thể trễ hơn Realtime, chuyển sang ⚡ Realtime khi cần trạng thái mới nhất.</p>
+          <label class="field-label">Danh sách mã đơn</label>
+          <textarea id="dv2-codes-input"
+            placeholder="Dán mã đơn cần tra, mỗi dòng 1 mã hoặc cách nhau dấu phẩy."></textarea>
+
+          <div class="actions">
+            <button class="btn-primary" id="dv2-btn-run">Tra cứu</button>
+            <button class="btn-ghost" id="dv2-btn-clear">Xóa</button>
+            <span class="count-tag" id="dv2-code-count"></span>
+          </div>
+
+          <div class="chk-history-title">🕘 Lịch sử gần đây</div>
+          <div id="dv2-history-list"></div>
+          <div class="dv2-version">BI · bản 2026-10-02.8</div>
+        </div>
+
+        <div id="chk-mode-panel-pod" style="display:none;">
+          <label class="field-label">Danh sách mã đơn (POD)</label>
+          <textarea id="pod-codes-input"
+            placeholder="Dán mã đơn cần lấy ảnh POD, mỗi dòng 1 mã."></textarea>
+
+          <div class="actions">
+            <button class="btn-primary" id="pod-btn-run">Lấy ảnh POD</button>
+            <button class="btn-ghost" id="pod-btn-clear">Xóa</button>
+            <span class="count-tag" id="pod-code-count"></span>
+          </div>
+        </div>
+
+        <div id="chk-mode-panel-calllog" style="display:none;">
+          <p class="hint">🚧 CallLog đang được phát triển — sẽ hoàn thiện sau khi xong POD.</p>
+        </div>
+      </div>
+
+      <div class="main-col" id="main-col-normal">
+        <div id="results-area"></div>
+      </div>
+
+      <div class="main-col" id="main-col-checker" style="display:none;">
+        <div id="chk-results-area"></div>
+        <div id="dv2-results-area" style="display:none;"></div>
+        <div id="pod-results-area" style="display:none;"></div>
+        <div id="calllog-results-area" style="display:none;">
+          <div class="state" style="padding:40px 0;text-align:center;color:var(--muted);">🚧 CallLog đang được phát triển.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pod-lightbox" id="pod-lightbox">
+      <button type="button" class="pod-lb-close" id="pod-lb-close">✕</button>
+      <button type="button" class="pod-lb-nav pod-lb-prev" id="pod-lb-prev">‹</button>
+      <img id="pod-lb-img" alt="" />
+      <button type="button" class="pod-lb-nav pod-lb-next" id="pod-lb-next">›</button>
+      <div class="pod-lb-caption" id="pod-lb-caption"></div>
+    </div>
+
+    <button type="button" id="btn-toggle-notfound" class="nf-toggle">⚠️ Không tìm thấy</button>
+    <div class="nf-drawer" id="nf-drawer">
+      <div class="nf-drawer-head">
+        <span>Kết quả không tìm thấy</span>
+        <button type="button" id="btn-close-notfound" class="nf-close">✕</button>
+      </div>
+      <div id="notfound-area"></div>
+    </div>
+  </div>
+
+  <script>function initApp() {
+      const CONFIG = {
+        WEBHOOK_URL: WEBHOOK_BASE_URL,
+        TABS: {
+          denbu: {
+            label: "Đền bù",
+            useDateRange: false,
+            knownFields: ["so_tien", "loai_yeu_cau", "ngay_duyet"],
+            amountFields: ["so_tien"],
+            dateFields: ["ngay_duyet"],
+            statusField: null
+          },
+          quahan: {
+            label: "Quá hạn",
+            useDateRange: false,
+            knownFields: ["reason", "overdue_date"],
+            amountFields: [],
+            dateFields: ["overdue_date"],
+            statusField: null
+          },
+          miencuoc: {
+            label: "Miễn cước",
+            useDateRange: false,
+            knownFields: ["ly_do", "so_tien_mien", "ngay_duyet", "trang_thai"],
+            amountFields: ["so_tien_mien"],
+            dateFields: ["ngay_duyet"],
+            statusField: "trang_thai",
+            notReady: true
+          },
+          ticket: {
+            label: "Ticket",
+            useDateRange: false,
+            knownFields: ["client_name", "reason_type", "first_article_from"],
+            amountFields: [],
+            dateFields: [],
+            statusField: null,
+            linkedFieldMap: {
+              reason_type: "ticket_url"
+            },
+            exportExtraFields: ["ticket_url"]
+          },
+          fake_attempt: {
+            label: "Fake Attempt",
+            useDateRange: false,
+            knownFields: ["month", "client_type"],
+            amountFields: [],
+            dateFields: ["month"],
+            statusField: null
+          }
+        },
+        FIELD_LABELS: {
+          ma_don: "Mã đơn",
+          order_code: "Mã đơn",
+          so_tien: "Giá trị đền bù",
+          loai_yeu_cau: "Loại yêu cầu",
+          ngay_duyet: "Ngày duyệt",
+          reason: "Lý do",
+          overdue_date: "Ngày chốt quá hạn",
+          ly_do: "Lý do",
+          so_tien_mien: "Số tiền miễn",
+          trang_thai: "Trạng thái",
+          client_name: "Client / Team",
+          reason_type: "Lý do",
+          ticket_url: "Link ticket",
+          first_article_from: "Người tạo",
+          month: "Tháng phát sinh",
+          client_type: "Loại client"
+        }
+      };
+      let activeTab = "denbu";
+      let lastResults = [];
+      let lastFullItems = [];
+      let lastRequestedCodes = [];
+      let searchQuery = "";
+      let currentPage = 1;
+      let pageSize = 20;
+      const el = sel => document.querySelector(sel);
+      const tabsEl = el("#tabs");
+      const codesInput = el("#codes-input");
+      const dateRow = el("#date-row");
+      const dateFrom = el("#date-from");
+      const dateTo = el("#date-to");
+      const resultsArea = el("#results-area");
+      const codeCount = el("#code-count");
+      const fileInput = el("#file-input");
+      const fileUploadStatus = el("#file-upload-status");
+      function parseCodes(raw) {
+        return [...new Set(raw.split(/[\s,;]+/).map(s => s.trim()).filter(Boolean))];
+      }
+      function flashTab(el) {
+        el.classList.remove("flash");
+        void el.offsetWidth;
+        el.classList.add("flash");
+      }
+      function renderTabs() {
+        tabsEl.innerHTML = "";
+        Object.entries(CONFIG.TABS).forEach(([key, cfg]) => {
+          const d = document.createElement("div");
+          d.className = "tab" + (key === activeTab ? " active" : "");
+          d.innerHTML = cfg.label;
+          d.onclick = () => switchTab(key);
+          tabsEl.appendChild(d);
+        });
+      }
+      const tabState = {};
+      function saveCurrentTabState() {
+        tabState[activeTab] = {
+          lastFullItems,
+          lastRequestedCodes,
+          searchQuery,
+          currentPage,
+          pageSize,
+          codesInputValue: codesInput.value
+        };
+      }
+      function switchTab(key) {
+        saveCurrentTabState();
+        activeTab = key;
+        const cfg = CONFIG.TABS[key];
+        renderTabs();
+        const activeTabEl = el(".tabs .tab.active");
+        if (activeTabEl) flashTab(activeTabEl);
+        el("#panel-hint").textContent = cfg.hint;
+        dateRow.style.display = cfg.useDateRange ? "flex" : "none";
+        const saved = tabState[key];
+        if (saved) {
+          lastFullItems = saved.lastFullItems;
+          lastRequestedCodes = saved.lastRequestedCodes;
+          searchQuery = saved.searchQuery;
+          currentPage = saved.currentPage;
+          pageSize = saved.pageSize;
+          codesInput.value = saved.codesInputValue;
+          updateCount();
+          if (lastFullItems.length || lastRequestedCodes.length) {
+            rerenderTable();
+          } else {
+            resultsArea.innerHTML = "";
+            el("#notfound-area").innerHTML = "";
+          }
+        } else {
+          codesInput.value = "";
+          resultsArea.innerHTML = "";
+          el("#notfound-area").innerHTML = "";
+          currentPage = 1;
+          updateCount();
+        }
+      }
+      function updateCount() {
+        const n = parseCodes(codesInput.value).length;
+        codeCount.textContent = n > 0 ? n + " mã đơn" : "";
+      }
+      codesInput.addEventListener("input", updateCount);
+      function statusClass(value) {
+        if (!value) return "";
+        const v = value.toString().toLowerCase();
+        if (/(hoàn thành|đã duyệt|đã đền|thành công|ok|approved)/.test(v)) return "ok";
+        if (/(đang xử lý|chờ|pending|xem xét)/.test(v)) return "warn";
+        if (/(từ chối|hủy|reject|không đạt)/.test(v)) return "danger";
+        return "";
+      }
+      function formatAmount(v) {
+        const n = Number(String(v).replace(/[^\d.-]/g, ""));
+        if (isNaN(n)) return v;
+        return n.toLocaleString("vi-VN") + " đ";
+      }
+      function getCode(item) {
+        return item.ma_don || item.order_code || item.code || "";
+      }
+      function numberToEmoji(n) {
+        if (n === 10) return "🔟";
+        return String(n).split("").map(d => d + "️⃣").join("");
+      }
+      function annotateAndSortItems(items) {
+        const sorted = [...items].sort((a, b) => getCode(a).localeCompare(getCode(b), "vi", {
+          numeric: true,
+          sensitivity: "base"
+        }));
+        const totalCounts = {};
+        sorted.forEach(it => {
+          const c = getCode(it).toString().toUpperCase();
+          totalCounts[c] = (totalCounts[c] || 0) + 1;
+        });
+        const runningIdx = {};
+        return sorted.map(it => {
+          const c = getCode(it).toString().toUpperCase();
+          runningIdx[c] = (runningIdx[c] || 0) + 1;
+          return {
+            ...it,
+            _occIndex: runningIdx[c],
+            _occTotal: totalCounts[c]
+          };
+        });
+      }
+      function normalizeKey(str) {
+        return String(str || "").replace(/^\uFEFF/, "").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d").replace(/[\s_]+/g, "");
+      }
+      const ALLOWED_COLUMN_NAMES = ["order_code", "ordercode", "order code", "madonhang", "ma_don_hang", "madh", "ma dh", "ma don hang", "ma don", "lmtn", "spx_shipment_id", "spx shipment id", "tracking no", "tracking_no", "trackingno"].map(normalizeKey);
+      fileInput.addEventListener("change", handleFileUpload);
+      async function handleFileUpload(e) {
+        const files = Array.from(e.target.files || []);
+        if (!files.length) return;
+        fileUploadStatus.textContent = "Đang đọc file...";
+        let allCodes = [];
+        let filesRead = 0;
+        let sheetsRead = 0;
+        let sheetsWithoutMatch = 0;
+        try {
+          for (const file of files) {
+            const buf = await file.arrayBuffer();
+            const wb = XLSX.read(buf, {
+              type: "array"
+            });
+            filesRead++;
+            for (const sheetName of wb.SheetNames) {
+              const rows = XLSX.utils.sheet_to_json(wb.Sheets[sheetName], {
+                defval: ""
+              });
+              if (!rows.length) continue;
+              sheetsRead++;
+              const firstRowKeys = Object.keys(rows[0]);
+              const matchedKey = firstRowKeys.find(k => ALLOWED_COLUMN_NAMES.includes(normalizeKey(k)));
+              let codes;
+              if (matchedKey) {
+                codes = rows.map(r => String(r[matchedKey] || "").trim().toUpperCase()).filter(Boolean);
+              } else {
+                sheetsWithoutMatch++;
+                codes = rows.map(r => String(Object.values(r)[0] || "").trim().toUpperCase()).filter(Boolean);
+              }
+              allCodes.push(...codes);
+            }
+          }
+          allCodes = [...new Set(allCodes)];
+          codesInput.value = allCodes.join("\n");
+          updateCount();
+          const warn = sheetsWithoutMatch > 0 ? ` (⚠️ ${sheetsWithoutMatch} sheet không thấy cột quen thuộc, đã lấy cột đầu tiên)` : "";
+          fileUploadStatus.textContent = `✅ Đã đọc ${allCodes.length} mã đơn từ ${filesRead} file / ${sheetsRead} sheet.${warn}`;
+        } catch (err) {
+          fileUploadStatus.textContent = "❌ Lỗi đọc file: " + err.message;
+        } finally {
+          e.target.value = "";
+        }
+      }
+      function buildExportRows(cfg) {
+        const fields = [...cfg.knownFields, ...cfg.exportExtraFields || []];
+        const header = ["Mã đơn", ...fields.map(f => CONFIG.FIELD_LABELS[f] || f), "Số lần phát sinh"];
+        const splitFields = cfg.splitFieldsForExport || [];
+        const rows = [];
+        lastResults.forEach(item => {
+          const code = getCode(item);
+          if (splitFields.length) {
+            const splitValuesMap = {};
+            let maxCount = 1;
+            splitFields.forEach(f => {
+              const vals = String(item[f] ?? "").split(",").map(s => s.trim()).filter(Boolean);
+              splitValuesMap[f] = vals;
+              if (vals.length > maxCount) maxCount = vals.length;
+            });
+            if (maxCount > 1) {
+              for (let i = 0; i < maxCount; i++) {
+                const row = [code];
+                fields.forEach(f => {
+                  if (splitFields.includes(f)) {
+                    const vals = splitValuesMap[f];
+                    row.push(vals[i] ?? vals[vals.length - 1] ?? "");
+                  } else {
+                    row.push(item[f] ?? "");
+                  }
+                });
+                row.push(maxCount);
+                rows.push(row);
+              }
+              return;
+            }
+          }
+          rows.push([code, ...fields.map(f => item[f] ?? ""), item._occTotal || 1]);
+        });
+        rows.sort((a, b) => String(a[0]).localeCompare(String(b[0]), "vi", { numeric: true, sensitivity: "base" }));
+        return [header, ...rows];
+      }
+      function downloadBlob(blob, filename) {
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(a.href), 2e3);
+      }
+      function downloadJsonFromAoa(aoa, filename) {
+        const [header, ...dataRows] = aoa;
+        const objs = dataRows.map(row => {
+          const obj = {};
+          header.forEach((h, i) => { obj[h] = row[i]; });
+          return obj;
+        });
+        const blob = new Blob([JSON.stringify(objs, null, 2)], { type: "application/json;charset=utf-8;" });
+        downloadBlob(blob, filename);
+      }
+      function closeAllDlMenus() {
+        document.querySelectorAll(".dl-menu.open").forEach(m => m.classList.remove("open"));
+      }
+      document.addEventListener("click", e => {
+        if (!e.target.closest(".dl-wrap")) closeAllDlMenus();
+      });
+      function exportFileBaseName() {
+        const epoch = (Date.now() / 1000).toFixed(3);
+        return `output_${activeTab}_${epoch}`;
+      }
+      function exportCsv() {
+        if (!lastResults.length) return;
+        const cfg = CONFIG.TABS[activeTab];
+        const aoa = buildExportRows(cfg);
+        const ws = XLSX.utils.aoa_to_sheet(aoa);
+        const csv = XLSX.utils.sheet_to_csv(ws);
+        const blob = new Blob(["\ufeff" + csv], {
+          type: "text/csv;charset=utf-8;"
+        });
+        downloadBlob(blob, `${exportFileBaseName()}.csv`);
+      }
+      function exportXlsx() {
+        if (!lastResults.length) return;
+        const cfg = CONFIG.TABS[activeTab];
+        const aoa = buildExportRows(cfg);
+        const ws = XLSX.utils.aoa_to_sheet(aoa);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "KetQua");
+        XLSX.writeFile(wb, `${exportFileBaseName()}.xlsx`);
+      }
+      function exportJson() {
+        if (!lastResults.length) return;
+        const cfg = CONFIG.TABS[activeTab];
+        const aoa = buildExportRows(cfg);
+        downloadJsonFromAoa(aoa, `${exportFileBaseName()}.json`);
+      }
+      function renderNotFound(codes) {
+        const area = el("#notfound-area");
+        const toggleBtn = el("#btn-toggle-notfound");
+        if (!codes || !codes.length) {
+          area.innerHTML = "";
+          toggleBtn.textContent = "⚠️ Không tìm thấy";
+          toggleBtn.style.display = "none";
+          el("#nf-drawer").classList.remove("open");
+          return;
+        }
+        toggleBtn.style.display = "block";
+        toggleBtn.textContent = `⚠️ Không tìm thấy (${codes.length})`;
+        const itemsHtml = codes.map(c => `<div class="notfound-item">${c}</div>`).join("");
+        area.innerHTML = `\n    <div class="notfound-card">\n      <div class="notfound-header">\n        <span>Không tìm thấy (${codes.length})</span>\n        <button class="btn-copy-all" id="btn-copy-notfound" type="button">📋 Copy all</button>\n      </div>\n      <div class="notfound-body">${itemsHtml}</div>\n    </div>`;
+        el("#btn-copy-notfound").onclick = () => copyNotFoundCodes(codes);
+      }
+      async function copyNotFoundCodes(codes) {
+        const text = codes.join("\n");
+        const btn = el("#btn-copy-notfound");
+        try {
+          await navigator.clipboard.writeText(text);
+          showCopyFeedback(btn, "✅ Đã copy");
+        } catch (err) {
+          try {
+            const ta = document.createElement("textarea");
+            ta.value = text;
+            ta.style.position = "fixed";
+            ta.style.opacity = "0";
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand("copy");
+            document.body.removeChild(ta);
+            showCopyFeedback(btn, "✅ Đã copy");
+          } catch (err2) {
+            showCopyFeedback(btn, "❌ Lỗi copy");
+          }
+        }
+      }
+      function showCopyFeedback(btn, text) {
+        if (!btn) return;
+        const original = "📋 Copy all";
+        btn.textContent = text;
+        btn.disabled = true;
+        setTimeout(() => {
+          btn.textContent = original;
+          btn.disabled = false;
+        }, 1500);
+      }
+      async function copyFoundCodes() {
+        const codes = [...new Set(lastResults.map(getCode).filter(Boolean))];
+        const text = codes.join("\n");
+        const btn = el("#btn-copy-found");
+        try {
+          await navigator.clipboard.writeText(text);
+          showFoundCopyFeedback(btn, "✅ Đã copy");
+        } catch (err) {
+          try {
+            const ta = document.createElement("textarea");
+            ta.value = text;
+            ta.style.position = "fixed";
+            ta.style.opacity = "0";
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand("copy");
+            document.body.removeChild(ta);
+            showFoundCopyFeedback(btn, "✅ Đã copy");
+          } catch (err2) {
+            showFoundCopyFeedback(btn, "❌ Lỗi copy");
+          }
+        }
+      }
+      function showFoundCopyFeedback(btn, text) {
+        if (!btn) return;
+        const original = "📋 Copy mã đơn";
+        btn.textContent = text;
+        btn.disabled = true;
+        setTimeout(() => {
+          btn.textContent = original;
+          btn.disabled = false;
+        }, 1500);
+      }
+      function renderResults(rawItems, requestedCodes) {
+        lastFullItems = annotateAndSortItems(rawItems);
+        lastRequestedCodes = requestedCodes || [];
+        searchQuery = "";
+        currentPage = 1;
+        rerenderTable();
+      }
+      function rerenderTable() {
+        const allItems = lastFullItems;
+        const cfg = CONFIG.TABS[activeTab];
+        let statsHtml = "";
+        let notFoundCodes = [];
+        if (lastRequestedCodes.length) {
+          const foundSet = new Set(allItems.map(i => getCode(i).toString().toUpperCase()));
+          const foundCount = lastRequestedCodes.filter(c => foundSet.has(c.toUpperCase())).length;
+          notFoundCodes = lastRequestedCodes.filter(c => !foundSet.has(c.toUpperCase()));
+          statsHtml = `\n      <div class="stats">\n        <span class="stat-badge total">Tổng mã đơn: ${lastRequestedCodes.length}</span>\n        <span class="stat-badge found">Có kết quả: ${foundCount}</span>\n        <span class="stat-badge notfound">Không có kết quả: ${notFoundCodes.length}</span>\n      </div>`;
+        }
+        renderNotFound(notFoundCodes);
+        if (!allItems.length) {
+          lastResults = [];
+          resultsArea.innerHTML = `\n      ${statsHtml ? `<div class="toolbar">${statsHtml}</div>` : ""}\n      <div class="empty"><div class="big">🔍</div>Không tìm thấy kết quả phù hợp.</div>`;
+          return;
+        }
+        const filterTokens = parseCodes(searchQuery);
+        let items = allItems;
+        if (filterTokens.length) {
+          const tokensUpper = filterTokens.map(t => t.toUpperCase());
+          items = allItems.filter(it => {
+            const code = getCode(it).toString().toUpperCase();
+            return tokensUpper.some(t => code.includes(t));
+          });
+        }
+        lastResults = items;
+        const searchBoxHtml = `\n    <div class="result-search-row">\n      <input type="text" id="result-search" class="result-search-input" placeholder="Lọc mã đơn trong kết quả này — dán được nhiều mã, cách nhau bằng dấu phẩy/khoảng trắng" value="${searchQuery.replace(/"/g, "&quot;")}" />\n      ${searchQuery ? `<button class="btn-ghost" id="btn-clear-search">Xóa lọc</button>` : ""}\n      <span class="result-search-count">${filterTokens.length ? `${items.length}/${allItems.length} dòng khớp` : `${allItems.length} dòng`}</span>\n    </div>`;
+        if (!items.length) {
+          resultsArea.innerHTML = `\n      ${statsHtml ? `<div class="toolbar">${statsHtml}</div>` : ""}\n      ${searchBoxHtml}\n      <div class="empty"><div class="big">🔍</div>Không có mã đơn nào khớp ô lọc.</div>`;
+          bindResultSearchEvents();
+          return;
+        }
+        const totalPages = Math.max(1, Math.ceil(items.length / pageSize));
+        if (currentPage > totalPages) currentPage = totalPages;
+        if (currentPage < 1) currentPage = 1;
+        const startIdx = (currentPage - 1) * pageSize;
+        const pageItems = items.slice(startIdx, startIdx + pageSize);
+        const pageSizeOptions = [10, 20, 50, 100].map(n => `<option value="${n}" ${n === pageSize ? "selected" : ""}>${n}</option>`).join("");
+        const toolbarHtml = `\n    <div class="toolbar">\n      ${statsHtml}\n      <div class="toolbar-actions">\n        <label class="pagesize-label">Hiện <select id="page-size-select">${pageSizeOptions}</select> / trang</label>\n        <button class="btn-ghost" id="btn-copy-found">📋 Copy mã đơn</button>\n        <div class="dl-wrap">\n          <button class="btn-ghost" id="btn-dl-toggle">⬇ Tải ▾</button>\n          <div class="dl-menu" id="dl-menu">\n            <div class="dl-item" data-fmt="xlsx">Excel (.xlsx)</div>\n            <div class="dl-item" data-fmt="csv">CSV (.csv)</div>\n            <div class="dl-item" data-fmt="json">JSON (.json)</div>\n          </div>\n        </div>\n      </div>\n    </div>`;
+        const headerFieldKeys = [null, ...cfg.knownFields];
+        const headerCells = ["Mã đơn", ...cfg.knownFields.map(f => CONFIG.FIELD_LABELS[f] || f)];
+        const theadHtml = `<tr>${headerCells.map((h, i) => {
+          const key = headerFieldKeys[i];
+          const isRight = key && (cfg.amountFields.includes(key) || (cfg.dateFields || []).includes(key));
+          return `<th${isRight ? ' class="align-right"' : ""}>${h}</th>`;
+        }).join("")}</tr>`;
+        const rowsHtml = pageItems.map(item => {
+          const status = cfg.statusField ? item[cfg.statusField] : "";
+          const sClass = statusClass(status);
+          const code = getCode(item) || "—";
+          let dupBadge = "";
+          if (item._occIndex >= 2) {
+            dupBadge = ` <span class="dup-badge" title="Lần phát sinh thứ ${item._occIndex}/${item._occTotal} của mã đơn này">${numberToEmoji(item._occIndex)}</span>`;
+          } else if (cfg.multiCountField && item[cfg.multiCountField]) {
+            const count = String(item[cfg.multiCountField]).split(",").map(s => s.trim()).filter(Boolean).length;
+            if (count >= 2) {
+              dupBadge = ` <span class="dup-badge" title="Phát sinh ${count} lần (gộp trong cùng 1 dòng)">${numberToEmoji(count)}</span>`;
+            }
+          }
+          const cells = cfg.knownFields.map(f => {
+            const raw = item[f];
+            if (raw === undefined || raw === null || raw === "") return `<td class="align-right">—</td>`;
+            if (cfg.amountFields.includes(f)) return `<td class="amount-cell">${formatAmount(raw)}</td>`;
+            if ((cfg.dateFields || []).includes(f)) return `<td class="date-cell">${raw}</td>`;
+            if (cfg.linkedFieldMap && cfg.linkedFieldMap[f]) {
+              const url = item[cfg.linkedFieldMap[f]];
+              if (url) return `<td><a class="ticket-link" href="${url}" target="_blank" rel="noopener">${raw} ↗</a></td>`;
+              return `<td>${raw}</td>`;
+            }
+            if (f === cfg.statusField) return `<td class="badge-cell"><span class="badge${sClass ? " " + sClass : ""}">${raw}</span></td>`;
+            return `<td>${raw}</td>`;
+          }).join("");
+          return `<tr><td class="code-cell">${code}${dupBadge}</td>${cells}</tr>`;
+        }).join("");
+        const pageJumpOptions = Array.from({
+          length: totalPages
+        }, (_, i) => i + 1).map(p => `<option value="${p}" ${p === currentPage ? "selected" : ""}>Trang ${p}</option>`).join("");
+        const paginationHtml = totalPages > 1 ? `\n    <div class="pagination">\n      <button class="btn-ghost" id="btn-prev-page" ${currentPage <= 1 ? "disabled" : ""}>← Trước</button>\n      <select id="page-jump-select" class="page-jump-select">${pageJumpOptions}</select>\n      <span class="page-indicator">/ ${totalPages} (${items.length} kết quả)</span>\n      <button class="btn-ghost" id="btn-next-page" ${currentPage >= totalPages ? "disabled" : ""}>Sau →</button>\n    </div>` : `<div class="pagination"><span class="page-indicator">${items.length} kết quả</span></div>`;
+        resultsArea.innerHTML = `\n    ${toolbarHtml}\n    ${searchBoxHtml}\n    <div class="results-table-wrap">\n      <table class="result-table">\n        <thead>${theadHtml}</thead>\n        <tbody>${rowsHtml}</tbody>\n      </table>\n    </div>\n    ${paginationHtml}`;
+        el("#btn-copy-found").onclick = copyFoundCodes;
+        el("#btn-dl-toggle").onclick = e => {
+          e.stopPropagation();
+          const menu = el("#dl-menu");
+          const wasOpen = menu.classList.contains("open");
+          closeAllDlMenus();
+          if (!wasOpen) menu.classList.add("open");
+        };
+        document.querySelectorAll("#dl-menu .dl-item").forEach(item => {
+          item.onclick = () => {
+            const fmt = item.dataset.fmt;
+            if (fmt === "xlsx") exportXlsx();
+            else if (fmt === "csv") exportCsv();
+            else if (fmt === "json") exportJson();
+            closeAllDlMenus();
+          };
+        });
+        el("#page-size-select").onchange = e => {
+          pageSize = Number(e.target.value);
+          currentPage = 1;
+          rerenderTable();
+        };
+        const prevBtn = el("#btn-prev-page");
+        const nextBtn = el("#btn-next-page");
+        const jumpSelect = el("#page-jump-select");
+        if (prevBtn) prevBtn.onclick = () => {
+          currentPage--;
+          rerenderTable();
+        };
+        if (nextBtn) nextBtn.onclick = () => {
+          currentPage++;
+          rerenderTable();
+        };
+        if (jumpSelect) jumpSelect.onchange = e => {
+          currentPage = Number(e.target.value);
+          rerenderTable();
+        };
+        bindResultSearchEvents();
+      }
+      function bindResultSearchEvents() {
+        const input = el("#result-search");
+        if (input) {
+          input.oninput = e => {
+            searchQuery = e.target.value;
+            currentPage = 1;
+            const cursorPos = e.target.selectionStart;
+            rerenderTable();
+            const newInput = el("#result-search");
+            if (newInput) {
+              newInput.focus();
+              newInput.setSelectionRange(cursorPos, cursorPos);
+            }
+          };
+        }
+        const clearBtn = el("#btn-clear-search");
+        if (clearBtn) {
+          clearBtn.onclick = () => {
+            searchQuery = "";
+            currentPage = 1;
+            rerenderTable();
+            const newInput = el("#result-search");
+            if (newInput) newInput.focus();
+          };
+        }
+      }
+      const CODES_PER_REQUEST = 1e3;
+      function chunkArray(arr, size) {
+        const out = [];
+        for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
+        return out;
+      }
+      async function doSearch() {
+        const cfg = CONFIG.TABS[activeTab];
+        if (cfg.notReady) {
+          resultsArea.innerHTML = `<div class="empty"><div class="big">🚧</div>Chưa có nguồn dữ liệu cho mục này.<br/>Sẽ bổ sung khi có Google Sheet miễn cước.</div>`;
+          el("#notfound-area").innerHTML = "";
+          return;
+        }
+        const codes = parseCodes(codesInput.value);
+        if (!codes.length && !cfg.useDateRange) {
+          resultsArea.innerHTML = `<div class="empty"><div class="big">✏️</div>Nhập ít nhất một mã đơn để tra cứu.</div>`;
+          el("#notfound-area").innerHTML = "";
+          return;
+        }
+        if (cfg.useDateRange && !codes.length && (!dateFrom.value || !dateTo.value)) {
+          resultsArea.innerHTML = `<div class="empty"><div class="big">✏️</div>Nhập mã đơn hoặc chọn khoảng ngày để tra cứu.</div>`;
+          el("#notfound-area").innerHTML = "";
+          return;
+        }
+        el("#btn-search").disabled = true;
+        currentPage = 1;
+        const codeChunks = codes.length > CODES_PER_REQUEST ? chunkArray(codes, CODES_PER_REQUEST) : [codes];
+        const totalChunks = codeChunks.length;
+        let allItems = [];
+        const failedChunks = [];
+        for (let i = 0; i < totalChunks; i++) {
+          const chunk = codeChunks[i];
+          resultsArea.innerHTML = `<div class="state loading"><span class="spinner"></span>Đang tra cứu${totalChunks > 1 ? ` — lượt ${i + 1}/${totalChunks} (${chunk.length} mã)` : "..."}</div>`;
+          const params = new URLSearchParams({
+            t: TYPE_WIRE_MAP[activeTab] || activeTab,
+            c: chunk.join(","),
+            e: sessionEmail,
+            k: sessionPassword
+          });
+          if (cfg.useDateRange) {
+            if (dateFrom.value) params.set("f", dateFrom.value);
+            if (dateTo.value) params.set("g", dateTo.value);
+          }
+          try {
+            const res = await fetch(`${CONFIG.WEBHOOK_URL}?${params.toString()}`);
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const data = await res.json();
+            if (data.ok === false) throw new Error(data.message || "Lỗi không xác định");
+            const items = Array.isArray(data.items) ? data.items : Array.isArray(data) ? data : [];
+            allItems.push(...items);
+          } catch (err) {
+            failedChunks.push({
+              index: i + 1,
+              count: chunk.length,
+              message: err.message
+            });
+          }
+        }
+        el("#btn-search").disabled = false;
+        if (failedChunks.length === totalChunks) {
+          const msg = failedChunks[0].message;
+          resultsArea.innerHTML = `<div class="state error">⚠️ Không thể tải dữ liệu: ${msg}<br/><span style="font-size:14.5px;">Kiểm tra lại URL webhook trong cấu hình, hoặc n8n workflow có đang bật không.</span></div>`;
+          el("#notfound-area").innerHTML = "";
+          return;
+        }
+        renderResults(allItems, codes);
+        if (failedChunks.length) {
+          const failNote = failedChunks.map(f => `lượt ${f.index} (${f.count} mã, lỗi: ${f.message})`).join("; ");
+          resultsArea.innerHTML += `<div class="state error" style="margin-top:10px;">⚠️ ${failedChunks.length}/${totalChunks} lượt tra cứu bị lỗi, kết quả có thể chưa đầy đủ: ${failNote}. Thử tra cứu lại để bổ sung phần còn thiếu.</div>`;
+        }
+      }
+      el("#btn-search").onclick = doSearch;
+      el("#btn-clear").onclick = () => {
+        codesInput.value = "";
+        dateFrom.value = "";
+        dateTo.value = "";
+        fileUploadStatus.textContent = "Chọn nhiều file, tự dò cột mã đơn trong mọi sheet";
+        resultsArea.innerHTML = "";
+        el("#notfound-area").innerHTML = "";
+        lastFullItems = [];
+        lastResults = [];
+        lastRequestedCodes = [];
+        searchQuery = "";
+        currentPage = 1;
+        delete tabState[activeTab];
+        updateCount();
+      };
+      el("#btn-logout").onclick = () => {
+        if (!confirm("Đăng xuất khỏi tool tra cứu?")) return;
+        Object.keys(tabState).forEach(k => delete tabState[k]);
+        lastFullItems = [];
+        lastResults = [];
+        lastRequestedCodes = [];
+        searchQuery = "";
+        currentPage = 1;
+        codesInput.value = "";
+        dateFrom.value = "";
+        dateTo.value = "";
+        resultsArea.innerHTML = "";
+        el("#notfound-area").innerHTML = "";
+        doLogout();
+      };
+      el("#btn-toggle-notfound").onclick = () => {
+        el("#nf-drawer").classList.toggle("open");
+      };
+      el("#btn-close-notfound").onclick = () => {
+        el("#nf-drawer").classList.remove("open");
+      };
+      el("#btn-toggle-notfound").style.display = "none";
+
+      const CHK_CONFIG_KEY = "ka_lookup_chk_config_v1";
+      const tabChecker = el("#tab-checker");
+      const sidePanelNormal = el("#side-panel-normal");
+      const sidePanelChecker = el("#side-panel-checker");
+      const mainColNormal = el("#main-col-normal");
+      const mainColChecker = el("#main-col-checker");
+      const chkUserAgentInput = el("#chk-user-agent");
+      const chkTokenInput = el("#chk-token");
+      const chkCodesInput = el("#chk-codes-input");
+      const chkCodeCount = el("#chk-code-count");
+      const chkResultsArea = el("#chk-results-area");
+      const chkBtnRun = el("#chk-btn-run");
+
+      const chkConfigFields = el("#chk-config-fields");
+      const chkConfigSummary = el("#chk-config-summary");
+
+      function updateChkConfigView() {
+        const hasConfig = chkUserAgentInput.value.trim() && chkTokenInput.value.trim();
+        chkConfigFields.style.display = hasConfig ? "none" : "block";
+        chkConfigSummary.style.display = hasConfig ? "flex" : "none";
+      }
+
+      function loadChkConfig() {
+        try {
+          const raw = localStorage.getItem(CHK_CONFIG_KEY);
+          if (!raw) return;
+          const cfg = JSON.parse(raw);
+          chkUserAgentInput.value = cfg.userAgent || "";
+          chkTokenInput.value = cfg.token || "";
+        } catch (err) { }
+      }
+
+      function saveChkConfig() {
+        const cfg = {
+          userAgent: chkUserAgentInput.value.trim(),
+          token: chkTokenInput.value.trim()
+        };
+        try {
+          localStorage.setItem(CHK_CONFIG_KEY, JSON.stringify(cfg));
+        } catch (err) { }
+      }
+
+      loadChkConfig();
+      updateChkConfigView();
+
+      el("#chk-btn-save-config").onclick = () => {
+        saveChkConfig();
+        updateChkConfigView();
+      };
+
+      el("#chk-btn-edit-config").onclick = () => {
+        chkConfigFields.style.display = "block";
+        chkConfigSummary.style.display = "none";
+      };
+
+      function showCheckerView() {
+        sidePanelNormal.style.display = "none";
+        mainColNormal.style.display = "none";
+        sidePanelChecker.style.display = "block";
+        mainColChecker.style.display = "flex";
+        document.querySelectorAll(".tabs .tab").forEach(t => t.classList.remove("active"));
+        tabChecker.classList.add("active");
+        el("#btn-toggle-notfound").style.display = "none";
+      }
+
+      function showNormalView() {
+        sidePanelNormal.style.display = "block";
+        mainColNormal.style.display = "flex";
+        sidePanelChecker.style.display = "none";
+        mainColChecker.style.display = "none";
+        tabChecker.classList.remove("active");
+      }
+
+      tabChecker.onclick = () => {
+        flashTab(tabChecker);
+        showCheckerView();
+      };
+
+      const originalSwitchTab = switchTab;
+      switchTab = function (key) {
+        showNormalView();
+        originalSwitchTab(key);
+      };
+
+      /* ───────────────────── Chế độ trong tab Kiểm tra đơn ───────────────────── */
+      const CHK_MODE_KEY = "ka_lookup_chk_mode_v1";
+      const CHK_SOURCE_KEY = "ka_lookup_chk_source_v1";
+      let chkSource = "realtime";
+      let chkEffectiveMode = "tra-cuu";
+      try { chkSource = localStorage.getItem(CHK_SOURCE_KEY) === "bi" ? "bi" : "realtime"; } catch (err) { }
+      const chkModeSelect = el("#chk-mode-select");
+      const chkAppTitle = el("#chk-app-title");
+      const chkModePanels = {
+        "tra-cuu": el("#chk-mode-panel-tracuu"),
+        "tra-cuu-v2": el("#chk-mode-panel-v2"),
+        "pod": el("#chk-mode-panel-pod"),
+        "calllog": el("#chk-mode-panel-calllog")
+      };
+      const chkResultPanels = {
+        "tra-cuu": chkResultsArea,
+        "tra-cuu-v2": el("#dv2-results-area"),
+        "pod": el("#pod-results-area"),
+        "calllog": el("#calllog-results-area")
+      };
+      const CHK_MODE_TITLES = {
+        "tra-cuu": "Kiểm tra đơn",
+        "tra-cuu-v2": "Tra cứu BI",
+        "pod": "POD",
+        "calllog": "CallLog"
+      };
+
+      function setChkMode(mode) {
+        if (mode === "tra-cuu-v2") chkSource = "bi";
+        if (!chkModePanels[mode]) mode = "tra-cuu";
+        if (mode === "tra-cuu" || mode === "tra-cuu-v2") mode = chkSource === "bi" ? "tra-cuu-v2" : "tra-cuu";
+        const isLookup = mode === "tra-cuu" || mode === "tra-cuu-v2";
+        el("#chk-source-wrap").style.display = isLookup ? "block" : "none";
+        document.querySelectorAll('input[name="chk-source"]').forEach(r => { r.checked = r.value === chkSource; });
+        try { localStorage.setItem(CHK_SOURCE_KEY, chkSource); } catch (err) { }
+        Object.keys(chkModePanels).forEach(k => {
+          chkModePanels[k].style.display = k === mode ? "block" : "none";
+          chkResultPanels[k].style.display = k === mode ? (k === "tra-cuu" || k === "tra-cuu-v2" ? "flex" : "block") : "none";
+        });
+        chkModeSelect.value = isLookup ? "tra-cuu" : mode;
+        chkAppTitle.textContent = CHK_MODE_TITLES[mode] || "Kiểm tra đơn";
+        try { localStorage.setItem(CHK_MODE_KEY, mode); } catch (err) { }
+        chkEffectiveMode = mode;
+        if (typeof applyChkModeChrome === "function") applyChkModeChrome(mode);
+      }
+
+      chkModeSelect.addEventListener("change", () => setChkMode(chkModeSelect.value));
+      document.querySelectorAll('input[name="chk-source"]').forEach(r => {
+        r.addEventListener("change", () => {
+          if (!r.checked) return;
+          chkSource = r.value === "bi" ? "bi" : "realtime";
+          setChkMode("tra-cuu");
+        });
+      });
+
+      (function initChkMode() {
+        let saved = "tra-cuu";
+        try { saved = localStorage.getItem(CHK_MODE_KEY) || "tra-cuu"; } catch (err) { }
+        setChkMode(saved);
+      })();
+
+      const DV2_ENDPOINT = "/api/v2x4";
+      const DV2_CHUNK = 500;
+      const DV2_PARALLEL = 2;
+      const DV2_HISTORY_KEY = "ka_lookup_dv2_history_v1";
+      const DV2_HISTORY_MAX = 5;
+      const DV2_COPY_NUMBER = new Set(["client_id", "order_value", "cod_amount", "insurance_value"]);
+      const DV2_ID_NAME_RE = /^(\d+) - \S/;
+      const DV2_DATETIME_RE = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
+      const DV2_MONEY = new Set(["order_value", "cod_amount", "insurance_value"]);
+      const DV2_NUMBER = new Set(["weight", "num_pick", "num_deliver", "num_return"]);
+
+      const dv2CodesInput = el("#dv2-codes-input");
+      const dv2CodeCount = el("#dv2-code-count");
+      const dv2BtnRun = el("#dv2-btn-run");
+      const dv2ResultsArea = el("#dv2-results-area");
+      let dv2State = { items: [], columns: [], notFound: [], invalid: [], requested: 0, ms: 0, duplicates: 0, errors: [] };
+      let dv2Search = "";
+      let dv2SortField = null;
+      let dv2SortDir = 1;
+      let dv2StatusFilter = new Set();
+
+      function dv2Esc(v) {
+        return String(v ?? "").replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
+      }
+
+      function dv2Display(r, f) {
+        const v = r[f];
+        if (v === undefined || v === null || v === "") return "";
+        if (DV2_MONEY.has(f)) return formatMoney(v);
+        if (DV2_NUMBER.has(f)) return Number(v).toLocaleString("vi-VN");
+        if (dv2State.dateDisplay !== "datetime" && typeof v === "string" && DV2_DATETIME_RE.test(v)) return v.slice(0, 10);
+        return v;
+      }
+
+      function dv2RowClass(status) {
+        const s = String(status || "").toLowerCase();
+        if (s.includes("hủy")) return "chk-status-cancel";
+        if (s.includes("thất lạc") || s.includes("hư hỏng")) return "chk-status-lost";
+        if (s.includes("hoàn hàng thành công") || s.includes("vô thừa nhận")) return "chk-status-return";
+        if (s.includes("giao hàng thành công")) return "chk-status-delivered";
+        return "";
+      }
+
+      function dv2Columns() {
+        return dv2State.columns.length ? dv2State.columns : Object.keys(dv2State.items[0] || {});
+      }
+
+      function dv2ExportColumns() {
+        return Array.isArray(dv2State.exportColumns) ? dv2State.exportColumns : dv2Columns();
+      }
+
+      function dv2UpdateCount() {
+        const n = parseCodes(dv2CodesInput.value).length;
+        dv2CodeCount.textContent = n ? `${n} mã` : "";
+      }
+      dv2CodesInput.addEventListener("input", dv2UpdateCount);
+
+      function dv2LoadHistory() {
+        try {
+          const raw = localStorage.getItem(DV2_HISTORY_KEY);
+          return raw ? JSON.parse(raw) : [];
+        } catch (err) {
+          return [];
+        }
+      }
+
+      function dv2SaveHistory() {
+        const h = dv2LoadHistory();
+        const entry = { time: new Date().toLocaleString("sv-SE", { timeZone: "Asia/Ho_Chi_Minh" }), requested: dv2State.requested, found: dv2State.items.length, codes: dv2State.allCodes || [] };
+        const snapshot = JSON.stringify(dv2State);
+        if (snapshot.length < 1500000) entry.state = dv2State;
+        h.unshift(entry);
+        let trimmed = h.slice(0, DV2_HISTORY_MAX);
+        for (let i = trimmed.length - 1; i >= 0; i--) {
+          try {
+            localStorage.setItem(DV2_HISTORY_KEY, JSON.stringify(trimmed));
+            break;
+          } catch (err) {
+            trimmed = trimmed.map((x, idx) => idx >= i ? { ...x, state: undefined } : x);
+          }
+        }
+        dv2RenderHistory();
+      }
+
+      function dv2RenderHistory() {
+        const listEl = el("#dv2-history-list");
+        const h = dv2LoadHistory();
+        if (!h.length) {
+          listEl.innerHTML = `<div class="chk-history-empty">Chưa có lịch sử</div>`;
+          return;
+        }
+        listEl.innerHTML = h.map((x, i) => `
+          <div class="chk-history-item" data-dv2-index="${i}" title="${x.state ? "Bấm để xem lại kết quả đã lưu" : "Kết quả lớn không lưu được, bấm để nạp lại danh sách mã"}">
+            <div class="h-time">${dv2Esc(x.time)}</div>
+            <div class="h-count">${x.found}/${x.requested} mã${x.state ? "" : " · cần tra lại"}</div>
+          </div>`).join("");
+      }
+
+      el("#dv2-history-list").addEventListener("click", e => {
+        const item = e.target.closest(".chk-history-item");
+        if (!item) return;
+        const x = dv2LoadHistory()[Number(item.dataset.dv2Index)];
+        if (!x) return;
+        document.querySelectorAll("#dv2-history-list .chk-history-item").forEach(n => n.classList.remove("active"));
+        item.classList.add("active");
+        if (x.state) {
+          dv2State = x.state;
+          dv2Search = "";
+          dv2StatusFilter = new Set();
+          dv2RenderResults();
+        } else {
+          dv2CodesInput.value = (x.codes || []).join("\n");
+          dv2UpdateCount();
+        }
+      });
+
+      async function dv2FetchChunks(codes, next, label) {
+        const chunks = [];
+        for (let i = 0; i < codes.length; i += DV2_CHUNK) chunks.push(codes.slice(i, i + DV2_CHUNK));
+        const t0 = Date.now();
+        const results = new Array(chunks.length);
+        let done = 0;
+        let foundSoFar = next.items.length;
+        const paint = () => {
+          const sec = Math.round((Date.now() - t0) / 1000);
+          dv2ResultsArea.innerHTML = `<div class="state loading"><span class="spinner"></span>${label}${chunks.length > 1 ? ` — xong ${done}/${chunks.length} lượt (${codes.length} mã, chạy ${Math.min(DV2_PARALLEL, chunks.length)} lượt cùng lúc) · đã tìm thấy ${foundSoFar} · ${sec}s` : "..."}</div>`;
+        };
+        paint();
+        const ticker = setInterval(paint, 1000);
+        let cursor = 0;
+        const worker = async () => {
+          while (cursor < chunks.length) {
+            const i = cursor++;
+            try {
+              const res = await fetch(DV2_ENDPOINT, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ c: chunks[i], e: sessionEmail, k: sessionPassword })
+              });
+              const data = await res.json().catch(() => ({ ok: false, message: `HTTP ${res.status}` }));
+              if (data.ok !== true) throw new Error(data.message || `HTTP ${res.status}`);
+              results[i] = { data };
+              foundSoFar += (data.items || []).length;
+            } catch (err) {
+              results[i] = { error: err.message };
+            }
+            done++;
+            paint();
+          }
+        };
+        await Promise.all(Array.from({ length: Math.min(DV2_PARALLEL, chunks.length) }, worker));
+        clearInterval(ticker);
+        results.forEach((r, i) => {
+          if (r && r.data) {
+            const data = r.data;
+            next.items.push(...(data.items || []));
+            if (!next.columns.length && Array.isArray(data.columns)) next.columns = data.columns;
+            if (!next.exportColumns && Array.isArray(data.exportColumns)) next.exportColumns = data.exportColumns;
+            if (!next.dateDisplay && data.dateDisplay) next.dateDisplay = data.dateDisplay;
+            if (data.queryMode) next.queryMode = next.queryMode && next.queryMode !== data.queryMode ? "card" : data.queryMode;
+            if (next.moneyHighlight === undefined && data.moneyHighlight !== undefined) next.moneyHighlight = data.moneyHighlight;
+            if (!next.missingColumns.length && Array.isArray(data.missingColumns)) next.missingColumns = data.missingColumns;
+            next.notFound.push(...(data.notFound || []));
+            next.invalid.push(...(data.invalid || []));
+            next.duplicates += Number(data.duplicates || 0);
+          } else {
+            next.errors.push({ index: next.errors.length + 1, count: chunks[i].length, message: (r && r.error) || "Không rõ lỗi", codes: chunks[i] });
+          }
+        });
+        next.ms += Date.now() - t0;
+      }
+
+      async function dv2Run() {
+        const codes = parseCodes(dv2CodesInput.value).map(c => c.toUpperCase());
+        if (!codes.length) {
+          dv2ResultsArea.innerHTML = `<div class="empty"><div class="big">✏️</div>Nhập ít nhất một mã đơn để tra cứu.</div>`;
+          return;
+        }
+        dv2BtnRun.disabled = true;
+        const next = { items: [], columns: [], missingColumns: [], notFound: [], invalid: [], requested: codes.length, ms: 0, duplicates: 0, errors: [], allCodes: codes };
+        await dv2FetchChunks(codes, next, "Đang tra cứu");
+        dv2BtnRun.disabled = false;
+        dv2State = next;
+        dv2Search = "";
+        dv2StatusFilter = new Set();
+        dv2SortField = null;
+        dv2RenderResults();
+        if (next.items.length) dv2SaveHistory();
+      }
+
+      async function dv2RetryFailed() {
+        const s = dv2State;
+        const codes = (s.errors || []).flatMap(e => e.codes || []);
+        if (!codes.length) return;
+        dv2BtnRun.disabled = true;
+        s.errors = [];
+        s.allCodes = s.allCodes || codes;
+        await dv2FetchChunks(codes, s, "Đang tra lại các lượt lỗi");
+        const order = new Map((s.allCodes || []).map((c, i) => [c, i]));
+        const seen = new Set();
+        s.items = s.items.filter(r => { const k = String(r.order_code || "").toUpperCase(); if (seen.has(k)) return false; seen.add(k); return true; })
+          .sort((a, b) => (order.get(String(a.order_code).toUpperCase()) ?? 1e9) - (order.get(String(b.order_code).toUpperCase()) ?? 1e9));
+        s.notFound = [...new Set(s.notFound)].filter(c => !seen.has(c));
+        dv2BtnRun.disabled = false;
+        dv2RenderResults();
+        if (s.items.length) dv2SaveHistory();
+      }
+
+      dv2BtnRun.onclick = dv2Run;
+      el("#dv2-btn-clear").onclick = () => {
+        dv2CodesInput.value = "";
+        dv2UpdateCount();
+        dv2State = { items: [], columns: [], notFound: [], invalid: [], requested: 0, ms: 0, duplicates: 0, errors: [] };
+        dv2ResultsArea.innerHTML = "";
+      };
+
+      function dv2FilteredRows() {
+        const tokens = dv2Search.split(/[\s,;]+/).map(s => s.trim().toUpperCase()).filter(Boolean);
+        let rows = tokens.length ? dv2State.items.filter(r => tokens.some(t => String(r.order_code || "").toUpperCase().includes(t))) : dv2State.items;
+        if (dv2StatusFilter.size) rows = rows.filter(r => dv2StatusFilter.has(r.status || "Không rõ"));
+        if (dv2SortField) {
+          const f = dv2SortField;
+          rows = [...rows].sort((a, b) => {
+            if (DV2_MONEY.has(f) || DV2_NUMBER.has(f)) return ((Number(a[f]) || 0) - (Number(b[f]) || 0)) * dv2SortDir;
+            return String(a[f] ?? "").localeCompare(String(b[f] ?? ""), "vi", { numeric: true, sensitivity: "base" }) * dv2SortDir;
+          });
+        }
+        return { rows, tokens };
+      }
+
+      function dv2RenderResults() {
+        const s = dv2State;
+        if (!s.items.length && !s.notFound.length && !s.errors.length) {
+          dv2ResultsArea.innerHTML = `<div class="empty"><div class="big">🗄️</div>Chưa có kết quả.</div>`;
+          return;
+        }
+        const cols = dv2Columns();
+        const { rows, tokens } = dv2FilteredRows();
+        const statusCount = {};
+        s.items.forEach(r => { const k = r.status || "Không rõ"; statusCount[k] = (statusCount[k] || 0) + 1; });
+        const statusChips = Object.entries(statusCount).sort((a, b) => b[1] - a[1]).map(([k, v]) => `<span class="stat-badge dv2-chip ${dv2RowClass(k)}${dv2StatusFilter.has(k) ? " active" : ""}" data-dv2-status="${dv2Esc(k)}" title="Bấm để lọc · Ctrl + bấm để chọn thêm trạng thái · bấm lại để bỏ lọc">${dv2Esc(k)}: ${v}</span>`).join(" ");
+        const body = rows.map(r => `<tr class="${dv2RowClass(r.status)}">${cols.map(f => {
+          if (f === "order_code") {
+            const url = `https://tracuunoibo.ghn.vn/internal?order_code=${encodeURIComponent(r.order_code || "")}`;
+            return `<td class="code-cell"><a href="${url}" target="_blank" rel="noopener" class="ticket-link">${dv2Esc(r.order_code)}</a></td>`;
+          }
+          const raw = r[f];
+          const shown = dv2Display(r, f);
+          const tip = typeof raw === "string" && shown !== raw ? ` title="${dv2Esc(raw)}"` : "";
+          const limit = Number(dv2State.moneyHighlight || 0);
+          const high = limit > 0 && DV2_MONEY.has(f) && Number(raw) >= limit;
+          const classes = [];
+          if (DV2_MONEY.has(f) || DV2_NUMBER.has(f)) classes.push("amount-cell");
+          if (high) classes.push("dv2-money-high");
+          let copyId = "";
+          if (DV2_COPY_NUMBER.has(f) && raw !== "" && raw !== null && raw !== undefined) copyId = String(raw);
+          else if (typeof raw === "string") { const m = raw.match(DV2_ID_NAME_RE); if (m) copyId = m[1]; }
+          if (copyId) classes.push("wh-copyable");
+          const clsAttr = classes.length ? ` class="${classes.join(" ")}"` : "";
+          const copyAttr = copyId ? ` data-copy-id="${dv2Esc(copyId)}"` : "";
+          const title = copyId ? ` title="${dv2Esc((DV2_COPY_NUMBER.has(f) ? "Bấm để copy số: " : "Bấm để copy ID: ") + copyId + (tip ? " · " + raw : ""))}"` : tip;
+          return `<td${clsAttr}${copyAttr}${title}>${dv2Esc(shown)}</td>`;
+        }).join("")}</tr>`).join("");
+        const nfHtml = s.notFound.length ? `
+          <div class="state error" style="margin-top:10px;">
+            ⚠️ Không tìm thấy ${s.notFound.length} mã (chỉ có đơn tạo từ đầu tháng ${dv2WindowStart()} trở lại đây, thuộc nhóm client trong nguồn dữ liệu):
+            <div style="margin-top:6px;word-break:break-all;">${s.notFound.map(dv2Esc).join(", ")}</div>
+            <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">
+              <button class="btn-ghost" id="dv2-btn-copy-nf">📋 Copy mã không tìm thấy</button>
+              <button class="btn-ghost" id="dv2-btn-nf-realtime">↪ Kiểm tra Realtime các mã này</button>
+            </div>
+          </div>` : "";
+        const errCodes = s.errors.reduce((n, e) => n + (e.count || 0), 0);
+        const errHtml = s.errors.length ? `<div class="state error" style="margin-top:10px;">⚠️ ${s.errors.length} lượt bị lỗi (${errCodes} mã chưa tra được), kết quả có thể chưa đầy đủ: ${s.errors.map(e => `lượt ${e.index} (${e.count} mã): ${dv2Esc(e.message)}`).join("; ")}
+            <div style="margin-top:8px;"><button class="btn-ghost" id="dv2-btn-retry">🔁 Tra lại ${errCodes} mã bị lỗi</button></div></div>` : "";
+        const invHtml = s.invalid.length ? `<div style="margin-top:8px;font-size:13.5px;color:var(--muted);">Bỏ qua ${s.invalid.length} mã sai định dạng: ${s.invalid.map(dv2Esc).join(", ")}</div>` : "";
+        const noExp = dv2Columns().filter(c => !dv2ExportColumns().includes(c));
+        const neHtml = noExp.length ? `<div style="margin-top:8px;font-size:13.5px;color:var(--muted);">🔒 Chỉ xem, không có trong file tải và Copy: ${noExp.map(dv2Esc).join(", ")}</div>` : "";
+        const mcHtml = (s.missingColumns || []).length ? `<div style="margin-top:8px;font-size:13.5px;color:var(--muted);">ℹ️ Cột khai báo nhưng card không có: ${s.missingColumns.map(dv2Esc).join(", ")}</div>` : "";
+        const dupHtml = s.duplicates ? `<div style="margin-top:8px;font-size:13.5px;color:var(--muted);">ℹ️ Nguồn dữ liệu trả ${s.duplicates} dòng trùng mã đơn, đã giữ dòng đầu tiên.</div>` : "";
+        dv2ResultsArea.innerHTML = `
+          <div class="toolbar dv2-toolbar">
+            <span class="stats">
+              <span class="stat-badge total">Tìm thấy: ${s.items.length}/${s.requested}</span>
+              <span class="stat-badge">⏱ ${(s.ms / 1000).toFixed(1)}s</span>
+              ${s.queryMode ? `<span class="stat-badge dv2-mode" title="Cách truy vấn nguồn dữ liệu">${s.queryMode === "inlist" ? "⚡ IN-list" : "🐢 card"}</span>` : ""}
+              ${statusChips}
+            </span>
+            <div class="toolbar-actions"${s.items.length ? "" : ' style="display:none;"'}>
+              <button class="btn-ghost" id="dv2-btn-copy">Copy kết quả</button>
+              <button class="btn-ghost" id="dv2-btn-realtime" title="Đưa các mã đang xem sang nguồn Realtime">↪ Kiểm tra Realtime</button>
+              <div class="dl-wrap">
+                <button class="btn-ghost" id="dv2-btn-dl-toggle">⬇ Tải ▾</button>
+                <div class="dl-menu" id="dv2-dl-menu">
+                  <div class="dl-item" data-fmt="xlsx">Excel (.xlsx)</div>
+                  <div class="dl-item" data-fmt="csv">CSV (.csv)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="result-search-row">
+            <input type="text" id="dv2-search" class="result-search-input" placeholder="Lọc mã đơn trong kết quả này — dán được nhiều mã, cách nhau bằng dấu phẩy/khoảng trắng" value="${dv2Esc(dv2Search)}" />
+            <span class="result-search-count">${tokens.length || dv2StatusFilter.size ? `${rows.length}/${s.items.length} dòng khớp` : `${s.items.length} dòng`}</span>
+          </div>
+          ${s.items.length ? `<div class="results-table-wrap">
+            <table class="result-table">
+              <thead><tr>${cols.map(f => {
+                const arrow = dv2SortField === f ? (dv2SortDir === 1 ? " ▲" : " ▼") : " ⇅";
+                const cls = DV2_MONEY.has(f) || DV2_NUMBER.has(f) ? "align-right chk-sortable-th" : "chk-sortable-th";
+                return `<th class="${cls}" data-dv2-sort="${f}" style="text-transform:none;">${dv2Esc(f)}<span class="chk-sort-arrow">${arrow}</span></th>`;
+              }).join("")}</tr></thead>
+              <tbody>${body}</tbody>
+            </table>
+          </div>` : ""}
+          ${nfHtml}${errHtml}${invHtml}${dupHtml}${mcHtml}${neHtml}`;
+        dv2BindResultEvents();
+      }
+
+      function dv2WindowStart() {
+        const d = new Date();
+        const m = new Date(d.getFullYear(), d.getMonth() - 5, 1);
+        return `${String(m.getMonth() + 1).padStart(2, "0")}/${m.getFullYear()}`;
+      }
+
+      function dv2Aoa() {
+        const cols = dv2ExportColumns();
+        return [cols, ...dv2FilteredRows().rows.map(r => cols.map(f => {
+          const v = r[f];
+          if (v === undefined || v === null) return "";
+          if (v === "") return "";
+          return DV2_MONEY.has(f) || DV2_NUMBER.has(f) ? Number(v) : v;
+        }))];
+      }
+
+      function dv2SendToRealtime(codes) {
+        if (!codes.length) return;
+        chkCodesInput.value = codes.join("\n");
+        chkCodesInput.dispatchEvent(new Event("input"));
+        chkSource = "realtime";
+        setChkMode("tra-cuu");
+      }
+
+      function dv2BindResultEvents() {
+        document.querySelectorAll("#dv2-results-area .dv2-chip").forEach(chip => {
+          chip.onclick = e => {
+            const k = chip.dataset.dv2Status;
+            if (e.ctrlKey || e.metaKey) {
+              if (dv2StatusFilter.has(k)) dv2StatusFilter.delete(k); else dv2StatusFilter.add(k);
+            } else if (dv2StatusFilter.size === 1 && dv2StatusFilter.has(k)) {
+              dv2StatusFilter = new Set();
+            } else {
+              dv2StatusFilter = new Set([k]);
+            }
+            dv2RenderResults();
+          };
+        });
+        const search = el("#dv2-search");
+        if (search) {
+          search.addEventListener("input", () => {
+            dv2Search = search.value;
+            const pos = search.selectionStart;
+            dv2RenderResults();
+            const again = el("#dv2-search");
+            again.focus();
+            again.setSelectionRange(pos, pos);
+          });
+        }
+        document.querySelectorAll("#dv2-results-area th[data-dv2-sort]").forEach(th => {
+          th.onclick = () => {
+            const f = th.dataset.dv2Sort;
+            if (dv2SortField === f) dv2SortDir = -dv2SortDir; else { dv2SortField = f; dv2SortDir = 1; }
+            dv2RenderResults();
+          };
+        });
+        const copyBtn = el("#dv2-btn-copy");
+        if (copyBtn) copyBtn.onclick = async () => {
+          const text = dv2Aoa().map(r => r.join("\t")).join("\n");
+          try { await navigator.clipboard.writeText(text); copyBtn.textContent = "✓ Đã copy"; } catch (err) { copyBtn.textContent = "Không copy được"; }
+          setTimeout(() => { copyBtn.textContent = "Copy kết quả"; }, 1500);
+        };
+        const rtBtn = el("#dv2-btn-realtime");
+        if (rtBtn) rtBtn.onclick = () => dv2SendToRealtime(dv2FilteredRows().rows.map(r => r.order_code));
+        const nfCopy = el("#dv2-btn-copy-nf");
+        if (nfCopy) nfCopy.onclick = async () => {
+          try { await navigator.clipboard.writeText(dv2State.notFound.join("\n")); nfCopy.textContent = "✓ Đã copy"; } catch (err) { }
+        };
+        const retryBtn = el("#dv2-btn-retry");
+        if (retryBtn) retryBtn.onclick = dv2RetryFailed;
+        const nfRt = el("#dv2-btn-nf-realtime");
+        if (nfRt) nfRt.onclick = () => dv2SendToRealtime(dv2State.notFound);
+        const dlToggle = el("#dv2-btn-dl-toggle");
+        if (dlToggle) dlToggle.onclick = e => {
+          e.stopPropagation();
+          el("#dv2-dl-menu").classList.toggle("open");
+        };
+        document.querySelectorAll("#dv2-dl-menu .dl-item").forEach(item => {
+          item.onclick = () => {
+            const ws = XLSX.utils.aoa_to_sheet(dv2Aoa());
+            const stamp = new Date().toLocaleString("sv-SE", { timeZone: "Asia/Ho_Chi_Minh" }).replace(/[-: ]/g, "");
+            if (item.dataset.fmt === "csv") {
+              const blob = new Blob(["\ufeff" + XLSX.utils.sheet_to_csv(ws)], { type: "text/csv;charset=utf-8" });
+              const a = document.createElement("a");
+              a.href = URL.createObjectURL(blob);
+              a.download = `tracuu_v2_${stamp}.csv`;
+              a.click();
+              setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+            } else {
+              const wb = XLSX.utils.book_new();
+              XLSX.utils.book_append_sheet(wb, ws, "TraCuuV2");
+              XLSX.writeFile(wb, `tracuu_v2_${stamp}.xlsx`);
+            }
+            el("#dv2-dl-menu").classList.remove("open");
+          };
+        });
+      }
+
+      function applyChkModeChrome(mode) {
+        const isV2 = mode === "tra-cuu-v2";
+        const hint = el("#chk-hint-note");
+        if (hint) hint.style.display = isV2 ? "none" : "";
+        const divider = el("#side-panel-checker .divider-or");
+        if (divider) divider.style.display = isV2 ? "none" : "";
+        if (isV2) {
+          chkConfigFields.style.display = "none";
+          chkConfigSummary.style.display = "none";
+        } else {
+          updateChkConfigView();
+        }
+      }
+
+      dv2ResultsArea.addEventListener("click", e => {
+        const cell = e.target.closest(".wh-copyable");
+        if (!cell || !cell.dataset.copyId) return;
+        const id = cell.dataset.copyId;
+        navigator.clipboard.writeText(id).then(() => {
+          if (typeof chkShowToast === "function") chkShowToast("Đã copy: " + id);
+        }).catch(() => { });
+      });
+
+      dv2RenderHistory();
+      applyChkModeChrome(chkEffectiveMode);
+
+      /* ───────────────────── Tab POD (Demo B — 3 cột Pick/Deliver/Return) ───────────────────── */
+      const podCodesInput = el("#pod-codes-input");
+      const podCodeCount = el("#pod-code-count");
+      const podBtnRun = el("#pod-btn-run");
+      const podBtnClear = el("#pod-btn-clear");
+      const podResultsArea = el("#pod-results-area");
+      const podLightbox = el("#pod-lightbox");
+      const podLbImg = el("#pod-lb-img");
+      const podLbCaption = el("#pod-lb-caption");
+
+      const POD_THEME_KEY = "ka_lookup_pod_theme_v1";
+      const POD_PHASE_DEFS = [
+        { key: "PICK", label: "Lấy hàng", cls: "pod-phase-col--pick" },
+        { key: "DELIVER", label: "Giao hàng", cls: "pod-phase-col--deliver" },
+        { key: "RETURN", label: "Trả hàng", cls: "pod-phase-col--return" }
+      ];
+      const GHN_INTERNAL_LOOKUP_URL = "https://tracuunoibo.ghn.vn/internal";
+
+      let podResults = [];
+      let podFlatUrls = [];
+      let podLbIdx = 0;
+      let podSearchQuery = "";
+      let podTheme = "light";
+
+      try { podTheme = localStorage.getItem(POD_THEME_KEY) || "light"; } catch (err) { }
+
+      function parsePodCodes(raw) {
+        return [...new Set(raw.split(/[\s,;]+/).map(s => s.trim().toUpperCase()).filter(Boolean))];
+      }
+
+      function bucketPodUrls(urls) {
+        const buckets = { PICK: [], DELIVER: [], RETURN: [], OTHER: [] };
+        (urls || []).forEach(item => {
+          const key = buckets[item.type] ? item.type : "OTHER";
+          buckets[key].push(item);
+        });
+        return buckets;
+      }
+
+      function getFilteredPodResults() {
+        const terms = podSearchQuery.split(/[,\s]+/).map(t => t.trim().toLowerCase()).filter(Boolean);
+        if (!terms.length) return podResults;
+        return podResults.filter(r => {
+          const code = (r.order_code || "").toLowerCase();
+          return terms.some(t => code.includes(t));
+        });
+      }
+
+      podCodesInput.addEventListener("input", () => {
+        const n = parsePodCodes(podCodesInput.value).length;
+        podCodeCount.textContent = n > 0 ? n + " mã đơn" : "";
+      });
+
+      podBtnClear.onclick = () => {
+        podCodesInput.value = "";
+        podCodeCount.textContent = "";
+        podResultsArea.innerHTML = "";
+        podResults = [];
+        podFlatUrls = [];
+        podSearchQuery = "";
+      };
+
+      function openPodLightbox(idx) {
+        if (!podFlatUrls.length) return;
+        podLbIdx = ((idx % podFlatUrls.length) + podFlatUrls.length) % podFlatUrls.length;
+        const item = podFlatUrls[podLbIdx];
+        podLbImg.src = item.url;
+        podLbCaption.textContent = `${podLbIdx + 1} / ${podFlatUrls.length} — ${item.orderCode} (${item.type})`;
+        podLightbox.classList.add("show");
+      }
+
+      function closePodLightbox() {
+        podLightbox.classList.remove("show");
+        podLbImg.src = "";
+      }
+
+      el("#pod-lb-close").onclick = closePodLightbox;
+      el("#pod-lb-prev").onclick = () => openPodLightbox(podLbIdx - 1);
+      el("#pod-lb-next").onclick = () => openPodLightbox(podLbIdx + 1);
+      podLightbox.addEventListener("click", e => {
+        if (e.target === podLightbox) closePodLightbox();
+      });
+      document.addEventListener("keydown", e => {
+        if (!podLightbox.classList.contains("show")) return;
+        if (e.key === "Escape") closePodLightbox();
+        if (e.key === "ArrowLeft") openPodLightbox(podLbIdx - 1);
+        if (e.key === "ArrowRight") openPodLightbox(podLbIdx + 1);
+      });
+
+      function makePodThumb(item, orderCode) {
+        const flatIdx = podFlatUrls.length;
+        podFlatUrls.push({ url: item.url, type: item.type, orderCode });
+        const thumb = document.createElement("div");
+        thumb.className = "pod-thumb";
+        const img = document.createElement("img");
+        img.loading = "lazy";
+        img.src = item.url;
+        img.alt = `${orderCode} - ${item.type}`;
+        img.addEventListener("error", () => {
+          thumb.classList.add("pod-thumb-error");
+          thumb.innerHTML = "<span>Không tải được ảnh<br>(bấm mở link gốc)</span>";
+          thumb.onclick = () => window.open(item.url, "_blank");
+        });
+        thumb.appendChild(img);
+        thumb.addEventListener("click", () => {
+          if (!thumb.classList.contains("pod-thumb-error")) openPodLightbox(flatIdx);
+        });
+        return thumb;
+      }
+
+      function sanitizePodFileName(s) {
+        return String(s || "unknown").replace(/[\\/:*?"<>|]/g, "_").trim().slice(0, 80) || "unknown";
+      }
+
+      function guessPodExt(mime, url) {
+        const map = { "image/jpeg": ".jpg", "image/png": ".png", "image/webp": ".webp", "image/gif": ".gif", "image/bmp": ".bmp" };
+        if (map[mime]) return map[mime];
+        const m = String(url || "").match(/\.(jpg|jpeg|png|webp|gif|bmp)(?:$|\?)/i);
+        return m ? "." + m[1].toLowerCase() : ".jpg";
+      }
+
+      function podToProxyUrl(url) {
+        const stripped = String(url || "").replace(/^https?:\/\//i, "");
+        return "https://images.weserv.nl/?url=" + encodeURIComponent(stripped);
+      }
+
+      async function fetchPodBlobWithRetry(url, retries) {
+        for (let attempt = 0; attempt <= retries; attempt++) {
+          try {
+            const resp = await fetch(url, { mode: "cors" });
+            if (!resp.ok) throw new Error("bad status " + resp.status);
+            return await resp.blob();
+          } catch (e) {
+            if (attempt === retries) throw e;
+          }
+        }
+      }
+
+      async function fetchPodImageBlobForZip(url) {
+        try {
+          return await fetchPodBlobWithRetry(url, 0);
+        } catch (e) {
+          return await fetchPodBlobWithRetry(podToProxyUrl(url), 1);
+        }
+      }
+
+      function applyPodTheme(root) {
+        root.classList.toggle("pod-theme-dark", podTheme === "dark");
+      }
+
+      function renderPodResults() {
+        podFlatUrls = [];
+        podResultsArea.innerHTML = "";
+        if (!podResults.length) return;
+
+        const root = document.createElement("div");
+        root.id = "pod-root";
+        applyPodTheme(root);
+
+        let totalImgs = 0, pickCount = 0, deliverCount = 0, returnCount = 0, errorCount = 0;
+        podResults.forEach(r => {
+          if (r.ok) {
+            totalImgs += (r.urls || []).length;
+            pickCount += r.pick_count || 0;
+            deliverCount += r.deliver_count || 0;
+            returnCount += r.return_count || 0;
+          } else {
+            errorCount++;
+          }
+        });
+
+        const toolbar = document.createElement("div");
+        toolbar.className = "pod-toolbar";
+        const themeBtn = document.createElement("button");
+        themeBtn.type = "button";
+        themeBtn.className = "pod-theme-toggle";
+        themeBtn.textContent = podTheme === "dark" ? "☀️ Chế độ sáng" : "🌙 Chế độ tối";
+        themeBtn.onclick = () => {
+          podTheme = podTheme === "dark" ? "light" : "dark";
+          try { localStorage.setItem(POD_THEME_KEY, podTheme); } catch (err) { }
+          renderPodResults();
+        };
+        toolbar.appendChild(themeBtn);
+        root.appendChild(toolbar);
+
+        const statRow = document.createElement("div");
+        statRow.className = "pod-stat-row";
+        const stats = [
+          [podResults.length, "Mã đơn", "pod-stat-accent"],
+          [totalImgs, "Tổng ảnh", ""],
+          [pickCount, "Lấy hàng", "pod-stat-pick"],
+          [deliverCount, "Giao hàng", "pod-stat-ok"],
+          [returnCount, "Trả hàng", "pod-stat-bad"]
+        ];
+        if (errorCount > 0) stats.push([errorCount, "Lỗi", "pod-stat-bad"]);
+        stats.forEach(([num, lbl, cls]) => {
+          const s = document.createElement("div");
+          s.className = "pod-stat" + (cls ? " " + cls : "");
+          s.innerHTML = `<span class="pod-stat-num">${num}</span><span class="pod-stat-lbl">${lbl}</span>`;
+          statRow.appendChild(s);
+        });
+        root.appendChild(statRow);
+
+        const filterBar = document.createElement("div");
+        filterBar.className = "pod-filter-bar";
+        const searchInput = document.createElement("input");
+        searchInput.type = "text";
+        searchInput.placeholder = "Tìm nhanh theo mã đơn — nhiều mã cách nhau bằng dấu phẩy hoặc khoảng trắng...";
+        searchInput.value = podSearchQuery;
+        searchInput.addEventListener("input", () => {
+          const cursorPos = searchInput.selectionStart;
+          podSearchQuery = searchInput.value;
+          renderPodResults();
+          const newInput = el('#pod-root .pod-filter-bar input[type="text"]');
+          if (newInput) {
+            newInput.focus();
+            newInput.setSelectionRange(cursorPos, cursorPos);
+          }
+        });
+        filterBar.appendChild(searchInput);
+        const filterCount = document.createElement("span");
+        filterCount.className = "pod-filter-count";
+        filterBar.appendChild(filterCount);
+        root.appendChild(filterBar);
+
+        const actionsRow = document.createElement("div");
+        actionsRow.className = "pod-actions-row";
+        const zipBtn = document.createElement("button");
+        zipBtn.type = "button";
+        zipBtn.className = "pod-zip-btn";
+        zipBtn.textContent = "Tải tất cả ảnh (zip)";
+        zipBtn.onclick = async () => {
+          const rows = getFilteredPodResults().filter(r => r.ok && (r.urls || []).length);
+          if (!rows.length) return;
+          const original = zipBtn.textContent;
+          zipBtn.disabled = true;
+          try {
+            const zip = new JSZip();
+            const total = rows.reduce((s, r) => s + r.urls.length, 0);
+            let done = 0, failed = 0;
+            for (const row of rows) {
+              const folderName = sanitizePodFileName(row.order_code);
+              const orderFolder = zip.folder(folderName);
+              const buckets = bucketPodUrls(row.urls);
+              for (const p of POD_PHASE_DEFS.concat([{ key: "OTHER", label: "Khác" }])) {
+                const urls = buckets[p.key];
+                if (!urls || !urls.length) continue;
+                const phaseFolder = orderFolder.folder(p.label);
+                let count = 0;
+                for (const item of urls) {
+                  count++;
+                  done++;
+                  zipBtn.textContent = `Đang tải ${done}/${total}...`;
+                  try {
+                    const blob = await fetchPodImageBlobForZip(item.url);
+                    phaseFolder.file(`${count}${guessPodExt(blob.type, item.url)}`, blob);
+                  } catch (e) {
+                    failed++;
+                  }
+                }
+              }
+            }
+            zipBtn.textContent = "Đang nén file...";
+            const content = await zip.generateAsync({ type: "blob" });
+            const zipUrl = URL.createObjectURL(content);
+            const a = document.createElement("a");
+            a.href = zipUrl;
+            a.download = "pod_anh.zip";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(zipUrl);
+            if (failed > 0) alert(`Đã tải xong, ${failed} ảnh lỗi không tải được (do CORS).`);
+          } catch (e) {
+            alert("Tạo file zip thất bại, thử lại sau.");
+          }
+          zipBtn.textContent = original;
+          zipBtn.disabled = false;
+        };
+        actionsRow.appendChild(zipBtn);
+        root.appendChild(actionsRow);
+
+        const filtered = getFilteredPodResults();
+        filterCount.textContent = podSearchQuery.trim()
+          ? `Hiển thị ${filtered.length}/${podResults.length} mã đơn`
+          : `Tổng ${podResults.length} mã đơn`;
+
+        filtered.forEach(r => {
+          const groupEl = document.createElement("div");
+          groupEl.className = "pod-group";
+
+          const head = document.createElement("div");
+          head.className = "pod-group-head";
+          const codeLink = document.createElement("a");
+          codeLink.className = "pod-group-code";
+          codeLink.textContent = r.order_code;
+          codeLink.href = `${GHN_INTERNAL_LOOKUP_URL}?order_code=${encodeURIComponent(r.order_code)}&tab=pod-order`;
+          codeLink.target = "_blank";
+          codeLink.rel = "noopener";
+          head.appendChild(codeLink);
+
+          if (!r.ok) {
+            const errSpan = document.createElement("span");
+            errSpan.className = "pod-group-empty";
+            errSpan.textContent = r.message || "Lỗi không xác định";
+            head.appendChild(errSpan);
+            groupEl.appendChild(head);
+            root.appendChild(groupEl);
+            return;
+          }
+
+          const urls = r.urls || [];
+          const buckets = bucketPodUrls(urls);
+          const metaSpan = document.createElement("span");
+          metaSpan.textContent = `Pick: ${buckets.PICK.length} · Deliver: ${buckets.DELIVER.length} · Return: ${buckets.RETURN.length}`;
+          head.appendChild(metaSpan);
+          groupEl.appendChild(head);
+
+          const cols = document.createElement("div");
+          cols.className = "pod-phase-cols";
+          const phaseDefsToRender = buckets.OTHER.length
+            ? POD_PHASE_DEFS.concat([{ key: "OTHER", label: "Khác", cls: "" }])
+            : POD_PHASE_DEFS;
+          phaseDefsToRender.forEach(p => {
+            const col = document.createElement("div");
+            col.className = "pod-phase-col " + p.cls;
+            const title = document.createElement("div");
+            title.className = "pod-phase-col-title";
+            title.textContent = `${p.label} (${buckets[p.key].length})`;
+            col.appendChild(title);
+            if (!buckets[p.key].length) {
+              const empty = document.createElement("span");
+              empty.className = "pod-phase-empty";
+              empty.textContent = "Không có ảnh.";
+              col.appendChild(empty);
+            } else {
+              const grid = document.createElement("div");
+              grid.className = "pod-grid";
+              buckets[p.key].forEach(item => grid.appendChild(makePodThumb(item, r.order_code)));
+              col.appendChild(grid);
+            }
+            cols.appendChild(col);
+          });
+          groupEl.appendChild(cols);
+          root.appendChild(groupEl);
+        });
+
+        podResultsArea.appendChild(root);
+      }
+
+      async function fetchOnePod(orderCode, userAgent, token) {
+        const res = await fetch("/api/pod7", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ order_code: orderCode, user_agent: userAgent, token })
+        });
+        return res.json();
+      }
+
+      podBtnRun.onclick = async () => {
+        const userAgent = chkUserAgentInput.value.trim();
+        const token = chkTokenInput.value.trim();
+        if (!userAgent || !token) {
+          alert("Vui lòng nhập đầy đủ User-Agent và Token.");
+          return;
+        }
+        const codes = parsePodCodes(podCodesInput.value);
+        if (!codes.length) {
+          alert("Vui lòng nhập ít nhất 1 mã đơn.");
+          return;
+        }
+        saveChkConfig();
+        updateChkConfigView();
+        podBtnRun.disabled = true;
+        podResults = [];
+        podSearchQuery = "";
+        for (let i = 0; i < codes.length; i++) {
+          podResultsArea.innerHTML = `<div class="state loading"><span class="spinner"></span>Đang lấy ảnh POD... ${i + 1}/${codes.length}</div>`;
+          try {
+            const data = await fetchOnePod(codes[i], userAgent, token);
+            podResults.push({ order_code: codes[i], ...data });
+          } catch (err) {
+            podResults.push({ order_code: codes[i], ok: false, message: "Lỗi kết nối" });
+          }
+        }
+        podBtnRun.disabled = false;
+        renderPodResults();
+      };
+
+      function parseChkCodes(raw) {
+        return [...new Set(raw.split(/[\s,;]+/).map(s => s.trim().toUpperCase()).filter(Boolean))];
+      }
+
+      chkCodesInput.addEventListener("input", () => {
+        const n = parseChkCodes(chkCodesInput.value).length;
+        chkCodeCount.textContent = n > 0 ? n + " mã đơn" : "";
+      });
+
+      el("#chk-btn-clear").onclick = () => {
+        chkCodesInput.value = "";
+        chkCodeCount.textContent = "";
+        chkResultsArea.innerHTML = "";
+        chkResults = [];
+        chkSearchQuery = "";
+        chkSortField = null;
+        chkSortDir = 1;
+      };
+
+      let chkResults = [];
+      let chkSortField = null;
+      let chkSortDir = 1;
+
+      const CHK_HISTORY_KEY = "ka_lookup_chk_history_v1";
+      const CHK_HISTORY_MAX = 5;
+
+      function loadChkHistory() {
+        try {
+          const raw = localStorage.getItem(CHK_HISTORY_KEY);
+          return raw ? JSON.parse(raw) : [];
+        } catch (err) {
+          return [];
+        }
+      }
+
+      function saveChkHistoryEntry(results) {
+        if (!results.length) return;
+        const history = loadChkHistory();
+        history.unshift({
+          time: new Date().toLocaleString("vi-VN"),
+          count: results.length,
+          results
+        });
+        const trimmed = history.slice(0, CHK_HISTORY_MAX);
+        try {
+          localStorage.setItem(CHK_HISTORY_KEY, JSON.stringify(trimmed));
+        } catch (err) { }
+      }
+
+      function renderChkHistoryList() {
+        const history = loadChkHistory();
+        const listEl = el("#chk-history-list");
+        if (!listEl) return;
+        if (!history.length) {
+          listEl.innerHTML = `<div class="chk-history-empty">Chưa có lịch sử</div>`;
+          return;
+        }
+        listEl.innerHTML = history.map((h, i) => `
+          <div class="chk-history-item" data-history-index="${i}">
+            <div class="h-time">${h.time}</div>
+            <div class="h-count">${h.count} mã đơn</div>
+          </div>`).join("");
+      }
+
+      el("#chk-history-list").addEventListener("click", e => {
+        const item = e.target.closest(".chk-history-item");
+        if (!item) return;
+        const idx = Number(item.dataset.historyIndex);
+        const history = loadChkHistory();
+        if (!history[idx]) return;
+        chkResults = history[idx].results;
+        chkSearchQuery = "";
+        renderChkResults();
+        document.querySelectorAll(".chk-history-item").forEach(x => x.classList.remove("active"));
+        item.classList.add("active");
+      });
+
+      renderChkHistoryList();
+      let chkSearchQuery = "";
+
+      function formatMoney(v) {
+        const n = Number(v);
+        if (isNaN(n)) return v;
+        return n.toLocaleString("vi-VN") + " đ";
+      }
+
+      const CHK_COLUMNS = [
+        ["order_code", "Mã đơn"],
+        ["client_id", "Mã kh"],
+        ["created_date", "Ngày tạo"],
+        ["end_picktime", "Lấy tc"],
+        ["status_vn", "Trạng thái"],
+        ["last_action_at_vn", "TG cập nhật cuối"],
+        ["last_operator", "Người thao tác cuối"],
+        ["order_value", "Giá trị"],
+        ["cod_amount", "COD"],
+        ["insurance_value", "Khai giá"],
+        ["compensation", "GT đền bù"],
+        ["pickwh", "Kho lấy"],
+        ["deliverywh", "Kho giao"],
+        ["returnwh", "Kho trả"],
+        ["currentwh", "Kho hiện tại"]
+      ];
+      const CHK_EXPORT_EXTRA_COLUMNS = [
+        ["package_value", "Package Value"],
+        ["status_ops_name", "TT v.hành"],
+        ["status_name", "Trạng thái gốc GHN"],
+        ["content", "Nội dung"],
+        ["from_name", "Người gửi"],
+        ["from_address", "Địa chỉ gửi"]
+      ];
+      const CHK_MONEY_FIELDS = new Set(["order_value", "cod_amount", "insurance_value", "package_value", "compensation"]);
+      const CHK_COPYABLE_NUMBER_FIELDS = new Set(["order_value", "cod_amount", "insurance_value", "compensation"]);
+      const CHK_DATE_FIELDS = new Set(["created_date", "end_picktime", "last_action_at_vn"]);
+      const CHK_XLSX_DATE_FIELDS = CHK_DATE_FIELDS;
+      const COMPENSATION_DATE_FIELDS = new Set(["created_date", "end_picktime", "end_delivery_or_return_vn", "returned_date_vn"]);
+
+      const COMPENSATION_COLUMNS = [
+        ["order_code", "MaDH"],
+        ["created_date", "ThoiGianTao"],
+        ["end_picktime", "ThoiGianKetThucLay"],
+        ["end_delivery_or_return_vn", "ThoiGianKetThucGiao"],
+        ["returned_date_vn", "ThoiGianKetThucTra"],
+        ["__blank", "ThongTinTraHang"],
+        ["from_district_name", "TuQuan"],
+        ["from_province_name", "TuTinh"],
+        ["to_district_name", "DenQuan"],
+        ["to_province_name", "DenTinh"],
+        ["pick_warehouse_name", "KhoLay"],
+        ["deliver_warehouse_name", "KhoGiao"],
+        ["current_warehouse_name", "KhoHienTai"],
+        ["return_warehouse_name", "KhoTra"],
+        ["status_vn", "TrangThai"],
+        ["__weight_max", "TrongLuongGram"],
+        ["__dimensions", "KichThuocRDC"],
+        ["client_id", "MaKH"],
+        ["__blank", "GhiChuGHN"],
+        ["__blank", "SoLanLay"],
+        ["__blank", "SoLanGiao"],
+        ["__blank", "SoLanTra"],
+        ["package_value", "PackageValue"],
+        ["order_value", "OrderValue"],
+        ["cod_amount", "CODAmount"],
+        ["insurance_value", "InsuranceValue"],
+        ["last_operator", "NguoiCapNhatTTCuoi"]
+      ];
+
+      function chkCompensationValue(r, field) {
+        if (field === "__blank") return "";
+        if (field === "__dimensions") return `${r.length ?? ""}x${r.width ?? ""}x${r.height ?? ""}`;
+        if (field === "__weight_max") return Math.max(Number(r.weight) || 0, Number(r.converted_weight) || 0);
+        return r[field] ?? "";
+      }
+
+      function vnDateTimeToExcelSerial(str) {
+        if (!str) return "";
+        const m = String(str).match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2}):(\d{2})/);
+        if (!m) return str;
+        const [, y, mo, d, h, mi, s] = m.map(Number);
+        const excelEpochUTC = Date.UTC(1899, 11, 30);
+        const targetUTC = Date.UTC(y, mo - 1, d, h, mi, s);
+        return (targetUTC - excelEpochUTC) / 86400000;
+      }
+
+      function applyDateTimeFormat(ws, aoa, dateFieldIndexes) {
+        for (let r = 1; r < aoa.length; r++) {
+          dateFieldIndexes.forEach(c => {
+            const addr = XLSX.utils.encode_cell({ r, c });
+            const cell = ws[addr];
+            if (cell && cell.t === "n") cell.z = "yyyy-mm-dd hh:mm:ss";
+          });
+        }
+      }
+
+      function chkStatusRowClass(status) {
+        const s = String(status || "").toLowerCase();
+        if (s.includes("cancel")) return "chk-status-cancel";
+        if (s.includes("lost") || s.includes("damage")) return "chk-status-lost";
+        if (s.includes("returned") || s.includes("scrap")) return "chk-status-return";
+        if (s.includes("delivered")) return "chk-status-delivered";
+        return "";
+      }
+
+      function chkCellValue(r, field) {
+        if (r.message && field === "status_name") return "Lỗi: " + r.message;
+        const v = r[field];
+        if (v === undefined || v === null || v === "") return "";
+        if (CHK_DATE_FIELDS.has(field)) return String(v).slice(0, 10);
+        return CHK_MONEY_FIELDS.has(field) ? formatMoney(v) : v;
+      }
+
+      function chkWarehouseNameOnly(merged) {
+        if (!merged) return "";
+        const idx = merged.indexOf(" - ");
+        return idx === -1 ? merged : merged.slice(idx + 3);
+      }
+
+      function chkOperatorIdOnly(merged) {
+        if (!merged) return "";
+        const idx = merged.indexOf(" - ");
+        return idx === -1 ? merged : merged.slice(0, idx);
+      }
+
+      function chkOperatorNameOnly(merged) {
+        if (!merged) return "";
+        const idx = merged.indexOf(" - ");
+        if (idx === -1) return "";
+        return merged.slice(idx + 3).replace(/\s*↩️\s*$/, "").trim();
+      }
+
+      function chkRawValue(r, field) {
+        if (r.message && field === "status_name") return "Lỗi: " + r.message;
+        if (field === "currentwh_name_only") return chkWarehouseNameOnly(r.currentwh);
+        if (field === "last_operator_id_only") return chkOperatorIdOnly(r.last_operator);
+        if (field === "last_operator_name_only") return chkOperatorNameOnly(r.last_operator);
+        return r[field] ?? "";
+      }
+
+      const CHK_WH_ID_FIELD_MAP = {
+        pickwh: "pick_warehouse_id",
+        deliverywh: "deliver_warehouse_id",
+        returnwh: "return_warehouse_id",
+        currentwh: "current_warehouse_id"
+      };
+
+      function isChkStale(status, lastActionAtVN) {
+        if (chkStatusRowClass(status)) return false;
+        if (!lastActionAtVN) return false;
+        const lastDateStr = String(lastActionAtVN).slice(0, 10);
+        const todayStr = new Date().toISOString().slice(0, 10);
+        const last = new Date(lastDateStr);
+        const today = new Date(todayStr);
+        if (isNaN(last.getTime())) return false;
+        const diffDays = Math.floor((today - last) / 86400000);
+        return diffDays > 5 ? diffDays : false;
+      }
+
+      function chkShowToast(msg) {
+        let toast = el("#chk-toast");
+        if (!toast) {
+          toast = document.createElement("div");
+          toast.id = "chk-toast";
+          toast.className = "chk-toast";
+          document.body.appendChild(toast);
+        }
+        toast.textContent = msg;
+        toast.classList.add("show");
+        clearTimeout(toast._hideTimer);
+        toast._hideTimer = setTimeout(() => toast.classList.remove("show"), 1500);
+      }
+
+      chkResultsArea.addEventListener("click", e => {
+        const cell = e.target.closest(".wh-copyable");
+        if (cell) {
+          const id = cell.dataset.copyId;
+          if (id) {
+            navigator.clipboard.writeText(id);
+            chkShowToast("Đã copy: " + id);
+          }
+          return;
+        }
+        const th = e.target.closest(".chk-sortable-th");
+        if (th) {
+          const field = th.dataset.sortField;
+          if (chkSortField === field) {
+            chkSortDir = -chkSortDir;
+          } else {
+            chkSortField = field;
+            chkSortDir = 1;
+          }
+          renderChkResults();
+        }
+      });
+
+      function renderChkResults() {
+        if (!chkResults.length) {
+          chkResultsArea.innerHTML = `<div class="empty"><div class="big">🔍</div>Chưa có kết quả.</div>`;
+          return;
+        }
+        const filterTokens = chkSearchQuery.split(/[\s,;]+/).map(s => s.trim().toUpperCase()).filter(Boolean);
+        const filtered = filterTokens.length
+          ? chkResults.filter(r => filterTokens.some(t => (r.order_code || "").toUpperCase().includes(t)))
+          : chkResults;
+        const displayRows = chkSortField ? [...filtered].sort((a, b) => {
+          let av = chkRawValue(a, chkSortField);
+          let bv = chkRawValue(b, chkSortField);
+          if (CHK_MONEY_FIELDS.has(chkSortField)) {
+            return ((Number(av) || 0) - (Number(bv) || 0)) * chkSortDir;
+          }
+          return String(av ?? "").localeCompare(String(bv ?? ""), "vi", { numeric: true, sensitivity: "base" }) * chkSortDir;
+        }) : filtered;
+        const searchBoxHtml = `
+          <div class="result-search-row">
+            <input type="text" id="chk-result-search" class="result-search-input" placeholder="Lọc mã đơn trong kết quả này — dán được nhiều mã, cách nhau bằng dấu phẩy/khoảng trắng" value="${chkSearchQuery.replace(/"/g, "&quot;")}" />
+            ${chkSearchQuery ? `<button class="btn-ghost" id="chk-btn-clear-search">Xóa lọc</button>` : ""}
+            <span class="result-search-count">${filterTokens.length ? `${filtered.length}/${chkResults.length} dòng khớp` : `${chkResults.length} dòng`}</span>
+          </div>`;
+        if (!filtered.length) {
+          chkResultsArea.innerHTML = `${searchBoxHtml}<div class="empty"><div class="big">🔍</div>Không có mã đơn nào khớp ô lọc.</div>`;
+          bindChkSearchEvents();
+          return;
+        }
+        const rows = displayRows.map(r => {
+          const rowClass = chkStatusRowClass(r.status);
+          const cells = CHK_COLUMNS.map(([field]) => {
+            const cls = CHK_MONEY_FIELDS.has(field) ? ' class="amount-cell"' : (field === "order_code" ? ' class="code-cell"' : "");
+            if (field === "order_code") {
+              const codeVal = chkCellValue(r, field);
+              const url = `https://tracuunoibo.ghn.vn/internal?order_code=${encodeURIComponent(r.order_code || "")}`;
+              const staleDays = isChkStale(r.status, r.last_action_at_vn);
+              const staleBadge = staleDays ? ` <span class="stale-badge" title="Dừng hành trình ${staleDays} ngày">⚠️</span>` : "";
+              return `<td${cls}><a href="${url}" target="_blank" rel="noopener" class="ticket-link">${codeVal}</a>${staleBadge}</td>`;
+            }
+            if (field === "last_operator") {
+              const val = chkCellValue(r, field);
+              const phone = r.last_operator_phone;
+              const opId = chkOperatorIdOnly(r.last_operator);
+              const titleParts = [];
+              if (opId) titleParts.push(`Bấm để copy ID: ${opId}`);
+              if (phone) titleParts.push(`SĐT: ${phone}`);
+              const copyAttr = opId ? ` class="wh-copyable" data-copy-id="${opId}"` : "";
+              return `<td${cls}${copyAttr}${titleParts.length ? ` title="${titleParts.join(" | ")}"` : ""}>${val}</td>`;
+            }
+            if (CHK_COPYABLE_NUMBER_FIELDS.has(field)) {
+              const val = chkCellValue(r, field);
+              const rawNum = r[field];
+              if (rawNum === undefined || rawNum === null || rawNum === "") return `<td${cls}>${val}</td>`;
+              const mergedCls = CHK_MONEY_FIELDS.has(field) ? "amount-cell wh-copyable" : "wh-copyable";
+              return `<td class="${mergedCls}" data-copy-id="${rawNum}" title="Bấm để copy số: ${rawNum}">${val}</td>`;
+            }
+            if (field === "status_vn") {
+              const val = chkCellValue(r, field);
+              const isScrap = String(r.status || "").toLowerCase().includes("scrap");
+              return `<td${cls}>${isScrap ? `<span class="chk-scrap-blink">${val}</span>` : val}</td>`;
+            }
+            if (CHK_WH_ID_FIELD_MAP[field]) {
+              const val = chkCellValue(r, field);
+              const idVal = r[CHK_WH_ID_FIELD_MAP[field]];
+              if (!val || !idVal) return `<td${cls}>${val}</td>`;
+              return `<td${cls} class="wh-copyable" data-copy-id="${idVal}" title="Bấm để copy ID: ${idVal}">${val}</td>`;
+            }
+            return `<td${cls}>${chkCellValue(r, field)}</td>`;
+          }).join("");
+          return `<tr class="${rowClass}">${cells}</tr>`;
+        }).join("");
+        chkResultsArea.innerHTML = `
+          <div class="toolbar">
+            <span class="stats"><span class="stat-badge total">Tổng: ${chkResults.length}</span></span>
+            <div class="toolbar-actions">
+              <button class="btn-ghost" id="chk-btn-copy">Copy kết quả</button>
+              <div class="dl-wrap">
+                <button class="btn-ghost" id="chk-btn-dl-toggle">⬇ Tải ▾</button>
+                <div class="dl-menu" id="chk-dl-menu">
+                  <div class="dl-item" data-fmt="xlsx">Excel (.xlsx)</div>
+                  <div class="dl-item" data-fmt="csv">CSV (.csv)</div>
+                  <div class="dl-item" data-fmt="json">JSON (.json)</div>
+                </div>
+              </div>
+              <button class="btn-ghost chk-btn-comp" id="chk-btn-comp">📦 Tải Compensation</button>
+            </div>
+          </div>
+          ${searchBoxHtml}<div class="results-table-wrap">
+            <table class="result-table">
+              <thead>
+                <tr>${CHK_COLUMNS.map(([field, label]) => {
+                  let cls = CHK_MONEY_FIELDS.has(field) ? "align-right chk-sortable-th" : "chk-sortable-th";
+                  if (field === "compensation") cls += " chk-th-compensation";
+                  const arrow = chkSortField === field ? (chkSortDir === 1 ? " ▲" : " ▼") : " ⇅";
+                  return `<th class="${cls}" data-sort-field="${field}">${label}<span class="chk-sort-arrow">${arrow}</span></th>`;
+                }).join("")}</tr>
+              </thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </div>`;
+        const exportCols = [];
+        CHK_COLUMNS.forEach(([field, label]) => {
+          if (field === "last_operator") {
+            exportCols.push(["last_operator_id_only", "ID người thao tác cuối"]);
+            exportCols.push(["last_operator_name_only", "Tên người thao tác cuối"]);
+          } else if (field === "currentwh") {
+            exportCols.push(["current_warehouse_id", "ID Kho hiện tại"]);
+            exportCols.push(["currentwh_name_only", "Kho hiện tại"]);
+          } else {
+            exportCols.push([field, label]);
+          }
+        });
+        exportCols.push(...CHK_EXPORT_EXTRA_COLUMNS);
+        function buildChkAoaForCsv() {
+          const aoa = [exportCols.map(([, label]) => label)];
+          displayRows.forEach(r => aoa.push(exportCols.map(([field]) => chkRawValue(r, field))));
+          return aoa;
+        }
+        function buildChkAoaForXlsx() {
+          const aoa = [exportCols.map(([, label]) => label)];
+          displayRows.forEach(r => aoa.push(exportCols.map(([field]) => {
+            const v = chkRawValue(r, field);
+            return CHK_XLSX_DATE_FIELDS.has(field) ? vnDateTimeToExcelSerial(v) : v;
+          })));
+          return aoa;
+        }
+        const chkDateColIndexes = exportCols.map(([field], i) => CHK_XLSX_DATE_FIELDS.has(field) ? i : -1).filter(i => i >= 0);
+        el("#chk-btn-dl-toggle").onclick = e => {
+          e.stopPropagation();
+          const menu = el("#chk-dl-menu");
+          const wasOpen = menu.classList.contains("open");
+          closeAllDlMenus();
+          if (!wasOpen) menu.classList.add("open");
+        };
+        document.querySelectorAll("#chk-dl-menu .dl-item").forEach(item => {
+          item.onclick = () => {
+            const fmt = item.dataset.fmt;
+            const epoch = (Date.now() / 1000).toFixed(3);
+            if (fmt === "csv") {
+              const ws = XLSX.utils.aoa_to_sheet(buildChkAoaForCsv());
+              const csv = XLSX.utils.sheet_to_csv(ws);
+              const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8;" });
+              downloadBlob(blob, `output_kiemtra_${epoch}.csv`);
+            } else if (fmt === "xlsx") {
+              const aoaXlsx = buildChkAoaForXlsx();
+              const ws = XLSX.utils.aoa_to_sheet(aoaXlsx);
+              applyDateTimeFormat(ws, aoaXlsx, chkDateColIndexes);
+              const wb = XLSX.utils.book_new();
+              XLSX.utils.book_append_sheet(wb, ws, "KetQua");
+              XLSX.writeFile(wb, `output_kiemtra_${epoch}.xlsx`);
+            } else if (fmt === "json") {
+              downloadJsonFromAoa(buildChkAoaForCsv(), `output_kiemtra_${epoch}.json`);
+            }
+            closeAllDlMenus();
+          };
+        });
+        el("#chk-btn-copy").onclick = () => {
+          const sanitizeForCopy = v => String(v ?? "").replace(/\r\n|\r|\n/g, " ");
+          const header = exportCols.map(([, label]) => label).join("\t");
+          const lines = displayRows.map(r => exportCols.map(([field]) => sanitizeForCopy(chkRawValue(r, field))).join("\t"));
+          navigator.clipboard.writeText([header, ...lines].join("\n"));
+        };
+        el("#chk-btn-comp").onclick = () => {
+          const aoa = [COMPENSATION_COLUMNS.map(([, label]) => label)];
+          displayRows.forEach(r => aoa.push(COMPENSATION_COLUMNS.map(([field]) => {
+            const v = chkCompensationValue(r, field);
+            return COMPENSATION_DATE_FIELDS.has(field) ? vnDateTimeToExcelSerial(v) : v;
+          })));
+          const compDateColIndexes = COMPENSATION_COLUMNS.map(([field], i) => COMPENSATION_DATE_FIELDS.has(field) ? i : -1).filter(i => i >= 0);
+          const ws = XLSX.utils.aoa_to_sheet(aoa);
+          applyDateTimeFormat(ws, aoa, compDateColIndexes);
+          const wb = XLSX.utils.book_new();
+          XLSX.utils.book_append_sheet(wb, ws, "compensation");
+          const epoch = (Date.now() / 1000).toFixed(3);
+          XLSX.writeFile(wb, `output_compensation_${epoch}.xlsx`);
+        };
+        bindChkSearchEvents();
+      }
+
+      function bindChkSearchEvents() {
+        const input = el("#chk-result-search");
+        if (input) {
+          input.oninput = e => {
+            chkSearchQuery = e.target.value;
+            const cursorPos = e.target.selectionStart;
+            renderChkResults();
+            const newInput = el("#chk-result-search");
+            if (newInput) {
+              newInput.focus();
+              newInput.setSelectionRange(cursorPos, cursorPos);
+            }
+          };
+        }
+        const clearBtn = el("#chk-btn-clear-search");
+        if (clearBtn) {
+          clearBtn.onclick = () => {
+            chkSearchQuery = "";
+            renderChkResults();
+            const newInput = el("#chk-result-search");
+            if (newInput) newInput.focus();
+          };
+        }
+      }
+
+      async function fetchOneOrder(orderCode, userAgent, token) {
+        const res = await fetch("/api/chk9", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ order_code: orderCode, user_agent: userAgent, token })
+        });
+        return res.json();
+      }
+
+      chkBtnRun.onclick = async () => {
+        const userAgent = chkUserAgentInput.value.trim();
+        const token = chkTokenInput.value.trim();
+        if (!userAgent || !token) {
+          alert("Vui lòng nhập đầy đủ User-Agent và Token.");
+          return;
+        }
+        const codes = parseChkCodes(chkCodesInput.value);
+        if (!codes.length) {
+          alert("Vui lòng nhập ít nhất 1 mã đơn.");
+          return;
+        }
+        saveChkConfig();
+        updateChkConfigView();
+        chkBtnRun.disabled = true;
+        chkResults = [];
+        chkSearchQuery = "";
+        chkSortField = null;
+        chkSortDir = 1;
+        for (let i = 0; i < codes.length; i++) {
+          chkResultsArea.innerHTML = `<div class="state loading"><span class="spinner"></span>Đang chạy... ${i + 1}/${codes.length}</div>`;
+          try {
+            const data = await fetchOneOrder(codes[i], userAgent, token);
+            chkResults.push({ order_code: codes[i], ...data });
+          } catch (err) {
+            chkResults.push({ order_code: codes[i], ok: false, message: "Lỗi kết nối" });
+          }
+        }
+        chkBtnRun.disabled = false;
+        saveChkHistoryEntry(chkResults);
+        renderChkHistoryList();
+        renderChkResults();
+      };
+
+      codesInput.addEventListener("keydown", e => {
+        if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) doSearch();
+      });
+      (function initFromUrl() {
+        const params = new URLSearchParams(window.location.search);
+        const type = params.get("type");
+        const codes = params.get("codes");
+        if (type && CONFIG.TABS[type]) {
+          activeTab = type;
+          switchTab(activeTab);
+          if (codes) {
+            codesInput.value = codes.split(",").join("\n");
+            updateCount();
+            doSearch();
+          }
+        } else {
+          renderTabs();
+          showCheckerView();
+        }
+      })();
+    }
+  </script>
+
+  <script>const WEBHOOK_BASE_URL = "/api/q9f2";
+  </script>
+
+  <script>const AUTH_STORAGE_KEY = "ka_lookup_authed_v1";
+    const AUTH_PASSWORD_KEY = "ka_lookup_pw_v1";
+    const AUTH_EMAIL_KEY = "ka_lookup_email_v1";
+    let sessionPassword = "";
+
+    const TYPE_WIRE_MAP = {
+      denbu: "v2",
+      quahan: "v3",
+      ticket: "v4",
+      fake_attempt: "v5",
+      miencuoc: "v6"
+    };
+    let sessionEmail = "";
+
+    const authGate = document.getElementById("auth-gate");
+    const appRoot = document.getElementById("app-root");
+
+    const googleStep = document.getElementById("google-step");
+    const googleError = document.getElementById("google-error");
+    const googleEmailDisplay = document.getElementById("google-email-display");
+
+    const authForm = document.getElementById("auth-form");
+    const authPasswordInput = document.getElementById("auth-password");
+    const authError = document.getElementById("auth-error");
+    const authSubmitBtn = authForm.querySelector(".auth-submit");
+    const btnSwitchGoogle = document.getElementById("btn-switch-google");
+
+    function unlockApp() {
+      authGate.style.display = "none";
+      appRoot.style.display = "block";
+      initApp();
+    }
+
+    function showPasswordStep(email) {
+      sessionEmail = email;
+      googleStep.style.display = "none";
+      authForm.style.display = "block";
+      googleEmailDisplay.textContent = email;
+      authPasswordInput.focus();
+    }
+
+    function showGoogleStep() {
+      authForm.style.display = "none";
+      googleStep.style.display = "block";
+      googleError.textContent = "";
+    }
+
+    async function triggerAutoGenPass(email) {
+      try {
+        const params = new URLSearchParams({ t: "v7", e: email });
+        await fetch(`${WEBHOOK_BASE_URL}?${params.toString()}`);
+      } catch (err) {
+      }
+    }
+
+    async function handleGoogleCredential(response) {
+      googleError.textContent = "Đang xác minh với Google...";
+      try {
+        const params = new URLSearchParams({ i: response.credential });
+        const res = await fetch(`/api/m3k7?${params.toString()}`);
+        const data = await res.json();
+        if (data.ok) {
+          triggerAutoGenPass(data.email);
+          showPasswordStep(data.email);
+        } else {
+          googleError.textContent = data.message || "Xác minh Google thất bại.";
+        }
+      } catch (err) {
+        googleError.textContent = "Không xác minh được với Google, thử lại.";
+      }
+    }
+    window.handleGoogleCredential = handleGoogleCredential;
+
+    btnSwitchGoogle.addEventListener("click", () => {
+      sessionEmail = "";
+      showGoogleStep();
+    });
+
+    async function verifyPassword(email, password) {
+      const params = new URLSearchParams({
+        t: "v1",
+        e: email,
+        k: password
+      });
+      const res = await fetch(`${WEBHOOK_BASE_URL}?${params.toString()}`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      return data.ok === true;
+    }
+
+    authForm.addEventListener("submit", async e => {
+      e.preventDefault();
+      const password = authPasswordInput.value;
+      if (!sessionEmail || !password) {
+        authError.textContent = "Thiếu thông tin, vui lòng đăng nhập lại.";
+        return;
+      }
+      authSubmitBtn.disabled = true;
+      authError.textContent = "";
+      try {
+        const ok = await verifyPassword(sessionEmail, password);
+        if (ok) {
+          sessionPassword = password;
+          try {
+            localStorage.setItem(AUTH_STORAGE_KEY, "1");
+            localStorage.setItem(AUTH_PASSWORD_KEY, sessionPassword);
+            localStorage.setItem(AUTH_EMAIL_KEY, sessionEmail);
+          } catch (err) { }
+          unlockApp();
+        } else {
+          authError.textContent = "Sai mật khẩu, hoặc mật khẩu này không cấp cho email của bạn, hoặc đã dùng rồi (1 lần duy nhất).";
+          authPasswordInput.value = "";
+          authPasswordInput.focus();
+        }
+      } catch (err) {
+        authError.textContent = "Không kiểm tra được mật khẩu, thử lại.";
+      } finally {
+        authSubmitBtn.disabled = false;
+      }
+    });
+
+    function doLogout() {
+      try {
+        localStorage.removeItem(AUTH_STORAGE_KEY);
+        localStorage.removeItem(AUTH_PASSWORD_KEY);
+        localStorage.removeItem(AUTH_EMAIL_KEY);
+      } catch (err) { }
+      sessionPassword = "";
+      sessionEmail = "";
+      appRoot.style.display = "none";
+      authGate.style.display = "";
+      authPasswordInput.value = "";
+      authError.textContent = "";
+      showGoogleStep();
+    }
+
+    (function checkExistingAuth() {
+      let authed = false;
+      try {
+        authed = localStorage.getItem(AUTH_STORAGE_KEY) === "1";
+        if (authed) {
+          sessionPassword = localStorage.getItem(AUTH_PASSWORD_KEY) || "";
+          sessionEmail = localStorage.getItem(AUTH_EMAIL_KEY) || "";
+        }
+      } catch (err) { }
+      if (authed) unlockApp();
+    })();
+  </script>
+
+  <script>document.addEventListener("click", e => {
+      const target = e.target.closest(".tab, button, .file-upload-btn, .chk-edit-link");
+      if (!target) return;
+      const rect = target.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height);
+      const ripple = document.createElement("span");
+      ripple.className = "ripple-wave";
+      ripple.style.width = ripple.style.height = size + "px";
+      ripple.style.left = (e.clientX - rect.left - size / 2) + "px";
+      ripple.style.top = (e.clientY - rect.top - size / 2) + "px";
+      target.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 550);
+    });
+  </script>
+</body>
+
+</html>
