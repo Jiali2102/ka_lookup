@@ -214,32 +214,9 @@
       font-size: 13px;
       font-weight: 700;
       color: var(--muted);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-    }
-
-    .chk-history-clear-all {
-      font-size: 11.5px;
-      font-weight: 600;
-      color: var(--muted);
-      background: none;
-      border: none;
-      cursor: pointer;
-      text-decoration: underline;
-      padding: 0;
-    }
-
-    .chk-history-clear-all:hover {
-      color: var(--danger);
     }
 
     .chk-history-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 6px;
       padding: 8px 10px;
       border: 1px solid var(--border);
       border-radius: 8px;
@@ -255,11 +232,6 @@
       border-color: var(--orange);
     }
 
-    .chk-history-item .h-main {
-      flex: 1;
-      min-width: 0;
-    }
-
     .chk-history-item .h-time {
       font-weight: 700;
     }
@@ -268,32 +240,6 @@
       color: var(--muted);
       font-size: 12px;
       margin-top: 1px;
-    }
-
-    .chk-history-item-actions {
-      display: flex;
-      gap: 2px;
-      flex: none;
-    }
-
-    .chk-history-item-actions button {
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 13px;
-      padding: 4px 6px;
-      border-radius: 6px;
-      color: var(--muted);
-      line-height: 1;
-    }
-
-    .chk-history-item-actions button:hover {
-      background: rgba(0, 0, 0, .06);
-      color: var(--text);
-    }
-
-    .chk-history-item-actions .h-delete-btn:hover {
-      color: var(--danger);
     }
 
     .chk-history-empty {
@@ -1051,18 +997,6 @@
       color: var(--pod-faint);
     }
 
-    .pod-phase-col--pick .pod-timeline-item::before {
-      background: var(--pod-pick);
-    }
-
-    .pod-phase-col--deliver .pod-timeline-item::before {
-      background: var(--pod-ok);
-    }
-
-    .pod-phase-col--return .pod-timeline-item::before {
-      background: var(--pod-bad);
-    }
-
     .pod-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
@@ -1101,100 +1035,6 @@
       cursor: pointer;
     }
 
-    /* Phương án C — timeline dọc theo mốc thời gian */
-    .pod-timeline {
-      position: relative;
-      padding-left: 20px;
-    }
-
-    .pod-timeline::before {
-      content: "";
-      position: absolute;
-      left: 5px;
-      top: 6px;
-      bottom: 6px;
-      width: 2px;
-      background: var(--pod-line);
-    }
-
-    .pod-timeline-item {
-      position: relative;
-      display: flex;
-      gap: 10px;
-      padding-bottom: 14px;
-    }
-
-    .pod-timeline-item:last-child {
-      padding-bottom: 0;
-    }
-
-    .pod-timeline-item::before {
-      content: "";
-      position: absolute;
-      left: -20px;
-      top: 4px;
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background: var(--pod-dot-color, var(--pod-faint));
-      border: 2px solid var(--pod-panel);
-    }
-
-    .pod-timeline-thumb {
-      position: relative;
-      width: 64px;
-      height: 64px;
-      flex: none;
-      border-radius: 8px;
-      overflow: hidden;
-      border: 1.5px solid var(--pod-line);
-      cursor: zoom-in;
-      background: var(--pod-sunken);
-    }
-
-    .pod-timeline-thumb:hover {
-      border-color: var(--pod-accent);
-    }
-
-    .pod-timeline-thumb img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .pod-timeline-thumb.pod-thumb-error {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      color: var(--pod-bad);
-      font-size: 9px;
-      padding: 3px;
-      cursor: pointer;
-    }
-
-    .pod-timeline-meta {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 2px;
-      min-width: 0;
-    }
-
-    .pod-timeline-time {
-      font-size: 12px;
-      font-weight: 700;
-      font-family: var(--mono);
-      color: var(--pod-text);
-    }
-
-    .pod-timeline-reason {
-      font-size: 11.5px;
-      color: var(--pod-muted);
-      overflow-wrap: anywhere;
-    }
-
     .pod-lightbox {
       position: fixed;
       inset: 0;
@@ -1204,70 +1044,29 @@
       justify-content: center;
       z-index: 5000;
       flex-direction: column;
-      gap: 12px;
-      padding: 64px 20px 20px;
-      overflow-y: auto;
     }
 
     .pod-lightbox.show {
       display: flex;
     }
 
-    .pod-lb-stage {
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      max-width: 94vw;
-      min-height: 0;
-      overflow: visible;
-    }
-
-    .pod-lb-stage.zoomed img {
-      cursor: grab;
-    }
-
-    .pod-lb-stage.zoomed.dragging img {
-      cursor: grabbing;
-    }
-
     .pod-lightbox img {
-      max-width: 92vw;
-      max-height: 78vh;
+      max-width: 88vw;
+      max-height: 80vh;
       border-radius: 8px;
       box-shadow: 0 16px 40px rgba(0, 0, 0, .65);
-      transition: transform .1s ease, max-width .15s ease, max-height .15s ease;
-      display: block;
-      transform-origin: center center;
-      user-select: none;
-      -webkit-user-drag: none;
-    }
-
-    .pod-lb-zoom-hint {
-      flex: none;
-      color: #767a8f;
-      font-size: 11px;
-      text-align: center;
     }
 
     .pod-lb-caption {
-      flex: none;
+      position: absolute;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
       color: #b2b6ca;
       font-size: 12.5px;
       max-width: 80vw;
       text-align: center;
-      word-break: break-word;
-    }
-
-    .pod-lb-cap-time {
-      font-family: 'Courier New', monospace;
-      font-weight: 700;
-      color: #e9e9ed;
-    }
-
-    .pod-lb-cap-reason {
-      margin-top: 3px;
-      color: #b2b6ca;
+      word-break: break-all;
     }
 
     .pod-lb-close,
@@ -1291,32 +1090,6 @@
       right: 24px;
       font-size: 19px;
       padding: 9px 15px;
-      z-index: 5011;
-    }
-
-    .pod-lb-toolbar {
-      position: absolute;
-      top: 18px;
-      left: 24px;
-      display: flex;
-      gap: 8px;
-      z-index: 5011;
-    }
-
-    .pod-lb-rotate {
-      background: rgba(255, 255, 255, .08);
-      color: #e9e9ed;
-      border: 1px solid rgba(255, 255, 255, .14);
-      border-radius: 999px;
-      cursor: pointer;
-      font-size: 19px;
-      padding: 9px 13px;
-      line-height: 1;
-    }
-
-    .pod-lb-rotate:hover {
-      background: rgba(145, 132, 217, .25);
-      border-color: #9184d9;
     }
 
     .pod-lb-nav {
@@ -2101,72 +1874,12 @@
         <label class="field-label">Chế độ</label>
         <select id="chk-mode-select" class="chk-input" style="margin-bottom:12px;">
           <option value="tra-cuu">🔎 Tra cứu</option>
+          <option value="tra-cuu-v2">🗄️ Tra cứu v2</option>
           <option value="calllog">🕘 CallLog</option>
           <option value="pod">🖼️ POD</option>
         </select>
 
         <p class="hint chk-hint-note" id="chk-hint-note">⚠️ = đơn &gt;5 ngày chưa cập nhật · Bấm Mã đơn để mở tra cứu nội bộ GHN · Bấm tên kho để copy nhanh ID</p>
-
-        <div id="chk-mode-panel-tracuu">
-          <label class="field-label">Danh sách mã đơn</label>
-          <textarea id="chk-codes-input"
-            placeholder="Dán mã đơn cần kiểm tra, mỗi dòng 1 mã."></textarea>
-
-          <div class="actions">
-            <button class="btn-primary" id="chk-btn-run">Chạy kiểm tra</button>
-            <button class="btn-ghost" id="chk-btn-clear">Xóa</button>
-            <span class="count-tag" id="chk-code-count"></span>
-          </div>
-
-          <div class="chk-history-title">
-            <span>🕘 Lịch sử gần đây</span>
-            <button type="button" class="chk-history-clear-all" id="chk-history-clear-all">Xóa tất cả</button>
-          </div>
-          <div id="chk-history-list"></div>
-        </div>
-
-        <div id="chk-mode-panel-pod" style="display:none;">
-          <label class="field-label">Danh sách mã đơn (POD)</label>
-          <textarea id="pod-codes-input"
-            placeholder="Dán mã đơn cần lấy ảnh POD, mỗi dòng 1 mã."></textarea>
-
-          <div class="actions">
-            <button class="btn-primary" id="pod-btn-run">Lấy ảnh POD</button>
-            <button class="btn-ghost" id="pod-btn-clear">Xóa</button>
-            <span class="count-tag" id="pod-code-count"></span>
-          </div>
-
-          <div class="chk-history-title">
-            <span>🕘 Lịch sử gần đây</span>
-            <button type="button" class="chk-history-clear-all" id="pod-history-clear-all">Xóa tất cả</button>
-          </div>
-          <div id="pod-history-list"></div>
-        </div>
-
-        <div id="chk-mode-panel-calllog" style="display:none;">
-          <p class="hint">🚧 CallLog đang được phát triển — sẽ hoàn thiện sau khi xong POD.</p>
-
-          <label class="field-label">Danh sách mã đơn (CallLog)</label>
-          <textarea id="calllog-codes-input"
-            placeholder="Dán mã đơn cần tra CallLog, mỗi dòng 1 mã."></textarea>
-
-          <div class="actions">
-            <button class="btn-primary" id="calllog-btn-run">Chạy CallLog</button>
-            <button class="btn-ghost" id="calllog-btn-clear">Xóa</button>
-            <span class="count-tag" id="calllog-code-count"></span>
-          </div>
-
-          <div class="chk-history-title">
-            <span>🕘 Lịch sử gần đây</span>
-            <button type="button" class="chk-history-clear-all" id="calllog-history-clear-all">Xóa tất cả</button>
-          </div>
-          <div id="calllog-history-list">
-            <div class="chk-history-empty">Chưa có lịch sử</div>
-          </div>
-        </div>
-
-
-        <div class="divider-or">Cấu hình chung</div>
 
         <div id="chk-config-fields">
           <label class="field-label">User-Agent</label>
@@ -2182,6 +1895,55 @@
           <span>🔒 Đã cấu hình User-Agent &amp; Token</span>
           <button type="button" class="chk-edit-link" id="chk-btn-edit-config">Thay đổi</button>
         </div>
+
+        <div class="divider-or">sau đó</div>
+
+        <div id="chk-mode-panel-tracuu">
+          <label class="field-label">Danh sách mã đơn</label>
+          <textarea id="chk-codes-input"
+            placeholder="Dán mã đơn cần kiểm tra, mỗi dòng 1 mã."></textarea>
+
+          <div class="actions">
+            <button class="btn-primary" id="chk-btn-run">Chạy kiểm tra</button>
+            <button class="btn-ghost" id="chk-btn-clear">Xóa</button>
+            <span class="count-tag" id="chk-code-count"></span>
+          </div>
+
+          <div class="chk-history-title">🕘 Lịch sử gần đây</div>
+          <div id="chk-history-list"></div>
+        </div>
+
+        <div id="chk-mode-panel-v2" style="display:none;">
+          <p class="hint">Tra từ nguồn dữ liệu tổng hợp, không cần User-Agent/Token. Dữ liệu có thể trễ so với realtime, dùng chế độ 🔎 Tra cứu khi cần trạng thái mới nhất.</p>
+          <label class="field-label">Danh sách mã đơn</label>
+          <textarea id="dv2-codes-input"
+            placeholder="Dán mã đơn cần tra, mỗi dòng 1 mã hoặc cách nhau dấu phẩy."></textarea>
+
+          <div class="actions">
+            <button class="btn-primary" id="dv2-btn-run">Tra cứu</button>
+            <button class="btn-ghost" id="dv2-btn-clear">Xóa</button>
+            <span class="count-tag" id="dv2-code-count"></span>
+          </div>
+
+          <div class="chk-history-title">🕘 Lịch sử gần đây</div>
+          <div id="dv2-history-list"></div>
+        </div>
+
+        <div id="chk-mode-panel-pod" style="display:none;">
+          <label class="field-label">Danh sách mã đơn (POD)</label>
+          <textarea id="pod-codes-input"
+            placeholder="Dán mã đơn cần lấy ảnh POD, mỗi dòng 1 mã."></textarea>
+
+          <div class="actions">
+            <button class="btn-primary" id="pod-btn-run">Lấy ảnh POD</button>
+            <button class="btn-ghost" id="pod-btn-clear">Xóa</button>
+            <span class="count-tag" id="pod-code-count"></span>
+          </div>
+        </div>
+
+        <div id="chk-mode-panel-calllog" style="display:none;">
+          <p class="hint">🚧 CallLog đang được phát triển — sẽ hoàn thiện sau khi xong POD.</p>
+        </div>
       </div>
 
       <div class="main-col" id="main-col-normal">
@@ -2190,6 +1952,7 @@
 
       <div class="main-col" id="main-col-checker" style="display:none;">
         <div id="chk-results-area"></div>
+        <div id="dv2-results-area" style="display:none;"></div>
         <div id="pod-results-area" style="display:none;"></div>
         <div id="calllog-results-area" style="display:none;">
           <div class="state" style="padding:40px 0;text-align:center;color:var(--muted);">🚧 CallLog đang được phát triển.</div>
@@ -2198,17 +1961,10 @@
     </div>
 
     <div class="pod-lightbox" id="pod-lightbox">
-      <div class="pod-lb-toolbar">
-        <button type="button" class="pod-lb-rotate" id="pod-lb-rotate-left" title="Xoay trái 90°">⟲</button>
-        <button type="button" class="pod-lb-rotate" id="pod-lb-rotate-right" title="Xoay phải 90°">⟳</button>
-      </div>
       <button type="button" class="pod-lb-close" id="pod-lb-close">✕</button>
       <button type="button" class="pod-lb-nav pod-lb-prev" id="pod-lb-prev">‹</button>
+      <img id="pod-lb-img" alt="" />
       <button type="button" class="pod-lb-nav pod-lb-next" id="pod-lb-next">›</button>
-      <div class="pod-lb-stage" id="pod-lb-stage">
-        <img id="pod-lb-img" alt="" />
-      </div>
-      <div class="pod-lb-zoom-hint">Ctrl + cuộn chuột để phóng to · kéo ảnh để di chuyển · nhấp đúp để về cỡ gốc</div>
       <div class="pod-lb-caption" id="pod-lb-caption"></div>
     </div>
 
@@ -2987,24 +2743,21 @@
       const CHK_MODE_KEY = "ka_lookup_chk_mode_v1";
       const chkModeSelect = el("#chk-mode-select");
       const chkAppTitle = el("#chk-app-title");
-      const chkHintNote = el("#chk-hint-note");
       const chkModePanels = {
         "tra-cuu": el("#chk-mode-panel-tracuu"),
+        "tra-cuu-v2": el("#chk-mode-panel-v2"),
         "pod": el("#chk-mode-panel-pod"),
         "calllog": el("#chk-mode-panel-calllog")
       };
       const chkResultPanels = {
         "tra-cuu": chkResultsArea,
+        "tra-cuu-v2": el("#dv2-results-area"),
         "pod": el("#pod-results-area"),
         "calllog": el("#calllog-results-area")
       };
-      const CHK_RESULT_DISPLAY = {
-        "tra-cuu": "flex",
-        "pod": "block",
-        "calllog": "block"
-      };
       const CHK_MODE_TITLES = {
         "tra-cuu": "Kiểm tra đơn",
+        "tra-cuu-v2": "Tra cứu v2",
         "pod": "POD",
         "calllog": "CallLog"
       };
@@ -3013,12 +2766,12 @@
         if (!chkModePanels[mode]) mode = "tra-cuu";
         Object.keys(chkModePanels).forEach(k => {
           chkModePanels[k].style.display = k === mode ? "block" : "none";
-          chkResultPanels[k].style.display = k === mode ? CHK_RESULT_DISPLAY[k] : "none";
+          chkResultPanels[k].style.display = k === mode ? "block" : "none";
         });
-        chkHintNote.style.display = mode === "tra-cuu" ? "block" : "none";
         chkModeSelect.value = mode;
         chkAppTitle.textContent = CHK_MODE_TITLES[mode] || "Kiểm tra đơn";
         try { localStorage.setItem(CHK_MODE_KEY, mode); } catch (err) { }
+        if (typeof applyChkModeChrome === "function") applyChkModeChrome(mode);
       }
 
       chkModeSelect.addEventListener("change", () => setChkMode(chkModeSelect.value));
@@ -3029,6 +2782,371 @@
         setChkMode(saved);
       })();
 
+      const DV2_ENDPOINT = "/api/v2x4";
+      const DV2_CHUNK = 500;
+      const DV2_HISTORY_KEY = "ka_lookup_dv2_history_v1";
+      const DV2_HISTORY_MAX = 5;
+      const DV2_LABELS = {
+        dt: "Ngày phân vùng", order_code: "Mã đơn", client_id: "Mã KH", pick_type: "Hình thức lấy",
+        created_date: "Ngày tạo", order_date: "Ngày hẹn lấy", first_picked_time: "Lấy lần đầu", end_pick_time: "Lấy thành công",
+        first_delivered_time: "Giao lần đầu", end_delivery_time: "Giao thành công", first_return_time: "Hoàn lần đầu",
+        end_return_time: "Hoàn thành công", end_success_time: "Kết thúc", lost_time: "Thời điểm thất lạc",
+        updated_employee: "NV cập nhật cuối", from_name: "Người gửi", from_phone: "SĐT gửi", from_address: "Địa chỉ gửi",
+        to_address: "Địa chỉ nhận", weight: "KL tính cước (g)", order_value: "Giá trị", cod_amount: "COD",
+        insurance_value: "Khai giá", content: "Nội dung", status: "Trạng thái", from_ward: "Phường/xã gửi",
+        from_province: "Tỉnh gửi", from_region: "Vùng gửi", to_ward: "Phường/xã nhận", to_province: "Tỉnh nhận",
+        to_region: "Vùng nhận", from_ward_code: "Mã phường gửi", to_ward_code: "Mã phường nhận",
+        from_ward_id_v2: "ID phường gửi v2", from_province_id_v2: "ID tỉnh gửi v2", to_ward_id_v2: "ID phường nhận v2",
+        to_province_id_v2: "ID tỉnh nhận v2", pick_wh: "Kho lấy", delivery_wh: "Kho giao", return_wh: "Kho trả",
+        current_wh: "Kho hiện tại", next_wh: "Kho kế tiếp", num_pick: "Số lần lấy", num_deliver: "Số lần giao",
+        num_return: "Số lần hoàn", cat_level1: "Ngành hàng 1", cat_level2: "Ngành hàng 2", cat_level3: "Ngành hàng 3"
+      };
+      const DV2_MAIN_COLUMNS = ["order_code", "client_id", "status", "pick_type", "created_date", "end_pick_time",
+        "end_delivery_time", "end_return_time", "lost_time", "order_value", "cod_amount", "insurance_value", "weight",
+        "from_province", "to_province", "pick_wh", "delivery_wh", "current_wh", "next_wh", "num_pick", "num_deliver",
+        "num_return", "updated_employee", "content"];
+      const DV2_MONEY = new Set(["order_value", "cod_amount", "insurance_value"]);
+      const DV2_NUMBER = new Set(["weight", "num_pick", "num_deliver", "num_return"]);
+
+      const dv2CodesInput = el("#dv2-codes-input");
+      const dv2CodeCount = el("#dv2-code-count");
+      const dv2BtnRun = el("#dv2-btn-run");
+      const dv2ResultsArea = el("#dv2-results-area");
+      let dv2State = { items: [], columns: [], notFound: [], invalid: [], requested: 0, ms: 0, duplicates: 0, errors: [] };
+      let dv2Search = "";
+      let dv2SortField = null;
+      let dv2SortDir = 1;
+      let dv2ShowAll = false;
+
+      function dv2Esc(v) {
+        return String(v ?? "").replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
+      }
+
+      function dv2Label(f) {
+        return DV2_LABELS[f] || f;
+      }
+
+      function dv2Display(r, f) {
+        const v = r[f];
+        if (v === undefined || v === null || v === "") return "";
+        if (DV2_MONEY.has(f)) return formatMoney(v);
+        if (DV2_NUMBER.has(f)) return Number(v).toLocaleString("vi-VN");
+        return v;
+      }
+
+      function dv2RowClass(status) {
+        const s = String(status || "").toLowerCase();
+        if (s.includes("hủy")) return "chk-status-cancel";
+        if (s.includes("thất lạc") || s.includes("hư hỏng")) return "chk-status-lost";
+        if (s.includes("hoàn hàng thành công") || s.includes("vô thừa nhận")) return "chk-status-return";
+        if (s.includes("giao hàng thành công")) return "chk-status-delivered";
+        return "";
+      }
+
+      function dv2Columns() {
+        const all = dv2State.columns.length ? dv2State.columns : Object.keys(dv2State.items[0] || {});
+        if (dv2ShowAll) return ["order_code", ...all.filter(c => c !== "order_code")];
+        return DV2_MAIN_COLUMNS.filter(c => all.includes(c));
+      }
+
+      function dv2ExportColumns() {
+        const all = dv2State.columns.length ? dv2State.columns : Object.keys(dv2State.items[0] || {});
+        return ["order_code", ...all.filter(c => c !== "order_code")];
+      }
+
+      function dv2UpdateCount() {
+        const n = parseCodes(dv2CodesInput.value).length;
+        dv2CodeCount.textContent = n ? `${n} mã` : "";
+      }
+      dv2CodesInput.addEventListener("input", dv2UpdateCount);
+
+      function dv2LoadHistory() {
+        try {
+          const raw = localStorage.getItem(DV2_HISTORY_KEY);
+          return raw ? JSON.parse(raw) : [];
+        } catch (err) {
+          return [];
+        }
+      }
+
+      function dv2SaveHistory() {
+        const h = dv2LoadHistory();
+        const entry = { time: new Date().toLocaleString("sv-SE", { timeZone: "Asia/Ho_Chi_Minh" }), requested: dv2State.requested, found: dv2State.items.length, codes: dv2State.allCodes || [] };
+        const snapshot = JSON.stringify(dv2State);
+        if (snapshot.length < 1500000) entry.state = dv2State;
+        h.unshift(entry);
+        let trimmed = h.slice(0, DV2_HISTORY_MAX);
+        for (let i = trimmed.length - 1; i >= 0; i--) {
+          try {
+            localStorage.setItem(DV2_HISTORY_KEY, JSON.stringify(trimmed));
+            break;
+          } catch (err) {
+            trimmed = trimmed.map((x, idx) => idx >= i ? { ...x, state: undefined } : x);
+          }
+        }
+        dv2RenderHistory();
+      }
+
+      function dv2RenderHistory() {
+        const listEl = el("#dv2-history-list");
+        const h = dv2LoadHistory();
+        if (!h.length) {
+          listEl.innerHTML = `<div class="chk-history-empty">Chưa có lịch sử</div>`;
+          return;
+        }
+        listEl.innerHTML = h.map((x, i) => `
+          <div class="chk-history-item" data-dv2-index="${i}" title="${x.state ? "Bấm để xem lại kết quả đã lưu" : "Kết quả lớn không lưu được, bấm để nạp lại danh sách mã"}">
+            <div class="h-time">${dv2Esc(x.time)}</div>
+            <div class="h-count">${x.found}/${x.requested} mã${x.state ? "" : " · cần tra lại"}</div>
+          </div>`).join("");
+      }
+
+      el("#dv2-history-list").addEventListener("click", e => {
+        const item = e.target.closest(".chk-history-item");
+        if (!item) return;
+        const x = dv2LoadHistory()[Number(item.dataset.dv2Index)];
+        if (!x) return;
+        document.querySelectorAll("#dv2-history-list .chk-history-item").forEach(n => n.classList.remove("active"));
+        item.classList.add("active");
+        if (x.state) {
+          dv2State = x.state;
+          dv2Search = "";
+          dv2RenderResults();
+        } else {
+          dv2CodesInput.value = (x.codes || []).join("\n");
+          dv2UpdateCount();
+        }
+      });
+
+      async function dv2Run() {
+        const codes = parseCodes(dv2CodesInput.value).map(c => c.toUpperCase());
+        if (!codes.length) {
+          dv2ResultsArea.innerHTML = `<div class="empty"><div class="big">✏️</div>Nhập ít nhất một mã đơn để tra cứu.</div>`;
+          return;
+        }
+        dv2BtnRun.disabled = true;
+        const chunks = [];
+        for (let i = 0; i < codes.length; i += DV2_CHUNK) chunks.push(codes.slice(i, i + DV2_CHUNK));
+        const next = { items: [], columns: [], notFound: [], invalid: [], requested: codes.length, ms: 0, duplicates: 0, errors: [], allCodes: codes };
+        const t0 = Date.now();
+        for (let i = 0; i < chunks.length; i++) {
+          dv2ResultsArea.innerHTML = `<div class="state loading"><span class="spinner"></span>Đang tra cứu${chunks.length > 1 ? ` — lượt ${i + 1}/${chunks.length} (${chunks[i].length} mã)` : "..."}</div>`;
+          try {
+            const res = await fetch(DV2_ENDPOINT, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ c: chunks[i], e: sessionEmail, k: sessionPassword })
+            });
+            const data = await res.json().catch(() => ({ ok: false, message: `HTTP ${res.status}` }));
+            if (data.ok !== true) throw new Error(data.message || `HTTP ${res.status}`);
+            next.items.push(...(data.items || []));
+            if (!next.columns.length && Array.isArray(data.columns)) next.columns = data.columns;
+            next.notFound.push(...(data.notFound || []));
+            next.invalid.push(...(data.invalid || []));
+            next.duplicates += Number(data.duplicates || 0);
+          } catch (err) {
+            next.errors.push({ index: i + 1, count: chunks[i].length, message: err.message, codes: chunks[i] });
+          }
+        }
+        next.ms = Date.now() - t0;
+        dv2BtnRun.disabled = false;
+        dv2State = next;
+        dv2Search = "";
+        dv2SortField = null;
+        dv2RenderResults();
+        if (next.items.length) dv2SaveHistory();
+      }
+
+      dv2BtnRun.onclick = dv2Run;
+      el("#dv2-btn-clear").onclick = () => {
+        dv2CodesInput.value = "";
+        dv2UpdateCount();
+        dv2State = { items: [], columns: [], notFound: [], invalid: [], requested: 0, ms: 0, duplicates: 0, errors: [] };
+        dv2ResultsArea.innerHTML = "";
+      };
+
+      function dv2FilteredRows() {
+        const tokens = dv2Search.split(/[\s,;]+/).map(s => s.trim().toUpperCase()).filter(Boolean);
+        let rows = tokens.length ? dv2State.items.filter(r => tokens.some(t => String(r.order_code || "").toUpperCase().includes(t))) : dv2State.items;
+        if (dv2SortField) {
+          const f = dv2SortField;
+          rows = [...rows].sort((a, b) => {
+            if (DV2_MONEY.has(f) || DV2_NUMBER.has(f)) return ((Number(a[f]) || 0) - (Number(b[f]) || 0)) * dv2SortDir;
+            return String(a[f] ?? "").localeCompare(String(b[f] ?? ""), "vi", { numeric: true, sensitivity: "base" }) * dv2SortDir;
+          });
+        }
+        return { rows, tokens };
+      }
+
+      function dv2RenderResults() {
+        const s = dv2State;
+        if (!s.items.length && !s.notFound.length && !s.errors.length) {
+          dv2ResultsArea.innerHTML = `<div class="empty"><div class="big">🗄️</div>Chưa có kết quả.</div>`;
+          return;
+        }
+        const cols = dv2Columns();
+        const { rows, tokens } = dv2FilteredRows();
+        const statusCount = {};
+        s.items.forEach(r => { const k = r.status || "Không rõ"; statusCount[k] = (statusCount[k] || 0) + 1; });
+        const statusChips = Object.entries(statusCount).sort((a, b) => b[1] - a[1]).map(([k, v]) => `<span class="stat-badge">${dv2Esc(k)}: ${v}</span>`).join(" ");
+        const body = rows.map(r => `<tr class="${dv2RowClass(r.status)}">${cols.map(f => {
+          if (f === "order_code") {
+            const url = `https://tracuunoibo.ghn.vn/internal?order_code=${encodeURIComponent(r.order_code || "")}`;
+            return `<td class="code-cell"><a href="${url}" target="_blank" rel="noopener" class="ticket-link">${dv2Esc(r.order_code)}</a></td>`;
+          }
+          const cls = DV2_MONEY.has(f) || DV2_NUMBER.has(f) ? ' class="amount-cell"' : "";
+          return `<td${cls}>${dv2Esc(dv2Display(r, f))}</td>`;
+        }).join("")}</tr>`).join("");
+        const nfHtml = s.notFound.length ? `
+          <div class="state error" style="margin-top:10px;">
+            ⚠️ Không tìm thấy ${s.notFound.length} mã (chỉ có đơn tạo từ đầu tháng ${dv2WindowStart()} trở lại đây, thuộc nhóm client trong nguồn dữ liệu):
+            <div style="margin-top:6px;word-break:break-all;">${s.notFound.map(dv2Esc).join(", ")}</div>
+            <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">
+              <button class="btn-ghost" id="dv2-btn-copy-nf">📋 Copy mã không tìm thấy</button>
+              <button class="btn-ghost" id="dv2-btn-nf-realtime">↪ Kiểm tra realtime các mã này</button>
+            </div>
+          </div>` : "";
+        const errHtml = s.errors.length ? `<div class="state error" style="margin-top:10px;">⚠️ ${s.errors.length} lượt bị lỗi, kết quả có thể chưa đầy đủ: ${s.errors.map(e => `lượt ${e.index} (${e.count} mã): ${dv2Esc(e.message)}`).join("; ")}</div>` : "";
+        const invHtml = s.invalid.length ? `<div style="margin-top:8px;font-size:13.5px;color:var(--muted);">Bỏ qua ${s.invalid.length} mã sai định dạng: ${s.invalid.map(dv2Esc).join(", ")}</div>` : "";
+        const dupHtml = s.duplicates ? `<div style="margin-top:8px;font-size:13.5px;color:var(--muted);">ℹ️ Nguồn dữ liệu trả ${s.duplicates} dòng trùng mã đơn, đã giữ dòng đầu tiên.</div>` : "";
+        dv2ResultsArea.innerHTML = `
+          <div class="toolbar">
+            <span class="stats">
+              <span class="stat-badge total">Tìm thấy: ${s.items.length}/${s.requested}</span>
+              <span class="stat-badge">⏱ ${(s.ms / 1000).toFixed(1)}s</span>
+              ${statusChips}
+            </span>
+            <div class="toolbar-actions"${s.items.length ? "" : ' style="display:none;"'}>
+              <button class="btn-ghost" id="dv2-btn-cols">${dv2ShowAll ? "▤ Cột chính" : "▦ Tất cả cột"}</button>
+              <button class="btn-ghost" id="dv2-btn-copy">Copy kết quả</button>
+              <button class="btn-ghost" id="dv2-btn-realtime" title="Đưa các mã tìm thấy sang chế độ Tra cứu realtime">↪ Kiểm tra realtime</button>
+              <div class="dl-wrap">
+                <button class="btn-ghost" id="dv2-btn-dl-toggle">⬇ Tải ▾</button>
+                <div class="dl-menu" id="dv2-dl-menu">
+                  <div class="dl-item" data-fmt="xlsx">Excel (.xlsx)</div>
+                  <div class="dl-item" data-fmt="csv">CSV (.csv)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="result-search-row">
+            <input type="text" id="dv2-search" class="result-search-input" placeholder="Lọc mã đơn trong kết quả này — dán được nhiều mã, cách nhau bằng dấu phẩy/khoảng trắng" value="${dv2Esc(dv2Search)}" />
+            <span class="result-search-count">${tokens.length ? `${rows.length}/${s.items.length} dòng khớp` : `${s.items.length} dòng`}</span>
+          </div>
+          ${s.items.length ? `<div class="results-table-wrap">
+            <table class="result-table">
+              <thead><tr>${cols.map(f => {
+                const arrow = dv2SortField === f ? (dv2SortDir === 1 ? " ▲" : " ▼") : " ⇅";
+                const cls = DV2_MONEY.has(f) || DV2_NUMBER.has(f) ? "align-right chk-sortable-th" : "chk-sortable-th";
+                return `<th class="${cls}" data-dv2-sort="${f}">${dv2Esc(dv2Label(f))}<span class="chk-sort-arrow">${arrow}</span></th>`;
+              }).join("")}</tr></thead>
+              <tbody>${body}</tbody>
+            </table>
+          </div>` : ""}
+          ${nfHtml}${errHtml}${invHtml}${dupHtml}`;
+        dv2BindResultEvents();
+      }
+
+      function dv2WindowStart() {
+        const d = new Date();
+        const m = new Date(d.getFullYear(), d.getMonth() - 5, 1);
+        return `${String(m.getMonth() + 1).padStart(2, "0")}/${m.getFullYear()}`;
+      }
+
+      function dv2Aoa() {
+        const cols = dv2ExportColumns();
+        return [cols.map(dv2Label), ...dv2FilteredRows().rows.map(r => cols.map(f => {
+          const v = r[f];
+          if (v === undefined || v === null) return "";
+          return DV2_MONEY.has(f) || DV2_NUMBER.has(f) ? Number(v) : v;
+        }))];
+      }
+
+      function dv2SendToRealtime(codes) {
+        if (!codes.length) return;
+        chkCodesInput.value = codes.join("\n");
+        chkCodesInput.dispatchEvent(new Event("input"));
+        setChkMode("tra-cuu");
+      }
+
+      function dv2BindResultEvents() {
+        const search = el("#dv2-search");
+        if (search) {
+          search.addEventListener("input", () => {
+            dv2Search = search.value;
+            const pos = search.selectionStart;
+            dv2RenderResults();
+            const again = el("#dv2-search");
+            again.focus();
+            again.setSelectionRange(pos, pos);
+          });
+        }
+        document.querySelectorAll("#dv2-results-area th[data-dv2-sort]").forEach(th => {
+          th.onclick = () => {
+            const f = th.dataset.dv2Sort;
+            if (dv2SortField === f) dv2SortDir = -dv2SortDir; else { dv2SortField = f; dv2SortDir = 1; }
+            dv2RenderResults();
+          };
+        });
+        const colsBtn = el("#dv2-btn-cols");
+        if (colsBtn) colsBtn.onclick = () => { dv2ShowAll = !dv2ShowAll; dv2RenderResults(); };
+        const copyBtn = el("#dv2-btn-copy");
+        if (copyBtn) copyBtn.onclick = async () => {
+          const text = dv2Aoa().map(r => r.join("\t")).join("\n");
+          try { await navigator.clipboard.writeText(text); copyBtn.textContent = "✓ Đã copy"; } catch (err) { copyBtn.textContent = "Không copy được"; }
+          setTimeout(() => { copyBtn.textContent = "Copy kết quả"; }, 1500);
+        };
+        const rtBtn = el("#dv2-btn-realtime");
+        if (rtBtn) rtBtn.onclick = () => dv2SendToRealtime(dv2FilteredRows().rows.map(r => r.order_code));
+        const nfCopy = el("#dv2-btn-copy-nf");
+        if (nfCopy) nfCopy.onclick = async () => {
+          try { await navigator.clipboard.writeText(dv2State.notFound.join("\n")); nfCopy.textContent = "✓ Đã copy"; } catch (err) { }
+        };
+        const nfRt = el("#dv2-btn-nf-realtime");
+        if (nfRt) nfRt.onclick = () => dv2SendToRealtime(dv2State.notFound);
+        const dlToggle = el("#dv2-btn-dl-toggle");
+        if (dlToggle) dlToggle.onclick = e => {
+          e.stopPropagation();
+          el("#dv2-dl-menu").classList.toggle("open");
+        };
+        document.querySelectorAll("#dv2-dl-menu .dl-item").forEach(item => {
+          item.onclick = () => {
+            const ws = XLSX.utils.aoa_to_sheet(dv2Aoa());
+            const stamp = new Date().toLocaleString("sv-SE", { timeZone: "Asia/Ho_Chi_Minh" }).replace(/[-: ]/g, "");
+            if (item.dataset.fmt === "csv") {
+              const blob = new Blob(["\ufeff" + XLSX.utils.sheet_to_csv(ws)], { type: "text/csv;charset=utf-8" });
+              const a = document.createElement("a");
+              a.href = URL.createObjectURL(blob);
+              a.download = `tracuu_v2_${stamp}.csv`;
+              a.click();
+              setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+            } else {
+              const wb = XLSX.utils.book_new();
+              XLSX.utils.book_append_sheet(wb, ws, "TraCuuV2");
+              XLSX.writeFile(wb, `tracuu_v2_${stamp}.xlsx`);
+            }
+            el("#dv2-dl-menu").classList.remove("open");
+          };
+        });
+      }
+
+      function applyChkModeChrome(mode) {
+        const isV2 = mode === "tra-cuu-v2";
+        const hint = el("#chk-hint-note");
+        if (hint) hint.style.display = isV2 ? "none" : "";
+        const divider = el("#side-panel-checker .divider-or");
+        if (divider) divider.style.display = isV2 ? "none" : "";
+        if (isV2) {
+          chkConfigFields.style.display = "none";
+          chkConfigSummary.style.display = "none";
+        } else {
+          updateChkConfigView();
+        }
+      }
+
+      dv2RenderHistory();
+      applyChkModeChrome(chkModeSelect.value);
+
       /* ───────────────────── Tab POD (Demo B — 3 cột Pick/Deliver/Return) ───────────────────── */
       const podCodesInput = el("#pod-codes-input");
       const podCodeCount = el("#pod-code-count");
@@ -3038,7 +3156,6 @@
       const podLightbox = el("#pod-lightbox");
       const podLbImg = el("#pod-lb-img");
       const podLbCaption = el("#pod-lb-caption");
-      const podLbStage = el("#pod-lb-stage");
 
       const POD_THEME_KEY = "ka_lookup_pod_theme_v1";
       const POD_PHASE_DEFS = [
@@ -3092,121 +3209,19 @@
         podSearchQuery = "";
       };
 
-      function escapePodHtml(s) {
-        return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-      }
-
       function openPodLightbox(idx) {
         if (!podFlatUrls.length) return;
         podLbIdx = ((idx % podFlatUrls.length) + podFlatUrls.length) % podFlatUrls.length;
         const item = podFlatUrls[podLbIdx];
         podLbImg.src = item.url;
-        const timeStr = formatPodTime(item.time);
-        const timeLine = `${podLbIdx + 1} / ${podFlatUrls.length} — ${item.orderCode} (${item.type})${timeStr ? " — " + timeStr : ""}`;
-        podLbCaption.innerHTML = `<div class="pod-lb-cap-time">${escapePodHtml(timeLine)}</div>` +
-          (item.reason ? `<div class="pod-lb-cap-reason">Lý do: ${escapePodHtml(item.reason)}</div>` : "");
+        podLbCaption.textContent = `${podLbIdx + 1} / ${podFlatUrls.length} — ${item.orderCode} (${item.type})`;
         podLightbox.classList.add("show");
-        resetPodZoom();
-        applyPodImgTransform();
       }
 
       function closePodLightbox() {
         podLightbox.classList.remove("show");
         podLbImg.src = "";
       }
-
-      /* ───────────────────── Xoay + phóng to (Ctrl+cuộn) trong lightbox ───────────────────── */
-      const podRotationMap = new Map();
-      const POD_ZOOM_MIN = 1;
-      const POD_ZOOM_MAX = 5;
-      let podZoomScale = 1;
-      let podZoomX = 0;
-      let podZoomY = 0;
-
-      function getPodRotation(url) {
-        return podRotationMap.get(url) || 0;
-      }
-
-      function resetPodZoom() {
-        podZoomScale = 1;
-        podZoomX = 0;
-        podZoomY = 0;
-      }
-
-      function applyPodImgTransform() {
-        const item = podFlatUrls[podLbIdx];
-        const deg = item ? getPodRotation(item.url) : 0;
-        podLbImg.style.transform =
-          `translate(${podZoomX}px, ${podZoomY}px) rotate(${deg}deg) scale(${podZoomScale})`;
-        if (deg === 90 || deg === 270) {
-          podLbImg.style.maxWidth = "78vh";
-          podLbImg.style.maxHeight = "92vw";
-        } else {
-          podLbImg.style.maxWidth = "";
-          podLbImg.style.maxHeight = "";
-        }
-        podLbStage.classList.toggle("zoomed", podZoomScale > POD_ZOOM_MIN);
-      }
-
-      function rotatePodImg(delta) {
-        const item = podFlatUrls[podLbIdx];
-        if (!item) return;
-        const next = ((getPodRotation(item.url) + delta) % 360 + 360) % 360;
-        podRotationMap.set(item.url, next);
-        applyPodImgTransform();
-      }
-
-      el("#pod-lb-rotate-left").onclick = () => rotatePodImg(-90);
-      el("#pod-lb-rotate-right").onclick = () => rotatePodImg(90);
-
-      podLbStage.addEventListener("wheel", e => {
-        if (!e.ctrlKey && !e.metaKey) return;
-        e.preventDefault();
-        const factor = Math.exp(-e.deltaY * 0.0015);
-        const next = Math.min(POD_ZOOM_MAX, Math.max(POD_ZOOM_MIN, podZoomScale * factor));
-        podZoomScale = next;
-        if (podZoomScale <= POD_ZOOM_MIN) {
-          podZoomScale = POD_ZOOM_MIN;
-          podZoomX = 0;
-          podZoomY = 0;
-        }
-        applyPodImgTransform();
-      }, { passive: false });
-
-      let podDragActive = false;
-      let podDragStartX = 0;
-      let podDragStartY = 0;
-      let podDragOrigX = 0;
-      let podDragOrigY = 0;
-
-      podLbImg.addEventListener("mousedown", e => {
-        if (podZoomScale <= POD_ZOOM_MIN) return;
-        podDragActive = true;
-        podDragStartX = e.clientX;
-        podDragStartY = e.clientY;
-        podDragOrigX = podZoomX;
-        podDragOrigY = podZoomY;
-        podLbStage.classList.add("dragging");
-        e.preventDefault();
-      });
-
-      window.addEventListener("mousemove", e => {
-        if (!podDragActive) return;
-        podZoomX = podDragOrigX + (e.clientX - podDragStartX);
-        podZoomY = podDragOrigY + (e.clientY - podDragStartY);
-        applyPodImgTransform();
-      });
-
-      window.addEventListener("mouseup", () => {
-        if (!podDragActive) return;
-        podDragActive = false;
-        podLbStage.classList.remove("dragging");
-      });
-
-      podLbImg.addEventListener("dblclick", () => {
-        resetPodZoom();
-        applyPodImgTransform();
-      });
 
       el("#pod-lb-close").onclick = closePodLightbox;
       el("#pod-lb-prev").onclick = () => openPodLightbox(podLbIdx - 1);
@@ -3219,30 +3234,20 @@
         if (e.key === "Escape") closePodLightbox();
         if (e.key === "ArrowLeft") openPodLightbox(podLbIdx - 1);
         if (e.key === "ArrowRight") openPodLightbox(podLbIdx + 1);
-        if (e.key === "[") rotatePodImg(-90);
-        if (e.key === "]") rotatePodImg(90);
       });
 
-      function formatPodTime(unixSeconds) {
-        if (!unixSeconds) return "";
-        const d = new Date(unixSeconds * 1000);
-        if (isNaN(d.getTime())) return "";
-        const pad = n => String(n).padStart(2, "0");
-        return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
-      }
-
-      function makePodThumbImg(item, orderCode) {
+      function makePodThumb(item, orderCode) {
         const flatIdx = podFlatUrls.length;
-        podFlatUrls.push({ url: item.url, type: item.type, orderCode, time: item.time, reason: item.reason });
+        podFlatUrls.push({ url: item.url, type: item.type, orderCode });
         const thumb = document.createElement("div");
-        thumb.className = "pod-timeline-thumb";
+        thumb.className = "pod-thumb";
         const img = document.createElement("img");
         img.loading = "lazy";
         img.src = item.url;
         img.alt = `${orderCode} - ${item.type}`;
         img.addEventListener("error", () => {
           thumb.classList.add("pod-thumb-error");
-          thumb.innerHTML = "<span>Lỗi</span>";
+          thumb.innerHTML = "<span>Không tải được ảnh<br>(bấm mở link gốc)</span>";
           thumb.onclick = () => window.open(item.url, "_blank");
         });
         thumb.appendChild(img);
@@ -3250,26 +3255,6 @@
           if (!thumb.classList.contains("pod-thumb-error")) openPodLightbox(flatIdx);
         });
         return thumb;
-      }
-
-      function makePodTimelineItem(item, orderCode) {
-        const row = document.createElement("div");
-        row.className = "pod-timeline-item";
-        row.appendChild(makePodThumbImg(item, orderCode));
-        const meta = document.createElement("div");
-        meta.className = "pod-timeline-meta";
-        const timeSpan = document.createElement("span");
-        timeSpan.className = "pod-timeline-time";
-        timeSpan.textContent = formatPodTime(item.time) || "Không rõ thời gian";
-        meta.appendChild(timeSpan);
-        if (item.reason) {
-          const reasonSpan = document.createElement("span");
-          reasonSpan.className = "pod-timeline-reason";
-          reasonSpan.textContent = item.reason;
-          meta.appendChild(reasonSpan);
-        }
-        row.appendChild(meta);
-        return row;
       }
 
       function sanitizePodFileName(s) {
@@ -3498,10 +3483,10 @@
               empty.textContent = "Không có ảnh.";
               col.appendChild(empty);
             } else {
-              const timeline = document.createElement("div");
-              timeline.className = "pod-timeline";
-              buckets[p.key].forEach(item => timeline.appendChild(makePodTimelineItem(item, r.order_code)));
-              col.appendChild(timeline);
+              const grid = document.createElement("div");
+              grid.className = "pod-grid";
+              buckets[p.key].forEach(item => grid.appendChild(makePodThumb(item, r.order_code)));
+              col.appendChild(grid);
             }
             cols.appendChild(col);
           });
@@ -3521,122 +3506,14 @@
         return res.json();
       }
 
-      /* ───────────────────── Lịch sử gần đây (dùng chung cho Tra cứu / POD / CallLog) ───────────────────── */
-      const HISTORY_MAX = 10;
-      const HISTORY_STORAGE_KEYS = {
-        "tra-cuu": "ka_lookup_chk_history_v1",
-        "pod": "ka_lookup_pod_history_v1",
-        "calllog": "ka_lookup_calllog_history_v1"
-      };
-
-      function loadHistory(modeKey) {
-        try {
-          const raw = localStorage.getItem(HISTORY_STORAGE_KEYS[modeKey]);
-          return raw ? JSON.parse(raw) : [];
-        } catch (err) {
-          return [];
-        }
-      }
-
-      function saveHistorySafely(modeKey, list) {
-        for (let n = list.length; n >= 0; n--) {
-          try {
-            localStorage.setItem(HISTORY_STORAGE_KEYS[modeKey], JSON.stringify(list.slice(0, n)));
-            return;
-          } catch (err) { }
-        }
-      }
-
-      function saveHistoryEntry(modeKey, results) {
-        if (!results || !results.length) return;
-        const history = loadHistory(modeKey);
-        history.unshift({
-          time: new Date().toLocaleString("vi-VN"),
-          count: results.length,
-          results
-        });
-        saveHistorySafely(modeKey, history.slice(0, HISTORY_MAX));
-      }
-
-      function deleteHistoryEntry(modeKey, idx) {
-        const history = loadHistory(modeKey);
-        history.splice(idx, 1);
-        saveHistorySafely(modeKey, history);
-      }
-
-      function clearHistoryAll(modeKey) {
-        try { localStorage.removeItem(HISTORY_STORAGE_KEYS[modeKey]); } catch (err) { }
-      }
-
-      function renderHistoryList(modeKey, listSelector, onRestore, onRerun) {
-        const history = loadHistory(modeKey);
-        const listEl = el(listSelector);
-        if (!listEl) return;
-        if (!history.length) {
-          listEl.innerHTML = `<div class="chk-history-empty">Chưa có lịch sử</div>`;
-          return;
-        }
-        listEl.innerHTML = history.map((h, i) => `
-          <div class="chk-history-item" data-idx="${i}">
-            <div class="h-main">
-              <div class="h-time">${h.time}</div>
-              <div class="h-count">${h.count} mã đơn</div>
-            </div>
-            <div class="chk-history-item-actions">
-              <button type="button" class="h-rerun-btn" data-action="rerun" title="Chạy lại">🔁</button>
-              <button type="button" class="h-delete-btn" data-action="delete" title="Xóa">✕</button>
-            </div>
-          </div>`).join("");
-
-        listEl.querySelectorAll(".chk-history-item").forEach(itemEl => {
-          const idx = Number(itemEl.dataset.idx);
-          itemEl.addEventListener("click", e => {
-            const actionBtn = e.target.closest("[data-action]");
-            const hist = loadHistory(modeKey);
-            if (!hist[idx]) return;
-            if (actionBtn) {
-              e.stopPropagation();
-              if (actionBtn.dataset.action === "delete") {
-                deleteHistoryEntry(modeKey, idx);
-                renderHistoryList(modeKey, listSelector, onRestore, onRerun);
-              } else if (actionBtn.dataset.action === "rerun") {
-                const codes = hist[idx].results.map(r => r.order_code).filter(Boolean);
-                onRerun(codes);
-              }
-              return;
-            }
-            onRestore(hist[idx].results);
-            listEl.querySelectorAll(".chk-history-item").forEach(x => x.classList.remove("active"));
-            itemEl.classList.add("active");
-          });
-        });
-      }
-
-      function wireHistoryClearAll(modeKey, clearBtnSelector, listSelector, onRestore, onRerun) {
-        const btn = el(clearBtnSelector);
-        if (!btn) return;
-        btn.onclick = () => {
-          if (!loadHistory(modeKey).length) return;
-          if (!confirm("Xóa toàn bộ lịch sử của chế độ này?")) return;
-          clearHistoryAll(modeKey);
-          renderHistoryList(modeKey, listSelector, onRestore, onRerun);
-        };
-      }
-
-      /* ───────────────────── POD: gắn lịch sử + chạy lại ───────────────────── */
-      function restorePodResults(results) {
-        podResults = results;
-        podSearchQuery = "";
-        renderPodResults();
-      }
-
-      async function runPodCheck(codes) {
+      podBtnRun.onclick = async () => {
         const userAgent = chkUserAgentInput.value.trim();
         const token = chkTokenInput.value.trim();
         if (!userAgent || !token) {
           alert("Vui lòng nhập đầy đủ User-Agent và Token.");
           return;
         }
+        const codes = parsePodCodes(podCodesInput.value);
         if (!codes.length) {
           alert("Vui lòng nhập ít nhất 1 mã đơn.");
           return;
@@ -3657,64 +3534,7 @@
         }
         podBtnRun.disabled = false;
         renderPodResults();
-        saveHistoryEntry("pod", podResults);
-        renderHistoryList("pod", "#pod-history-list", restorePodResults, rerunPod);
-      }
-
-      function rerunPod(codes) {
-        podCodesInput.value = codes.join("\n");
-        podCodeCount.textContent = codes.length ? codes.length + " mã đơn" : "";
-        runPodCheck(codes);
-      }
-
-      podBtnRun.onclick = () => runPodCheck(parsePodCodes(podCodesInput.value));
-
-      renderHistoryList("pod", "#pod-history-list", restorePodResults, rerunPod);
-      wireHistoryClearAll("pod", "#pod-history-clear-all", "#pod-history-list", restorePodResults, rerunPod);
-
-      /* ───────────────────── CallLog (dùng chung toàn bộ cơ chế Tra cứu/POD, chờ API thật) ───────────────────── */
-      const callLogCodesInput = el("#calllog-codes-input");
-      const callLogCodeCount = el("#calllog-code-count");
-      const callLogBtnRun = el("#calllog-btn-run");
-      const callLogBtnClear = el("#calllog-btn-clear");
-      const callLogResultsArea = el("#calllog-results-area");
-
-      function parseCallLogCodes(raw) {
-        return [...new Set(raw.split(/[\s,;]+/).map(s => s.trim().toUpperCase()).filter(Boolean))];
-      }
-
-      callLogCodesInput.addEventListener("input", () => {
-        const n = parseCallLogCodes(callLogCodesInput.value).length;
-        callLogCodeCount.textContent = n > 0 ? n + " mã đơn" : "";
-      });
-
-      callLogBtnClear.onclick = () => {
-        callLogCodesInput.value = "";
-        callLogCodeCount.textContent = "";
       };
-
-      function restoreCallLogResults(results) {
-        callLogResultsArea.innerHTML = `<div class="state" style="padding:40px 0;text-align:center;color:var(--muted);">🚧 CallLog đang được phát triển — chưa có dữ liệu để xem lại.</div>`;
-      }
-
-      async function runCallLogCheck(codes) {
-        if (!codes.length) {
-          alert("Vui lòng nhập ít nhất 1 mã đơn.");
-          return;
-        }
-        callLogResultsArea.innerHTML = `<div class="state" style="padding:40px 0;text-align:center;color:var(--muted);">🚧 CallLog đang được phát triển — chưa thể chạy thật với ${codes.length} mã đơn này.</div>`;
-      }
-
-      function rerunCallLog(codes) {
-        callLogCodesInput.value = codes.join("\n");
-        callLogCodeCount.textContent = codes.length ? codes.length + " mã đơn" : "";
-        runCallLogCheck(codes);
-      }
-
-      callLogBtnRun.onclick = () => runCallLogCheck(parseCallLogCodes(callLogCodesInput.value));
-
-      renderHistoryList("calllog", "#calllog-history-list", restoreCallLogResults, rerunCallLog);
-      wireHistoryClearAll("calllog", "#calllog-history-clear-all", "#calllog-history-list", restoreCallLogResults, rerunCallLog);
 
       function parseChkCodes(raw) {
         return [...new Set(raw.split(/[\s,;]+/).map(s => s.trim().toUpperCase()).filter(Boolean))];
@@ -3738,22 +3558,63 @@
       let chkResults = [];
       let chkSortField = null;
       let chkSortDir = 1;
-      let chkSearchQuery = "";
 
-      function restoreChkResults(results) {
-        chkResults = results;
+      const CHK_HISTORY_KEY = "ka_lookup_chk_history_v1";
+      const CHK_HISTORY_MAX = 5;
+
+      function loadChkHistory() {
+        try {
+          const raw = localStorage.getItem(CHK_HISTORY_KEY);
+          return raw ? JSON.parse(raw) : [];
+        } catch (err) {
+          return [];
+        }
+      }
+
+      function saveChkHistoryEntry(results) {
+        if (!results.length) return;
+        const history = loadChkHistory();
+        history.unshift({
+          time: new Date().toLocaleString("vi-VN"),
+          count: results.length,
+          results
+        });
+        const trimmed = history.slice(0, CHK_HISTORY_MAX);
+        try {
+          localStorage.setItem(CHK_HISTORY_KEY, JSON.stringify(trimmed));
+        } catch (err) { }
+      }
+
+      function renderChkHistoryList() {
+        const history = loadChkHistory();
+        const listEl = el("#chk-history-list");
+        if (!listEl) return;
+        if (!history.length) {
+          listEl.innerHTML = `<div class="chk-history-empty">Chưa có lịch sử</div>`;
+          return;
+        }
+        listEl.innerHTML = history.map((h, i) => `
+          <div class="chk-history-item" data-history-index="${i}">
+            <div class="h-time">${h.time}</div>
+            <div class="h-count">${h.count} mã đơn</div>
+          </div>`).join("");
+      }
+
+      el("#chk-history-list").addEventListener("click", e => {
+        const item = e.target.closest(".chk-history-item");
+        if (!item) return;
+        const idx = Number(item.dataset.historyIndex);
+        const history = loadChkHistory();
+        if (!history[idx]) return;
+        chkResults = history[idx].results;
         chkSearchQuery = "";
         renderChkResults();
-      }
+        document.querySelectorAll(".chk-history-item").forEach(x => x.classList.remove("active"));
+        item.classList.add("active");
+      });
 
-      function rerunChk(codes) {
-        chkCodesInput.value = codes.join("\n");
-        chkCodeCount.textContent = codes.length ? codes.length + " mã đơn" : "";
-        runChkCheck(codes);
-      }
-
-      renderHistoryList("tra-cuu", "#chk-history-list", restoreChkResults, rerunChk);
-      wireHistoryClearAll("tra-cuu", "#chk-history-clear-all", "#chk-history-list", restoreChkResults, rerunChk);
+      renderChkHistoryList();
+      let chkSearchQuery = "";
 
       function formatMoney(v) {
         const n = Number(v);
@@ -4162,13 +4023,14 @@
         return res.json();
       }
 
-      async function runChkCheck(codes) {
+      chkBtnRun.onclick = async () => {
         const userAgent = chkUserAgentInput.value.trim();
         const token = chkTokenInput.value.trim();
         if (!userAgent || !token) {
           alert("Vui lòng nhập đầy đủ User-Agent và Token.");
           return;
         }
+        const codes = parseChkCodes(chkCodesInput.value);
         if (!codes.length) {
           alert("Vui lòng nhập ít nhất 1 mã đơn.");
           return;
@@ -4190,12 +4052,10 @@
           }
         }
         chkBtnRun.disabled = false;
-        saveHistoryEntry("tra-cuu", chkResults);
-        renderHistoryList("tra-cuu", "#chk-history-list", restoreChkResults, rerunChk);
+        saveChkHistoryEntry(chkResults);
+        renderChkHistoryList();
         renderChkResults();
-      }
-
-      chkBtnRun.onclick = () => runChkCheck(parseChkCodes(chkCodesInput.value));
+      };
 
       codesInput.addEventListener("keydown", e => {
         if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) doSearch();
@@ -4384,13 +4244,6 @@
       ripple.style.top = (e.clientY - rect.top - size / 2) + "px";
       target.appendChild(ripple);
       setTimeout(() => ripple.remove(), 550);
-    });
-  </script>
-  <script>document.addEventListener("keydown", e => {
-      const key = (e.key || "").toLowerCase();
-      if ((e.ctrlKey || e.metaKey) && key === "s") {
-        e.preventDefault();
-      }
     });
   </script>
 </body>
