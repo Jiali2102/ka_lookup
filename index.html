@@ -2002,7 +2002,7 @@
 
           <div class="chk-history-title">🕘 Lịch sử gần đây</div>
           <div id="dv2-history-list"></div>
-          <div class="dv2-version">BI · bản 2026-10-02.4</div>
+          <div class="dv2-version">BI · bản 2026-10-02.7</div>
         </div>
 
         <div id="chk-mode-panel-pod" style="display:none;">
@@ -2880,6 +2880,8 @@
       const DV2_CHUNK = 500;
       const DV2_HISTORY_KEY = "ka_lookup_dv2_history_v1";
       const DV2_HISTORY_MAX = 5;
+      const DV2_COPY_NUMBER = new Set(["client_id", "order_value", "cod_amount", "insurance_value"]);
+      const DV2_ID_NAME_RE = /^(\d+) - \S/;
       const DV2_DATETIME_RE = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
       const DV2_MONEY = new Set(["order_value", "cod_amount", "insurance_value"]);
       const DV2_NUMBER = new Set(["weight", "num_pick", "num_deliver", "num_return"]);
@@ -2892,7 +2894,7 @@
       let dv2Search = "";
       let dv2SortField = null;
       let dv2SortDir = 1;
-      let dv2StatusFilter = "";
+      let dv2StatusFilter = new Set();
 
       function dv2Esc(v) {
         return String(v ?? "").replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
@@ -2981,7 +2983,7 @@
         if (x.state) {
           dv2State = x.state;
           dv2Search = "";
-          dv2StatusFilter = "";
+          dv2StatusFilter = new Set();
           dv2RenderResults();
         } else {
           dv2CodesInput.value = (x.codes || []).join("\n");
@@ -2989,19 +2991,13 @@
         }
       });
 
-      async function dv2Run() {
-        const codes = parseCodes(dv2CodesInput.value).map(c => c.toUpperCase());
-        if (!codes.length) {
-          dv2ResultsArea.innerHTML = `<div class="empty"><div class="big">✏️</div>Nhập ít nhất một mã đơn để tra cứu.</div>`;
-          return;
-        }
-        dv2BtnRun.disabled = true;
+      async function dv2FetchChunks(codes, next, label) {
         const chunks = [];
         for (let i = 0; i < codes.length; i += DV2_CHUNK) chunks.push(codes.slice(i, i + DV2_CHUNK));
-        const next = { items: [], columns: [], missingColumns: [], notFound: [], invalid: [], requested: codes.length, ms: 0, duplicates: 0, errors: [], allCodes: codes };
         const t0 = Date.now();
         for (let i = 0; i < chunks.length; i++) {
-          dv2ResultsArea.innerHTML = `<div class="state loading"><span class="spinner"></span>Đang tra cứu${chunks.length > 1 ? ` — lượt ${i + 1}/${chunks.length} (${chunks[i].length} mã)` : "..."}</div>`;
+          const sec = Math.round((Date.now() - t0) / 1000);
+          dv2ResultsArea.innerHTML = `<div class="state loading"><span class="spinner"></span>${label}${chunks.length > 1 ? ` — lượt ${i + 1}/${chunks.length} (${chunks[i].length} mã) · đã tìm thấy ${next.items.length} · ${sec}s` : "..."}</div>`;
           try {
             const res = await fetch(DV2_ENDPOINT, {
               method: "POST",
@@ -3020,17 +3016,46 @@
             next.invalid.push(...(data.invalid || []));
             next.duplicates += Number(data.duplicates || 0);
           } catch (err) {
-            next.errors.push({ index: i + 1, count: chunks[i].length, message: err.message, codes: chunks[i] });
+            next.errors.push({ index: next.errors.length + 1, count: chunks[i].length, message: err.message, codes: chunks[i] });
           }
         }
-        next.ms = Date.now() - t0;
+        next.ms += Date.now() - t0;
+      }
+
+      async function dv2Run() {
+        const codes = parseCodes(dv2CodesInput.value).map(c => c.toUpperCase());
+        if (!codes.length) {
+          dv2ResultsArea.innerHTML = `<div class="empty"><div class="big">✏️</div>Nhập ít nhất một mã đơn để tra cứu.</div>`;
+          return;
+        }
+        dv2BtnRun.disabled = true;
+        const next = { items: [], columns: [], missingColumns: [], notFound: [], invalid: [], requested: codes.length, ms: 0, duplicates: 0, errors: [], allCodes: codes };
+        await dv2FetchChunks(codes, next, "Đang tra cứu");
         dv2BtnRun.disabled = false;
         dv2State = next;
         dv2Search = "";
-        dv2StatusFilter = "";
+        dv2StatusFilter = new Set();
         dv2SortField = null;
         dv2RenderResults();
         if (next.items.length) dv2SaveHistory();
+      }
+
+      async function dv2RetryFailed() {
+        const s = dv2State;
+        const codes = (s.errors || []).flatMap(e => e.codes || []);
+        if (!codes.length) return;
+        dv2BtnRun.disabled = true;
+        s.errors = [];
+        s.allCodes = s.allCodes || codes;
+        await dv2FetchChunks(codes, s, "Đang tra lại các lượt lỗi");
+        const order = new Map((s.allCodes || []).map((c, i) => [c, i]));
+        const seen = new Set();
+        s.items = s.items.filter(r => { const k = String(r.order_code || "").toUpperCase(); if (seen.has(k)) return false; seen.add(k); return true; })
+          .sort((a, b) => (order.get(String(a.order_code).toUpperCase()) ?? 1e9) - (order.get(String(b.order_code).toUpperCase()) ?? 1e9));
+        s.notFound = [...new Set(s.notFound)].filter(c => !seen.has(c));
+        dv2BtnRun.disabled = false;
+        dv2RenderResults();
+        if (s.items.length) dv2SaveHistory();
       }
 
       dv2BtnRun.onclick = dv2Run;
@@ -3044,7 +3069,7 @@
       function dv2FilteredRows() {
         const tokens = dv2Search.split(/[\s,;]+/).map(s => s.trim().toUpperCase()).filter(Boolean);
         let rows = tokens.length ? dv2State.items.filter(r => tokens.some(t => String(r.order_code || "").toUpperCase().includes(t))) : dv2State.items;
-        if (dv2StatusFilter) rows = rows.filter(r => (r.status || "Không rõ") === dv2StatusFilter);
+        if (dv2StatusFilter.size) rows = rows.filter(r => dv2StatusFilter.has(r.status || "Không rõ"));
         if (dv2SortField) {
           const f = dv2SortField;
           rows = [...rows].sort((a, b) => {
@@ -3065,20 +3090,28 @@
         const { rows, tokens } = dv2FilteredRows();
         const statusCount = {};
         s.items.forEach(r => { const k = r.status || "Không rõ"; statusCount[k] = (statusCount[k] || 0) + 1; });
-        const statusChips = Object.entries(statusCount).sort((a, b) => b[1] - a[1]).map(([k, v]) => `<span class="stat-badge dv2-chip${dv2StatusFilter === k ? " active" : ""}" data-dv2-status="${dv2Esc(k)}" title="Bấm để lọc, bấm lần nữa để bỏ lọc">${dv2Esc(k)}: ${v}</span>`).join(" ");
+        const statusChips = Object.entries(statusCount).sort((a, b) => b[1] - a[1]).map(([k, v]) => `<span class="stat-badge dv2-chip${dv2StatusFilter.has(k) ? " active" : ""}" data-dv2-status="${dv2Esc(k)}" title="Bấm để lọc · Ctrl + bấm để chọn thêm trạng thái · bấm lại để bỏ lọc">${dv2Esc(k)}: ${v}</span>`).join(" ");
         const body = rows.map(r => `<tr class="${dv2RowClass(r.status)}">${cols.map(f => {
           if (f === "order_code") {
             const url = `https://tracuunoibo.ghn.vn/internal?order_code=${encodeURIComponent(r.order_code || "")}`;
             return `<td class="code-cell"><a href="${url}" target="_blank" rel="noopener" class="ticket-link">${dv2Esc(r.order_code)}</a></td>`;
           }
-          const cls = DV2_MONEY.has(f) || DV2_NUMBER.has(f) ? ' class="amount-cell"' : "";
           const raw = r[f];
           const shown = dv2Display(r, f);
           const tip = typeof raw === "string" && shown !== raw ? ` title="${dv2Esc(raw)}"` : "";
           const limit = Number(dv2State.moneyHighlight || 0);
           const high = limit > 0 && DV2_MONEY.has(f) && Number(raw) >= limit;
-          const cls2 = high ? ' class="amount-cell dv2-money-high"' : cls;
-          return `<td${cls2}${tip}>${dv2Esc(shown)}</td>`;
+          const classes = [];
+          if (DV2_MONEY.has(f) || DV2_NUMBER.has(f)) classes.push("amount-cell");
+          if (high) classes.push("dv2-money-high");
+          let copyId = "";
+          if (DV2_COPY_NUMBER.has(f) && raw !== "" && raw !== null && raw !== undefined) copyId = String(raw);
+          else if (typeof raw === "string") { const m = raw.match(DV2_ID_NAME_RE); if (m) copyId = m[1]; }
+          if (copyId) classes.push("wh-copyable");
+          const clsAttr = classes.length ? ` class="${classes.join(" ")}"` : "";
+          const copyAttr = copyId ? ` data-copy-id="${dv2Esc(copyId)}"` : "";
+          const title = copyId ? ` title="${dv2Esc((DV2_COPY_NUMBER.has(f) ? "Bấm để copy số: " : "Bấm để copy ID: ") + copyId + (tip ? " · " + raw : ""))}"` : tip;
+          return `<td${clsAttr}${copyAttr}${title}>${dv2Esc(shown)}</td>`;
         }).join("")}</tr>`).join("");
         const nfHtml = s.notFound.length ? `
           <div class="state error" style="margin-top:10px;">
@@ -3089,7 +3122,9 @@
               <button class="btn-ghost" id="dv2-btn-nf-realtime">↪ Kiểm tra Realtime các mã này</button>
             </div>
           </div>` : "";
-        const errHtml = s.errors.length ? `<div class="state error" style="margin-top:10px;">⚠️ ${s.errors.length} lượt bị lỗi, kết quả có thể chưa đầy đủ: ${s.errors.map(e => `lượt ${e.index} (${e.count} mã): ${dv2Esc(e.message)}`).join("; ")}</div>` : "";
+        const errCodes = s.errors.reduce((n, e) => n + (e.count || 0), 0);
+        const errHtml = s.errors.length ? `<div class="state error" style="margin-top:10px;">⚠️ ${s.errors.length} lượt bị lỗi (${errCodes} mã chưa tra được), kết quả có thể chưa đầy đủ: ${s.errors.map(e => `lượt ${e.index} (${e.count} mã): ${dv2Esc(e.message)}`).join("; ")}
+            <div style="margin-top:8px;"><button class="btn-ghost" id="dv2-btn-retry">🔁 Tra lại ${errCodes} mã bị lỗi</button></div></div>` : "";
         const invHtml = s.invalid.length ? `<div style="margin-top:8px;font-size:13.5px;color:var(--muted);">Bỏ qua ${s.invalid.length} mã sai định dạng: ${s.invalid.map(dv2Esc).join(", ")}</div>` : "";
         const noExp = dv2Columns().filter(c => !dv2ExportColumns().includes(c));
         const neHtml = noExp.length ? `<div style="margin-top:8px;font-size:13.5px;color:var(--muted);">🔒 Chỉ xem, không có trong file tải và Copy: ${noExp.map(dv2Esc).join(", ")}</div>` : "";
@@ -3116,7 +3151,7 @@
           </div>
           <div class="result-search-row">
             <input type="text" id="dv2-search" class="result-search-input" placeholder="Lọc mã đơn trong kết quả này — dán được nhiều mã, cách nhau bằng dấu phẩy/khoảng trắng" value="${dv2Esc(dv2Search)}" />
-            <span class="result-search-count">${tokens.length || dv2StatusFilter ? `${rows.length}/${s.items.length} dòng khớp` : `${s.items.length} dòng`}</span>
+            <span class="result-search-count">${tokens.length || dv2StatusFilter.size ? `${rows.length}/${s.items.length} dòng khớp` : `${s.items.length} dòng`}</span>
           </div>
           ${s.items.length ? `<div class="results-table-wrap">
             <table class="result-table">
@@ -3157,9 +3192,15 @@
 
       function dv2BindResultEvents() {
         document.querySelectorAll("#dv2-results-area .dv2-chip").forEach(chip => {
-          chip.onclick = () => {
+          chip.onclick = e => {
             const k = chip.dataset.dv2Status;
-            dv2StatusFilter = dv2StatusFilter === k ? "" : k;
+            if (e.ctrlKey || e.metaKey) {
+              if (dv2StatusFilter.has(k)) dv2StatusFilter.delete(k); else dv2StatusFilter.add(k);
+            } else if (dv2StatusFilter.size === 1 && dv2StatusFilter.has(k)) {
+              dv2StatusFilter = new Set();
+            } else {
+              dv2StatusFilter = new Set([k]);
+            }
             dv2RenderResults();
           };
         });
@@ -3193,6 +3234,8 @@
         if (nfCopy) nfCopy.onclick = async () => {
           try { await navigator.clipboard.writeText(dv2State.notFound.join("\n")); nfCopy.textContent = "✓ Đã copy"; } catch (err) { }
         };
+        const retryBtn = el("#dv2-btn-retry");
+        if (retryBtn) retryBtn.onclick = dv2RetryFailed;
         const nfRt = el("#dv2-btn-nf-realtime");
         if (nfRt) nfRt.onclick = () => dv2SendToRealtime(dv2State.notFound);
         const dlToggle = el("#dv2-btn-dl-toggle");
@@ -3234,6 +3277,15 @@
           updateChkConfigView();
         }
       }
+
+      dv2ResultsArea.addEventListener("click", e => {
+        const cell = e.target.closest(".wh-copyable");
+        if (!cell || !cell.dataset.copyId) return;
+        const id = cell.dataset.copyId;
+        navigator.clipboard.writeText(id).then(() => {
+          if (typeof chkShowToast === "function") chkShowToast("Đã copy: " + id);
+        }).catch(() => { });
+      });
 
       dv2RenderHistory();
       applyChkModeChrome(chkEffectiveMode);
