@@ -1,4 +1,31 @@
-const kl2s = require("./_kl2s");
+const crypto = require("crypto");
+
+const KL2S_NAME = "kl2s";
+const KL2S_TTL = 12 * 60 * 60;
+
+function kl2sSign(payload) {
+  return crypto.createHmac("sha256", process.env.N8N_LOOKUP_V2_KEY || "").update(payload).digest("base64url");
+}
+
+function kl2sIssue(res, email) {
+  if (!process.env.N8N_LOOKUP_V2_KEY || !email) return;
+  const exp = Math.floor(Date.now() / 1000) + KL2S_TTL;
+  const payload = Buffer.from(`${String(email).toLowerCase()}|${exp}`).toString("base64url");
+  res.setHeader("Set-Cookie", `${KL2S_NAME}=${payload}.${kl2sSign(payload)}; Path=/api; Max-Age=${KL2S_TTL}; HttpOnly; Secure; SameSite=Strict`);
+}
+
+function kl2sRead(req) {
+  if (!process.env.N8N_LOOKUP_V2_KEY) return null;
+  const m = String(req.headers.cookie || "").match(/(?:^|;\s*)kl2s=([^;]+)/);
+  if (!m) return null;
+  const [payload, sig] = m[1].split(".");
+  if (!payload || !sig) return null;
+  const expected = kl2sSign(payload);
+  if (sig.length !== expected.length || !crypto.timingSafeEqual(Buffer.from(sig), Buffer.from(expected))) return null;
+  const [email, exp] = Buffer.from(payload, "base64url").toString().split("|");
+  if (!email || Number(exp) * 1000 < Date.now()) return null;
+  return { email, exp: Number(exp) };
+}
 
 const AUTH_URL = process.env.N8N_WEBHOOK_URL;
 const LOOKUP_URL = process.env.N8N_LOOKUP_V2_URL;
@@ -22,7 +49,7 @@ module.exports = async (req, res) => {
     ["N8N_LOOKUP_V2_KEY", LOOKUP_KEY]
   ].filter(([, v]) => !v).map(([k]) => k);
   if (req.method === "GET") {
-    const s = kl2s.read(req);
+    const s = kl2sRead(req);
     res.status(200).json({ ok: missing.length === 0, missing, lookup_host: LOOKUP_URL ? new URL(LOOKUP_URL).host : "", session: s ? s.email : null });
     return;
   }
@@ -45,7 +72,7 @@ module.exports = async (req, res) => {
     res.status(400).json({ ok: false, message: "Thiếu danh sách mã đơn." });
     return;
   }
-  const session = kl2s.read(req);
+  const session = kl2sRead(req);
   if (!session || session.email !== email) {
     let okUser = false;
     try {
@@ -58,7 +85,7 @@ module.exports = async (req, res) => {
       res.status(401).json({ ok: false, message: "Phiên đăng nhập không hợp lệ, vui lòng đăng xuất rồi đăng nhập lại." });
       return;
     }
-    kl2s.issue(res, email);
+    kl2sIssue(res, email);
   }
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), 55000);
