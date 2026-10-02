@@ -307,6 +307,59 @@
       border-color: var(--orange);
     }
 
+    .chk-history-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .h-clear-all {
+      border: none;
+      background: none;
+      padding: 0;
+      font-family: Cambria, Georgia, serif;
+      font-size: 12.5px;
+      color: var(--muted);
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .h-clear-all:hover {
+      color: #B42318;
+    }
+
+    .chk-history-item {
+      position: relative;
+      padding-right: 30px !important;
+    }
+
+    .h-del {
+      position: absolute;
+      top: 50%;
+      right: 6px;
+      transform: translateY(-50%);
+      width: 22px;
+      height: 22px;
+      border: none;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 22px;
+      cursor: pointer;
+      opacity: .55;
+    }
+
+    .chk-history-item:hover .h-del {
+      opacity: 1;
+    }
+
+    .h-del:hover {
+      background: #FBEAE8;
+      color: #B42318;
+    }
+
     .chk-history-item .h-time {
       font-weight: 700;
     }
@@ -2034,7 +2087,7 @@
             <span class="count-tag" id="chk-code-count"></span>
           </div>
 
-          <div class="chk-history-title">🕘 Lịch sử gần đây</div>
+          <div class="chk-history-title"><span>🕘 Lịch sử gần đây</span><button class="h-clear-all" id="chk-history-clear" title="Xóa toàn bộ lịch sử">🗑 Xóa tất cả</button></div>
           <div id="chk-history-list"></div>
         </div>
 
@@ -2050,9 +2103,9 @@
             <span class="count-tag" id="dv2-code-count"></span>
           </div>
 
-          <div class="chk-history-title">🕘 Lịch sử gần đây</div>
+          <div class="chk-history-title"><span>🕘 Lịch sử gần đây</span><button class="h-clear-all" id="dv2-history-clear" title="Xóa toàn bộ lịch sử">🗑 Xóa tất cả</button></div>
           <div id="dv2-history-list"></div>
-          <div class="dv2-version">BI · bản 2026-10-02.8</div>
+          <div class="dv2-version">BI · bản 2026-10-02.9</div>
         </div>
 
         <div id="chk-mode-panel-pod" style="display:none;">
@@ -3013,6 +3066,8 @@
       function dv2RenderHistory() {
         const listEl = el("#dv2-history-list");
         const h = dv2LoadHistory();
+        const clr = el("#dv2-history-clear");
+        if (clr) clr.style.display = h.length ? "" : "none";
         if (!h.length) {
           listEl.innerHTML = `<div class="chk-history-empty">Chưa có lịch sử</div>`;
           return;
@@ -3021,10 +3076,26 @@
           <div class="chk-history-item" data-dv2-index="${i}" title="${x.state ? "Bấm để xem lại kết quả đã lưu" : "Kết quả lớn không lưu được, bấm để nạp lại danh sách mã"}">
             <div class="h-time">${dv2Esc(x.time)}</div>
             <div class="h-count">${x.found}/${x.requested} mã${x.state ? "" : " · cần tra lại"}</div>
+            <button class="h-del" data-del-index="${i}" title="Xóa lần tra này">✕</button>
           </div>`).join("");
       }
 
+      el("#dv2-history-clear").addEventListener("click", () => {
+        if (!confirm("Xóa toàn bộ lịch sử tra cứu BI trên máy này?")) return;
+        try { localStorage.removeItem(DV2_HISTORY_KEY); } catch (err) { }
+        dv2RenderHistory();
+      });
+
       el("#dv2-history-list").addEventListener("click", e => {
+        const del = e.target.closest(".h-del");
+        if (del) {
+          e.stopPropagation();
+          const h = dv2LoadHistory();
+          h.splice(Number(del.dataset.delIndex), 1);
+          try { localStorage.setItem(DV2_HISTORY_KEY, JSON.stringify(h)); } catch (err) { }
+          dv2RenderHistory();
+          return;
+        }
         const item = e.target.closest(".chk-history-item");
         if (!item) return;
         const x = dv2LoadHistory()[Number(item.dataset.dv2Index)];
@@ -3063,7 +3134,7 @@
               const res = await fetch(DV2_ENDPOINT, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ c: chunks[i], e: sessionEmail, k: sessionPassword })
+                body: JSON.stringify({ c: chunks[i], e: sessionEmail, k: sessionPassword, q: 1 })
               });
               const data = await res.json().catch(() => ({ ok: false, message: `HTTP ${res.status}` }));
               if (data.ok !== true) throw new Error(data.message || `HTTP ${res.status}`);
@@ -3096,6 +3167,29 @@
           }
         });
         next.ms += Date.now() - t0;
+        return { parts: chunks.length, ms: Date.now() - t0 };
+      }
+
+      function dv2SendLog(mode, codes, stats, state) {
+        const codeSet = new Set(codes);
+        const found = state.items.filter(r => codeSet.has(String(r.order_code || "").toUpperCase())).length;
+        const errs = (state.errors || []);
+        const summary = {
+          mode,
+          requested: codes.length,
+          found,
+          errors: errs.length,
+          errorMessages: [...new Set(errs.map(e => e.message))].slice(0, 3),
+          ms: stats.ms,
+          parts: stats.parts,
+          codes,
+          notFound: (state.notFound || []).filter(c => codeSet.has(c))
+        };
+        fetch(DV2_ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ kind: "log", e: sessionEmail, k: sessionPassword, summary })
+        }).catch(() => { });
       }
 
       async function dv2Run() {
@@ -3106,7 +3200,8 @@
         }
         dv2BtnRun.disabled = true;
         const next = { items: [], columns: [], missingColumns: [], notFound: [], invalid: [], requested: codes.length, ms: 0, duplicates: 0, errors: [], allCodes: codes };
-        await dv2FetchChunks(codes, next, "Đang tra cứu");
+        const stats = await dv2FetchChunks(codes, next, "Đang tra cứu");
+        dv2SendLog("run", codes, stats, next);
         dv2BtnRun.disabled = false;
         dv2State = next;
         dv2Search = "";
@@ -3123,7 +3218,8 @@
         dv2BtnRun.disabled = true;
         s.errors = [];
         s.allCodes = s.allCodes || codes;
-        await dv2FetchChunks(codes, s, "Đang tra lại các lượt lỗi");
+        const stats = await dv2FetchChunks(codes, s, "Đang tra lại các lượt lỗi");
+        dv2SendLog("retry", codes, stats, s);
         const order = new Map((s.allCodes || []).map((c, i) => [c, i]));
         const seen = new Set();
         s.items = s.items.filter(r => { const k = String(r.order_code || "").toUpperCase(); if (seen.has(k)) return false; seen.add(k); return true; })
@@ -3810,6 +3906,8 @@
         const history = loadChkHistory();
         const listEl = el("#chk-history-list");
         if (!listEl) return;
+        const clr = el("#chk-history-clear");
+        if (clr) clr.style.display = history.length ? "" : "none";
         if (!history.length) {
           listEl.innerHTML = `<div class="chk-history-empty">Chưa có lịch sử</div>`;
           return;
@@ -3818,10 +3916,26 @@
           <div class="chk-history-item" data-history-index="${i}">
             <div class="h-time">${h.time}</div>
             <div class="h-count">${h.count} mã đơn</div>
+            <button class="h-del" data-del-index="${i}" title="Xóa lần tra này">✕</button>
           </div>`).join("");
       }
 
+      el("#chk-history-clear").addEventListener("click", () => {
+        if (!confirm("Xóa toàn bộ lịch sử tra cứu Realtime trên máy này?")) return;
+        try { localStorage.removeItem(CHK_HISTORY_KEY); } catch (err) { }
+        renderChkHistoryList();
+      });
+
       el("#chk-history-list").addEventListener("click", e => {
+        const del = e.target.closest(".h-del");
+        if (del) {
+          e.stopPropagation();
+          const history = loadChkHistory();
+          history.splice(Number(del.dataset.delIndex), 1);
+          try { localStorage.setItem(CHK_HISTORY_KEY, JSON.stringify(history)); } catch (err) { }
+          renderChkHistoryList();
+          return;
+        }
         const item = e.target.closest(".chk-history-item");
         if (!item) return;
         const idx = Number(item.dataset.historyIndex);
