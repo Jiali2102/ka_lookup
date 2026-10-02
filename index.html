@@ -175,11 +175,36 @@
       min-height: 0;
     }
 
-    #chk-results-area {
+    #chk-results-area,
+    #dv2-results-area {
       flex: 1;
       display: flex;
       flex-direction: column;
       min-height: 0;
+    }
+
+    .dv2-chip {
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .dv2-chip.active {
+      background: var(--orange);
+      color: #fff;
+      border-color: var(--orange);
+    }
+
+    .dv2-money-high {
+      background: #FDE2E1 !important;
+      color: #B42318;
+      font-weight: 700;
+    }
+
+    .dv2-version {
+      margin-top: 14px;
+      font-size: 12px;
+      color: var(--muted);
+      text-align: right;
     }
 
     .result-table th,
@@ -1977,6 +2002,7 @@
 
           <div class="chk-history-title">🕘 Lịch sử gần đây</div>
           <div id="dv2-history-list"></div>
+          <div class="dv2-version">BI · bản 2026-10-02.4</div>
         </div>
 
         <div id="chk-mode-panel-pod" style="display:none;">
@@ -2793,6 +2819,7 @@
       const CHK_MODE_KEY = "ka_lookup_chk_mode_v1";
       const CHK_SOURCE_KEY = "ka_lookup_chk_source_v1";
       let chkSource = "realtime";
+      let chkEffectiveMode = "tra-cuu";
       try { chkSource = localStorage.getItem(CHK_SOURCE_KEY) === "bi" ? "bi" : "realtime"; } catch (err) { }
       const chkModeSelect = el("#chk-mode-select");
       const chkAppTitle = el("#chk-app-title");
@@ -2825,11 +2852,12 @@
         try { localStorage.setItem(CHK_SOURCE_KEY, chkSource); } catch (err) { }
         Object.keys(chkModePanels).forEach(k => {
           chkModePanels[k].style.display = k === mode ? "block" : "none";
-          chkResultPanels[k].style.display = k === mode ? "block" : "none";
+          chkResultPanels[k].style.display = k === mode ? (k === "tra-cuu" || k === "tra-cuu-v2" ? "flex" : "block") : "none";
         });
         chkModeSelect.value = isLookup ? "tra-cuu" : mode;
         chkAppTitle.textContent = CHK_MODE_TITLES[mode] || "Kiểm tra đơn";
         try { localStorage.setItem(CHK_MODE_KEY, mode); } catch (err) { }
+        chkEffectiveMode = mode;
         if (typeof applyChkModeChrome === "function") applyChkModeChrome(mode);
       }
 
@@ -2852,6 +2880,7 @@
       const DV2_CHUNK = 500;
       const DV2_HISTORY_KEY = "ka_lookup_dv2_history_v1";
       const DV2_HISTORY_MAX = 5;
+      const DV2_DATETIME_RE = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
       const DV2_MONEY = new Set(["order_value", "cod_amount", "insurance_value"]);
       const DV2_NUMBER = new Set(["weight", "num_pick", "num_deliver", "num_return"]);
 
@@ -2863,6 +2892,7 @@
       let dv2Search = "";
       let dv2SortField = null;
       let dv2SortDir = 1;
+      let dv2StatusFilter = "";
 
       function dv2Esc(v) {
         return String(v ?? "").replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
@@ -2873,6 +2903,7 @@
         if (v === undefined || v === null || v === "") return "";
         if (DV2_MONEY.has(f)) return formatMoney(v);
         if (DV2_NUMBER.has(f)) return Number(v).toLocaleString("vi-VN");
+        if (dv2State.dateDisplay !== "datetime" && typeof v === "string" && DV2_DATETIME_RE.test(v)) return v.slice(0, 10);
         return v;
       }
 
@@ -2950,6 +2981,7 @@
         if (x.state) {
           dv2State = x.state;
           dv2Search = "";
+          dv2StatusFilter = "";
           dv2RenderResults();
         } else {
           dv2CodesInput.value = (x.codes || []).join("\n");
@@ -2981,6 +3013,8 @@
             next.items.push(...(data.items || []));
             if (!next.columns.length && Array.isArray(data.columns)) next.columns = data.columns;
             if (!next.exportColumns && Array.isArray(data.exportColumns)) next.exportColumns = data.exportColumns;
+            if (!next.dateDisplay && data.dateDisplay) next.dateDisplay = data.dateDisplay;
+            if (next.moneyHighlight === undefined && data.moneyHighlight !== undefined) next.moneyHighlight = data.moneyHighlight;
             if (!next.missingColumns.length && Array.isArray(data.missingColumns)) next.missingColumns = data.missingColumns;
             next.notFound.push(...(data.notFound || []));
             next.invalid.push(...(data.invalid || []));
@@ -2993,6 +3027,7 @@
         dv2BtnRun.disabled = false;
         dv2State = next;
         dv2Search = "";
+        dv2StatusFilter = "";
         dv2SortField = null;
         dv2RenderResults();
         if (next.items.length) dv2SaveHistory();
@@ -3009,6 +3044,7 @@
       function dv2FilteredRows() {
         const tokens = dv2Search.split(/[\s,;]+/).map(s => s.trim().toUpperCase()).filter(Boolean);
         let rows = tokens.length ? dv2State.items.filter(r => tokens.some(t => String(r.order_code || "").toUpperCase().includes(t))) : dv2State.items;
+        if (dv2StatusFilter) rows = rows.filter(r => (r.status || "Không rõ") === dv2StatusFilter);
         if (dv2SortField) {
           const f = dv2SortField;
           rows = [...rows].sort((a, b) => {
@@ -3029,14 +3065,20 @@
         const { rows, tokens } = dv2FilteredRows();
         const statusCount = {};
         s.items.forEach(r => { const k = r.status || "Không rõ"; statusCount[k] = (statusCount[k] || 0) + 1; });
-        const statusChips = Object.entries(statusCount).sort((a, b) => b[1] - a[1]).map(([k, v]) => `<span class="stat-badge">${dv2Esc(k)}: ${v}</span>`).join(" ");
+        const statusChips = Object.entries(statusCount).sort((a, b) => b[1] - a[1]).map(([k, v]) => `<span class="stat-badge dv2-chip${dv2StatusFilter === k ? " active" : ""}" data-dv2-status="${dv2Esc(k)}" title="Bấm để lọc, bấm lần nữa để bỏ lọc">${dv2Esc(k)}: ${v}</span>`).join(" ");
         const body = rows.map(r => `<tr class="${dv2RowClass(r.status)}">${cols.map(f => {
           if (f === "order_code") {
             const url = `https://tracuunoibo.ghn.vn/internal?order_code=${encodeURIComponent(r.order_code || "")}`;
             return `<td class="code-cell"><a href="${url}" target="_blank" rel="noopener" class="ticket-link">${dv2Esc(r.order_code)}</a></td>`;
           }
           const cls = DV2_MONEY.has(f) || DV2_NUMBER.has(f) ? ' class="amount-cell"' : "";
-          return `<td${cls}>${dv2Esc(dv2Display(r, f))}</td>`;
+          const raw = r[f];
+          const shown = dv2Display(r, f);
+          const tip = typeof raw === "string" && shown !== raw ? ` title="${dv2Esc(raw)}"` : "";
+          const limit = Number(dv2State.moneyHighlight || 0);
+          const high = limit > 0 && DV2_MONEY.has(f) && Number(raw) >= limit;
+          const cls2 = high ? ' class="amount-cell dv2-money-high"' : cls;
+          return `<td${cls2}${tip}>${dv2Esc(shown)}</td>`;
         }).join("")}</tr>`).join("");
         const nfHtml = s.notFound.length ? `
           <div class="state error" style="margin-top:10px;">
@@ -3074,7 +3116,7 @@
           </div>
           <div class="result-search-row">
             <input type="text" id="dv2-search" class="result-search-input" placeholder="Lọc mã đơn trong kết quả này — dán được nhiều mã, cách nhau bằng dấu phẩy/khoảng trắng" value="${dv2Esc(dv2Search)}" />
-            <span class="result-search-count">${tokens.length ? `${rows.length}/${s.items.length} dòng khớp` : `${s.items.length} dòng`}</span>
+            <span class="result-search-count">${tokens.length || dv2StatusFilter ? `${rows.length}/${s.items.length} dòng khớp` : `${s.items.length} dòng`}</span>
           </div>
           ${s.items.length ? `<div class="results-table-wrap">
             <table class="result-table">
@@ -3114,6 +3156,13 @@
       }
 
       function dv2BindResultEvents() {
+        document.querySelectorAll("#dv2-results-area .dv2-chip").forEach(chip => {
+          chip.onclick = () => {
+            const k = chip.dataset.dv2Status;
+            dv2StatusFilter = dv2StatusFilter === k ? "" : k;
+            dv2RenderResults();
+          };
+        });
         const search = el("#dv2-search");
         if (search) {
           search.addEventListener("input", () => {
@@ -3187,7 +3236,7 @@
       }
 
       dv2RenderHistory();
-      applyChkModeChrome(chkModeSelect.value);
+      applyChkModeChrome(chkEffectiveMode);
 
       /* ───────────────────── Tab POD (Demo B — 3 cột Pick/Deliver/Return) ───────────────────── */
       const podCodesInput = el("#pod-codes-input");
