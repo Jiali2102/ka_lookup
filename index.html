@@ -500,6 +500,49 @@
       line-height: 1.5;
     }
 
+    .chk-source-wrap {
+      margin-bottom: 12px;
+    }
+
+    .chk-source-toggle {
+      display: flex;
+      gap: 0;
+      border: 1.5px solid var(--orange);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .chk-source-opt {
+      flex: 1;
+      margin: 0;
+      cursor: pointer;
+    }
+
+    .chk-source-opt input {
+      display: none;
+    }
+
+    .chk-source-opt span {
+      display: block;
+      text-align: center;
+      padding: 8px 6px;
+      font-family: Cambria, Georgia, serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--orange);
+      background: var(--surface);
+      transition: background .15s ease, color .15s ease;
+    }
+
+    .chk-source-opt + .chk-source-opt span {
+      border-left: 1.5px solid var(--orange);
+    }
+
+    .chk-source-opt input:checked + span {
+      background: var(--orange);
+      color: #fff;
+    }
+
     .chk-hint-note {
       background: #FFF4E5;
       border: 1.5px solid var(--orange);
@@ -1874,10 +1917,17 @@
         <label class="field-label">Chế độ</label>
         <select id="chk-mode-select" class="chk-input" style="margin-bottom:12px;">
           <option value="tra-cuu">🔎 Tra cứu</option>
-          <option value="tra-cuu-v2">🗄️ Tra cứu v2</option>
           <option value="calllog">🕘 CallLog</option>
           <option value="pod">🖼️ POD</option>
         </select>
+
+        <div class="chk-source-wrap" id="chk-source-wrap">
+          <label class="field-label">Nguồn tra cứu</label>
+          <div class="chk-source-toggle" role="radiogroup">
+            <label class="chk-source-opt"><input type="radio" name="chk-source" value="realtime" /><span>⚡ Realtime</span></label>
+            <label class="chk-source-opt"><input type="radio" name="chk-source" value="bi" /><span>🗄️ BI</span></label>
+          </div>
+        </div>
 
         <p class="hint chk-hint-note" id="chk-hint-note">⚠️ = đơn &gt;5 ngày chưa cập nhật · Bấm Mã đơn để mở tra cứu nội bộ GHN · Bấm tên kho để copy nhanh ID</p>
 
@@ -1914,7 +1964,7 @@
         </div>
 
         <div id="chk-mode-panel-v2" style="display:none;">
-          <p class="hint">Tra từ nguồn dữ liệu tổng hợp, không cần User-Agent/Token. Dữ liệu có thể trễ so với realtime, dùng chế độ 🔎 Tra cứu khi cần trạng thái mới nhất.</p>
+          <p class="hint">Tra từ nguồn dữ liệu BI, không cần User-Agent/Token. Dữ liệu có thể trễ hơn Realtime, chuyển sang ⚡ Realtime khi cần trạng thái mới nhất.</p>
           <label class="field-label">Danh sách mã đơn</label>
           <textarea id="dv2-codes-input"
             placeholder="Dán mã đơn cần tra, mỗi dòng 1 mã hoặc cách nhau dấu phẩy."></textarea>
@@ -2741,6 +2791,9 @@
 
       /* ───────────────────── Chế độ trong tab Kiểm tra đơn ───────────────────── */
       const CHK_MODE_KEY = "ka_lookup_chk_mode_v1";
+      const CHK_SOURCE_KEY = "ka_lookup_chk_source_v1";
+      let chkSource = "realtime";
+      try { chkSource = localStorage.getItem(CHK_SOURCE_KEY) === "bi" ? "bi" : "realtime"; } catch (err) { }
       const chkModeSelect = el("#chk-mode-select");
       const chkAppTitle = el("#chk-app-title");
       const chkModePanels = {
@@ -2757,24 +2810,37 @@
       };
       const CHK_MODE_TITLES = {
         "tra-cuu": "Kiểm tra đơn",
-        "tra-cuu-v2": "Tra cứu v2",
+        "tra-cuu-v2": "Tra cứu BI",
         "pod": "POD",
         "calllog": "CallLog"
       };
 
       function setChkMode(mode) {
+        if (mode === "tra-cuu-v2") chkSource = "bi";
         if (!chkModePanels[mode]) mode = "tra-cuu";
+        if (mode === "tra-cuu" || mode === "tra-cuu-v2") mode = chkSource === "bi" ? "tra-cuu-v2" : "tra-cuu";
+        const isLookup = mode === "tra-cuu" || mode === "tra-cuu-v2";
+        el("#chk-source-wrap").style.display = isLookup ? "block" : "none";
+        document.querySelectorAll('input[name="chk-source"]').forEach(r => { r.checked = r.value === chkSource; });
+        try { localStorage.setItem(CHK_SOURCE_KEY, chkSource); } catch (err) { }
         Object.keys(chkModePanels).forEach(k => {
           chkModePanels[k].style.display = k === mode ? "block" : "none";
           chkResultPanels[k].style.display = k === mode ? "block" : "none";
         });
-        chkModeSelect.value = mode;
+        chkModeSelect.value = isLookup ? "tra-cuu" : mode;
         chkAppTitle.textContent = CHK_MODE_TITLES[mode] || "Kiểm tra đơn";
         try { localStorage.setItem(CHK_MODE_KEY, mode); } catch (err) { }
         if (typeof applyChkModeChrome === "function") applyChkModeChrome(mode);
       }
 
       chkModeSelect.addEventListener("change", () => setChkMode(chkModeSelect.value));
+      document.querySelectorAll('input[name="chk-source"]').forEach(r => {
+        r.addEventListener("change", () => {
+          if (!r.checked) return;
+          chkSource = r.value === "bi" ? "bi" : "realtime";
+          setChkMode("tra-cuu");
+        });
+      });
 
       (function initChkMode() {
         let saved = "tra-cuu";
@@ -3003,7 +3069,7 @@
             <div style="margin-top:6px;word-break:break-all;">${s.notFound.map(dv2Esc).join(", ")}</div>
             <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">
               <button class="btn-ghost" id="dv2-btn-copy-nf">📋 Copy mã không tìm thấy</button>
-              <button class="btn-ghost" id="dv2-btn-nf-realtime">↪ Kiểm tra realtime các mã này</button>
+              <button class="btn-ghost" id="dv2-btn-nf-realtime">↪ Kiểm tra Realtime các mã này</button>
             </div>
           </div>` : "";
         const errHtml = s.errors.length ? `<div class="state error" style="margin-top:10px;">⚠️ ${s.errors.length} lượt bị lỗi, kết quả có thể chưa đầy đủ: ${s.errors.map(e => `lượt ${e.index} (${e.count} mã): ${dv2Esc(e.message)}`).join("; ")}</div>` : "";
@@ -3019,7 +3085,7 @@
             <div class="toolbar-actions"${s.items.length ? "" : ' style="display:none;"'}>
               <button class="btn-ghost" id="dv2-btn-cols">${dv2ShowAll ? "▤ Cột chính" : "▦ Tất cả cột"}</button>
               <button class="btn-ghost" id="dv2-btn-copy">Copy kết quả</button>
-              <button class="btn-ghost" id="dv2-btn-realtime" title="Đưa các mã tìm thấy sang chế độ Tra cứu realtime">↪ Kiểm tra realtime</button>
+              <button class="btn-ghost" id="dv2-btn-realtime" title="Đưa các mã đang xem sang nguồn Realtime">↪ Kiểm tra Realtime</button>
               <div class="dl-wrap">
                 <button class="btn-ghost" id="dv2-btn-dl-toggle">⬇ Tải ▾</button>
                 <div class="dl-menu" id="dv2-dl-menu">
@@ -3066,6 +3132,7 @@
         if (!codes.length) return;
         chkCodesInput.value = codes.join("\n");
         chkCodesInput.dispatchEvent(new Event("input"));
+        chkSource = "realtime";
         setChkMode("tra-cuu");
       }
 
