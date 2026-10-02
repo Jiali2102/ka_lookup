@@ -188,6 +188,56 @@
       user-select: none;
     }
 
+    .dv2-chip.chk-status-delivered {
+      background: #E9F7EF;
+      border-color: #7BC69A;
+      color: #1E7B45;
+    }
+
+    .dv2-chip.chk-status-return {
+      background: #FFF8E1;
+      border-color: #E8C468;
+      color: #8A6200;
+    }
+
+    .dv2-chip.chk-status-lost {
+      background: #FBEAE8;
+      border-color: #E8A39C;
+      color: #B42318;
+    }
+
+    .dv2-chip.chk-status-cancel {
+      background: #4B5563;
+      border-color: #4B5563;
+      color: #fff;
+    }
+
+    .dv2-toolbar {
+      flex-wrap: nowrap !important;
+      align-items: flex-start !important;
+      gap: 12px;
+    }
+
+    .dv2-toolbar .stats {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .dv2-toolbar .toolbar-actions {
+      flex-shrink: 0;
+      display: flex;
+      gap: 6px;
+    }
+
+    .dv2-mode {
+      font-size: 13px !important;
+      font-weight: 600 !important;
+      color: var(--muted) !important;
+    }
+
     .dv2-chip.active {
       background: var(--orange);
       color: #fff;
@@ -2002,7 +2052,7 @@
 
           <div class="chk-history-title">🕘 Lịch sử gần đây</div>
           <div id="dv2-history-list"></div>
-          <div class="dv2-version">BI · bản 2026-10-02.7</div>
+          <div class="dv2-version">BI · bản 2026-10-02.8</div>
         </div>
 
         <div id="chk-mode-panel-pod" style="display:none;">
@@ -2878,6 +2928,7 @@
 
       const DV2_ENDPOINT = "/api/v2x4";
       const DV2_CHUNK = 500;
+      const DV2_PARALLEL = 2;
       const DV2_HISTORY_KEY = "ka_lookup_dv2_history_v1";
       const DV2_HISTORY_MAX = 5;
       const DV2_COPY_NUMBER = new Set(["client_id", "order_value", "cod_amount", "insurance_value"]);
@@ -2995,30 +3046,55 @@
         const chunks = [];
         for (let i = 0; i < codes.length; i += DV2_CHUNK) chunks.push(codes.slice(i, i + DV2_CHUNK));
         const t0 = Date.now();
-        for (let i = 0; i < chunks.length; i++) {
+        const results = new Array(chunks.length);
+        let done = 0;
+        let foundSoFar = next.items.length;
+        const paint = () => {
           const sec = Math.round((Date.now() - t0) / 1000);
-          dv2ResultsArea.innerHTML = `<div class="state loading"><span class="spinner"></span>${label}${chunks.length > 1 ? ` — lượt ${i + 1}/${chunks.length} (${chunks[i].length} mã) · đã tìm thấy ${next.items.length} · ${sec}s` : "..."}</div>`;
-          try {
-            const res = await fetch(DV2_ENDPOINT, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ c: chunks[i], e: sessionEmail, k: sessionPassword })
-            });
-            const data = await res.json().catch(() => ({ ok: false, message: `HTTP ${res.status}` }));
-            if (data.ok !== true) throw new Error(data.message || `HTTP ${res.status}`);
+          dv2ResultsArea.innerHTML = `<div class="state loading"><span class="spinner"></span>${label}${chunks.length > 1 ? ` — xong ${done}/${chunks.length} lượt (${codes.length} mã, chạy ${Math.min(DV2_PARALLEL, chunks.length)} lượt cùng lúc) · đã tìm thấy ${foundSoFar} · ${sec}s` : "..."}</div>`;
+        };
+        paint();
+        const ticker = setInterval(paint, 1000);
+        let cursor = 0;
+        const worker = async () => {
+          while (cursor < chunks.length) {
+            const i = cursor++;
+            try {
+              const res = await fetch(DV2_ENDPOINT, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ c: chunks[i], e: sessionEmail, k: sessionPassword })
+              });
+              const data = await res.json().catch(() => ({ ok: false, message: `HTTP ${res.status}` }));
+              if (data.ok !== true) throw new Error(data.message || `HTTP ${res.status}`);
+              results[i] = { data };
+              foundSoFar += (data.items || []).length;
+            } catch (err) {
+              results[i] = { error: err.message };
+            }
+            done++;
+            paint();
+          }
+        };
+        await Promise.all(Array.from({ length: Math.min(DV2_PARALLEL, chunks.length) }, worker));
+        clearInterval(ticker);
+        results.forEach((r, i) => {
+          if (r && r.data) {
+            const data = r.data;
             next.items.push(...(data.items || []));
             if (!next.columns.length && Array.isArray(data.columns)) next.columns = data.columns;
             if (!next.exportColumns && Array.isArray(data.exportColumns)) next.exportColumns = data.exportColumns;
             if (!next.dateDisplay && data.dateDisplay) next.dateDisplay = data.dateDisplay;
+            if (data.queryMode) next.queryMode = next.queryMode && next.queryMode !== data.queryMode ? "card" : data.queryMode;
             if (next.moneyHighlight === undefined && data.moneyHighlight !== undefined) next.moneyHighlight = data.moneyHighlight;
             if (!next.missingColumns.length && Array.isArray(data.missingColumns)) next.missingColumns = data.missingColumns;
             next.notFound.push(...(data.notFound || []));
             next.invalid.push(...(data.invalid || []));
             next.duplicates += Number(data.duplicates || 0);
-          } catch (err) {
-            next.errors.push({ index: next.errors.length + 1, count: chunks[i].length, message: err.message, codes: chunks[i] });
+          } else {
+            next.errors.push({ index: next.errors.length + 1, count: chunks[i].length, message: (r && r.error) || "Không rõ lỗi", codes: chunks[i] });
           }
-        }
+        });
         next.ms += Date.now() - t0;
       }
 
@@ -3090,7 +3166,7 @@
         const { rows, tokens } = dv2FilteredRows();
         const statusCount = {};
         s.items.forEach(r => { const k = r.status || "Không rõ"; statusCount[k] = (statusCount[k] || 0) + 1; });
-        const statusChips = Object.entries(statusCount).sort((a, b) => b[1] - a[1]).map(([k, v]) => `<span class="stat-badge dv2-chip${dv2StatusFilter.has(k) ? " active" : ""}" data-dv2-status="${dv2Esc(k)}" title="Bấm để lọc · Ctrl + bấm để chọn thêm trạng thái · bấm lại để bỏ lọc">${dv2Esc(k)}: ${v}</span>`).join(" ");
+        const statusChips = Object.entries(statusCount).sort((a, b) => b[1] - a[1]).map(([k, v]) => `<span class="stat-badge dv2-chip ${dv2RowClass(k)}${dv2StatusFilter.has(k) ? " active" : ""}" data-dv2-status="${dv2Esc(k)}" title="Bấm để lọc · Ctrl + bấm để chọn thêm trạng thái · bấm lại để bỏ lọc">${dv2Esc(k)}: ${v}</span>`).join(" ");
         const body = rows.map(r => `<tr class="${dv2RowClass(r.status)}">${cols.map(f => {
           if (f === "order_code") {
             const url = `https://tracuunoibo.ghn.vn/internal?order_code=${encodeURIComponent(r.order_code || "")}`;
@@ -3131,10 +3207,11 @@
         const mcHtml = (s.missingColumns || []).length ? `<div style="margin-top:8px;font-size:13.5px;color:var(--muted);">ℹ️ Cột khai báo nhưng card không có: ${s.missingColumns.map(dv2Esc).join(", ")}</div>` : "";
         const dupHtml = s.duplicates ? `<div style="margin-top:8px;font-size:13.5px;color:var(--muted);">ℹ️ Nguồn dữ liệu trả ${s.duplicates} dòng trùng mã đơn, đã giữ dòng đầu tiên.</div>` : "";
         dv2ResultsArea.innerHTML = `
-          <div class="toolbar">
+          <div class="toolbar dv2-toolbar">
             <span class="stats">
               <span class="stat-badge total">Tìm thấy: ${s.items.length}/${s.requested}</span>
               <span class="stat-badge">⏱ ${(s.ms / 1000).toFixed(1)}s</span>
+              ${s.queryMode ? `<span class="stat-badge dv2-mode" title="Cách truy vấn nguồn dữ liệu">${s.queryMode === "inlist" ? "⚡ IN-list" : "🐢 card"}</span>` : ""}
               ${statusChips}
             </span>
             <div class="toolbar-actions"${s.items.length ? "" : ' style="display:none;"'}>
@@ -3178,6 +3255,7 @@
         return [cols, ...dv2FilteredRows().rows.map(r => cols.map(f => {
           const v = r[f];
           if (v === undefined || v === null) return "";
+          if (v === "") return "";
           return DV2_MONEY.has(f) || DV2_NUMBER.has(f) ? Number(v) : v;
         }))];
       }
