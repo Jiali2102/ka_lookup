@@ -29,7 +29,8 @@ function kl2sRead(req) {
 
 const AUTH_URL = process.env.N8N_WEBHOOK_URL;
 const LOOKUP_URL = process.env.N8N_LOOKUP_V2_URL;
-const LOOKUP_KEY = process.env.N8N_LOOKUP_V2_KEY;
+const LOOKUP_KEY_RAW = process.env.N8N_LOOKUP_V2_KEY || "";
+const LOOKUP_KEY = LOOKUP_KEY_RAW.trim().replace(/^["']|["']$/g, "");
 const AUTH_CHECK_TYPE = process.env.AUTH_CHECK_TYPE || "v3";
 
 async function verifyByKacSupport(email, password) {
@@ -50,7 +51,16 @@ module.exports = async (req, res) => {
   ].filter(([, v]) => !v).map(([k]) => k);
   if (req.method === "GET") {
     const s = kl2sRead(req);
-    res.status(200).json({ ok: missing.length === 0, missing, lookup_host: LOOKUP_URL ? new URL(LOOKUP_URL).host : "", session: s ? s.email : null });
+    res.status(200).json({
+      ok: missing.length === 0,
+      missing,
+      lookup_host: LOOKUP_URL ? new URL(LOOKUP_URL).host : "",
+      lookup_path: LOOKUP_URL ? new URL(LOOKUP_URL).pathname : "",
+      key_len: LOOKUP_KEY.length,
+      key_fp: LOOKUP_KEY ? crypto.createHash("sha256").update(LOOKUP_KEY).digest("hex").slice(0, 8) : "",
+      key_had_spaces_or_quotes: LOOKUP_KEY !== LOOKUP_KEY_RAW,
+      session: s ? s.email : null
+    });
     return;
   }
   if (req.method !== "POST") {
