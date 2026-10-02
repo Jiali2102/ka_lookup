@@ -71,14 +71,15 @@ module.exports = async (req, res) => {
     res.status(500).json({ ok: false, message: `Vercel chưa có biến môi trường: ${missing.join(", ")}. Thêm ở Settings → Environment Variables (Production) rồi Redeploy.` });
     return;
   }
-  const { c, e, k } = req.body || {};
+  const { c, e, k, q, kind, summary } = req.body || {};
+  const isLog = kind === "log";
   const email = String(e || "").toLowerCase();
   const codes = (Array.isArray(c) ? c : String(c || "").split(/[\s,;]+/)).filter(Boolean);
   if (!email) {
     res.status(401).json({ ok: false, message: "Phiên đăng nhập không hợp lệ, vui lòng đăng nhập lại." });
     return;
   }
-  if (!codes.length) {
+  if (!isLog && !codes.length) {
     res.status(400).json({ ok: false, message: "Thiếu danh sách mã đơn." });
     return;
   }
@@ -103,7 +104,7 @@ module.exports = async (req, res) => {
     const upstream = await fetch(LOOKUP_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json", "x-kl-key": LOOKUP_KEY },
-      body: JSON.stringify({ codes, email }),
+      body: JSON.stringify(isLog ? { action: "log", email, summary: summary || {} } : { codes, email, quiet: Boolean(q) }),
       signal: ctrl.signal
     });
     if (upstream.status === 401 || upstream.status === 403) {
