@@ -141,15 +141,6 @@
       background: var(--danger-bg);
     }
 
-    .rail-version {
-      flex-shrink: 0;
-      padding: 0 4px;
-      font-size: 10.5px;
-      line-height: 1.35;
-      text-align: center;
-      color: var(--muted);
-    }
-
     .side-panel {
       width: 320px;
       flex: none;
@@ -184,148 +175,11 @@
       min-height: 0;
     }
 
-    #chk-results-area,
-    #dv2-results-area {
+    #chk-results-area {
       flex: 1;
       display: flex;
       flex-direction: column;
       min-height: 0;
-    }
-
-    .dv2-chip {
-      cursor: pointer;
-      user-select: none;
-    }
-
-    .dv2-chip.chk-status-delivered {
-      background: #E9F7EF;
-      border-color: #7BC69A;
-      color: #1E7B45;
-    }
-
-    .dv2-chip.chk-status-return {
-      background: #FFF8E1;
-      border-color: #E8C468;
-      color: #8A6200;
-    }
-
-    .dv2-chip.chk-status-lost {
-      background: #FBEAE8;
-      border-color: #E8A39C;
-      color: #B42318;
-    }
-
-    .dv2-chip.chk-status-cancel {
-      background: #4B5563;
-      border-color: #4B5563;
-      color: #fff;
-    }
-
-    .dv2-toolbar {
-      flex-wrap: nowrap !important;
-      align-items: flex-start !important;
-      gap: 12px;
-    }
-
-    .dv2-toolbar .stats {
-      flex: 1;
-      min-width: 0;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-
-    .dv2-toolbar .toolbar-actions {
-      flex-shrink: 0;
-      display: flex;
-      gap: 6px;
-    }
-
-    .dv2-mode {
-      font-size: 13px !important;
-      font-weight: 600 !important;
-      color: var(--muted) !important;
-    }
-
-    .dv2-chip.active {
-      background: var(--orange);
-      color: #fff;
-      border-color: var(--orange);
-    }
-
-    .dv2-chip.notfound.active {
-      background: var(--danger);
-      border-color: var(--danger);
-      color: #fff;
-    }
-
-    .chk-run-banner {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-      flex: none;
-      padding: 10px 14px;
-      margin-bottom: 10px;
-      border: 1px solid #cfe0f0;
-      background: var(--blue-soft);
-      border-radius: 12px;
-      font-size: 14.5px;
-      color: var(--blue);
-    }
-
-    .chk-run-banner.paused {
-      border-color: #E8C468;
-      background: #FFF8E1;
-      color: #8A6200;
-    }
-
-    .chk-run-text {
-      flex: 1 1 260px;
-      min-width: 220px;
-      font-weight: 700;
-    }
-
-    .chk-run-text small {
-      display: block;
-      margin-top: 2px;
-      font-weight: 400;
-      color: var(--muted);
-    }
-
-    .chk-run-progress {
-      flex: 1 1 160px;
-      min-width: 120px;
-      height: 8px;
-      border-radius: 99px;
-      overflow: hidden;
-      background: rgba(0, 0, 0, .08);
-    }
-
-    .chk-run-progress > div {
-      height: 100%;
-      border-radius: 99px;
-      background: var(--orange);
-      transition: width .3s;
-    }
-
-    .chk-run-actions {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .dv2-money-high {
-      background: #FDE2E1 !important;
-      color: #B42318;
-      font-weight: 700;
-    }
-
-    .dv2-version {
-      margin-top: 14px;
-      font-size: 12px;
-      color: var(--muted);
-      text-align: right;
     }
 
     .result-table th,
@@ -376,59 +230,6 @@
     .chk-history-item.active {
       background: #FFF1E8;
       border-color: var(--orange);
-    }
-
-    .chk-history-title {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-    }
-
-    .h-clear-all {
-      border: none;
-      background: none;
-      padding: 0;
-      font-family: Cambria, Georgia, serif;
-      font-size: 12.5px;
-      color: var(--muted);
-      text-decoration: underline;
-      cursor: pointer;
-    }
-
-    .h-clear-all:hover {
-      color: #B42318;
-    }
-
-    .chk-history-item {
-      position: relative;
-      padding-right: 30px !important;
-    }
-
-    .h-del {
-      position: absolute;
-      top: 50%;
-      right: 6px;
-      transform: translateY(-50%);
-      width: 22px;
-      height: 22px;
-      border: none;
-      border-radius: 6px;
-      background: transparent;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 22px;
-      cursor: pointer;
-      opacity: .55;
-    }
-
-    .chk-history-item:hover .h-del {
-      opacity: 1;
-    }
-
-    .h-del:hover {
-      background: #FBEAE8;
-      color: #B42318;
     }
 
     .chk-history-item .h-time {
@@ -599,10 +400,6 @@
         margin-left: auto;
       }
 
-      .rail-version {
-        display: none;
-      }
-
       .side-panel,
       .main-col {
         width: 100%;
@@ -701,49 +498,6 @@
       font-size: 13.5px;
       color: var(--muted);
       line-height: 1.5;
-    }
-
-    .chk-source-wrap {
-      margin-bottom: 12px;
-    }
-
-    .chk-source-toggle {
-      display: flex;
-      gap: 0;
-      border: 1.5px solid var(--orange);
-      border-radius: 10px;
-      overflow: hidden;
-    }
-
-    .chk-source-opt {
-      flex: 1;
-      margin: 0;
-      cursor: pointer;
-    }
-
-    .chk-source-opt input {
-      display: none;
-    }
-
-    .chk-source-opt span {
-      display: block;
-      text-align: center;
-      padding: 8px 6px;
-      font-family: Cambria, Georgia, serif;
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--orange);
-      background: var(--surface);
-      transition: background .15s ease, color .15s ease;
-    }
-
-    .chk-source-opt + .chk-source-opt span {
-      border-left: 1.5px solid var(--orange);
-    }
-
-    .chk-source-opt input:checked + span {
-      background: var(--orange);
-      color: #fff;
     }
 
     .chk-hint-note {
@@ -2078,7 +1832,6 @@
         <div class="tab" id="tab-checker">🔎 Kiểm tra đơn</div>
         <div class="tabs" id="tabs"></div>
         <button type="button" id="btn-logout" class="rail-logout" title="Đăng xuất">⏻</button>
-        <div class="rail-version" id="rail-version"></div>
       </div>
 
       <div class="side-panel" id="side-panel-normal">
@@ -2125,14 +1878,6 @@
           <option value="pod">🖼️ POD</option>
         </select>
 
-        <div class="chk-source-wrap" id="chk-source-wrap">
-          <label class="field-label">Nguồn tra cứu</label>
-          <div class="chk-source-toggle" role="radiogroup">
-            <label class="chk-source-opt"><input type="radio" name="chk-source" value="realtime" /><span>⚡ Realtime</span></label>
-            <label class="chk-source-opt"><input type="radio" name="chk-source" value="bi" /><span>🗄️ BI</span></label>
-          </div>
-        </div>
-
         <p class="hint chk-hint-note" id="chk-hint-note">⚠️ = đơn &gt;5 ngày chưa cập nhật · Bấm Mã đơn để mở tra cứu nội bộ GHN · Bấm tên kho để copy nhanh ID</p>
 
         <div id="chk-config-fields">
@@ -2163,25 +1908,8 @@
             <span class="count-tag" id="chk-code-count"></span>
           </div>
 
-          <div class="chk-history-title"><span>🕘 Lịch sử gần đây</span><button class="h-clear-all" id="chk-history-clear" title="Xóa toàn bộ lịch sử">🗑 Xóa tất cả</button></div>
+          <div class="chk-history-title">🕘 Lịch sử gần đây</div>
           <div id="chk-history-list"></div>
-        </div>
-
-        <div id="chk-mode-panel-v2" style="display:none;">
-          <p class="hint">Tra từ nguồn dữ liệu BI, không cần User-Agent/Token. Dữ liệu có thể trễ hơn Realtime, chuyển sang ⚡ Realtime khi cần trạng thái mới nhất.</p>
-          <label class="field-label">Danh sách mã đơn</label>
-          <textarea id="dv2-codes-input"
-            placeholder="Dán mã đơn cần tra, mỗi dòng 1 mã hoặc cách nhau dấu phẩy."></textarea>
-
-          <div class="actions">
-            <button class="btn-primary" id="dv2-btn-run">Tra cứu</button>
-            <button class="btn-ghost" id="dv2-btn-clear">Xóa</button>
-            <span class="count-tag" id="dv2-code-count"></span>
-          </div>
-
-          <div class="chk-history-title"><span>🕘 Lịch sử gần đây</span><button class="h-clear-all" id="dv2-history-clear" title="Xóa toàn bộ lịch sử">🗑 Xóa tất cả</button></div>
-          <div id="dv2-history-list"></div>
-          <div class="dv2-version">BI · bản 2026-10-02.9</div>
         </div>
 
         <div id="chk-mode-panel-pod" style="display:none;">
@@ -2207,7 +1935,6 @@
 
       <div class="main-col" id="main-col-checker" style="display:none;">
         <div id="chk-results-area"></div>
-        <div id="dv2-results-area" style="display:none;"></div>
         <div id="pod-results-area" style="display:none;"></div>
         <div id="calllog-results-area" style="display:none;">
           <div class="state" style="padding:40px 0;text-align:center;color:var(--muted);">🚧 CallLog đang được phát triển.</div>
@@ -2996,549 +2723,42 @@
 
       /* ───────────────────── Chế độ trong tab Kiểm tra đơn ───────────────────── */
       const CHK_MODE_KEY = "ka_lookup_chk_mode_v1";
-      const CHK_SOURCE_KEY = "ka_lookup_chk_source_v1";
-      let chkSource = "realtime";
-      let chkEffectiveMode = "tra-cuu";
-      try { chkSource = localStorage.getItem(CHK_SOURCE_KEY) === "bi" ? "bi" : "realtime"; } catch (err) { }
       const chkModeSelect = el("#chk-mode-select");
       const chkAppTitle = el("#chk-app-title");
       const chkModePanels = {
         "tra-cuu": el("#chk-mode-panel-tracuu"),
-        "tra-cuu-v2": el("#chk-mode-panel-v2"),
         "pod": el("#chk-mode-panel-pod"),
         "calllog": el("#chk-mode-panel-calllog")
       };
       const chkResultPanels = {
         "tra-cuu": chkResultsArea,
-        "tra-cuu-v2": el("#dv2-results-area"),
         "pod": el("#pod-results-area"),
         "calllog": el("#calllog-results-area")
       };
       const CHK_MODE_TITLES = {
         "tra-cuu": "Kiểm tra đơn",
-        "tra-cuu-v2": "Tra cứu BI",
         "pod": "POD",
         "calllog": "CallLog"
       };
 
       function setChkMode(mode) {
-        if (mode === "tra-cuu-v2") chkSource = "bi";
         if (!chkModePanels[mode]) mode = "tra-cuu";
-        if (mode === "tra-cuu" || mode === "tra-cuu-v2") mode = chkSource === "bi" ? "tra-cuu-v2" : "tra-cuu";
-        const isLookup = mode === "tra-cuu" || mode === "tra-cuu-v2";
-        el("#chk-source-wrap").style.display = isLookup ? "block" : "none";
-        document.querySelectorAll('input[name="chk-source"]').forEach(r => { r.checked = r.value === chkSource; });
-        try { localStorage.setItem(CHK_SOURCE_KEY, chkSource); } catch (err) { }
         Object.keys(chkModePanels).forEach(k => {
           chkModePanels[k].style.display = k === mode ? "block" : "none";
-          chkResultPanels[k].style.display = k === mode ? (k === "tra-cuu" || k === "tra-cuu-v2" ? "flex" : "block") : "none";
+          chkResultPanels[k].style.display = k === mode ? "block" : "none";
         });
-        chkModeSelect.value = isLookup ? "tra-cuu" : mode;
+        chkModeSelect.value = mode;
         chkAppTitle.textContent = CHK_MODE_TITLES[mode] || "Kiểm tra đơn";
         try { localStorage.setItem(CHK_MODE_KEY, mode); } catch (err) { }
-        chkEffectiveMode = mode;
-        if (typeof applyChkModeChrome === "function") applyChkModeChrome(mode);
       }
 
       chkModeSelect.addEventListener("change", () => setChkMode(chkModeSelect.value));
-      document.querySelectorAll('input[name="chk-source"]').forEach(r => {
-        r.addEventListener("change", () => {
-          if (!r.checked) return;
-          chkSource = r.value === "bi" ? "bi" : "realtime";
-          setChkMode("tra-cuu");
-        });
-      });
 
       (function initChkMode() {
         let saved = "tra-cuu";
         try { saved = localStorage.getItem(CHK_MODE_KEY) || "tra-cuu"; } catch (err) { }
         setChkMode(saved);
       })();
-
-      const DV2_ENDPOINT = "/api/v2x4";
-      const DV2_CHUNK = 500;
-      const DV2_WINDOW_MONTHS = 12;
-      const DV2_PARALLEL = 2;
-      const DV2_HISTORY_KEY = "ka_lookup_dv2_history_v1";
-      const DV2_HISTORY_MAX = 5;
-      const DV2_COPY_NUMBER = new Set(["client_id", "order_value", "cod_amount", "insurance_value"]);
-      const DV2_ID_NAME_RE = /^(\d+) - \S/;
-      const DV2_DATETIME_RE = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
-      const DV2_MONEY = new Set(["order_value", "cod_amount", "insurance_value"]);
-      const DV2_NUMBER = new Set(["weight", "num_pick", "num_deliver", "num_return"]);
-
-      const dv2CodesInput = el("#dv2-codes-input");
-      const dv2CodeCount = el("#dv2-code-count");
-      const dv2BtnRun = el("#dv2-btn-run");
-      const dv2ResultsArea = el("#dv2-results-area");
-      let dv2State = { items: [], columns: [], notFound: [], invalid: [], requested: 0, ms: 0, duplicates: 0, errors: [] };
-      let dv2Search = "";
-      let dv2SortField = null;
-      let dv2SortDir = 1;
-      let dv2StatusFilter = new Set();
-
-      function dv2Esc(v) {
-        return String(v ?? "").replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
-      }
-
-      function dv2Display(r, f) {
-        const v = r[f];
-        if (v === undefined || v === null || v === "") return "";
-        if (DV2_MONEY.has(f)) return formatMoney(v);
-        if (DV2_NUMBER.has(f)) return Number(v).toLocaleString("vi-VN");
-        if (dv2State.dateDisplay !== "datetime" && typeof v === "string" && DV2_DATETIME_RE.test(v)) return v.slice(0, 10);
-        return v;
-      }
-
-      function dv2RowClass(status) {
-        const s = String(status || "").toLowerCase();
-        if (s.includes("hủy")) return "chk-status-cancel";
-        if (s.includes("thất lạc") || s.includes("hư hỏng")) return "chk-status-lost";
-        if (s.includes("hoàn hàng thành công") || s.includes("vô thừa nhận")) return "chk-status-return";
-        if (s.includes("giao hàng thành công")) return "chk-status-delivered";
-        return "";
-      }
-
-      function dv2Columns() {
-        return dv2State.columns.length ? dv2State.columns : Object.keys(dv2State.items[0] || {});
-      }
-
-      function dv2ExportColumns() {
-        return Array.isArray(dv2State.exportColumns) ? dv2State.exportColumns : dv2Columns();
-      }
-
-      function dv2UpdateCount() {
-        const n = parseCodes(dv2CodesInput.value).length;
-        dv2CodeCount.textContent = n ? `${n} mã` : "";
-      }
-      dv2CodesInput.addEventListener("input", dv2UpdateCount);
-
-      function dv2LoadHistory() {
-        try {
-          const raw = localStorage.getItem(DV2_HISTORY_KEY);
-          return raw ? JSON.parse(raw) : [];
-        } catch (err) {
-          return [];
-        }
-      }
-
-      function dv2SaveHistory() {
-        const h = dv2LoadHistory();
-        const entry = { time: new Date().toLocaleString("sv-SE", { timeZone: "Asia/Ho_Chi_Minh" }), requested: dv2State.requested, found: dv2State.items.length, codes: dv2State.allCodes || [] };
-        const snapshot = JSON.stringify(dv2State);
-        if (snapshot.length < 1500000) entry.state = dv2State;
-        h.unshift(entry);
-        let trimmed = h.slice(0, DV2_HISTORY_MAX);
-        for (let i = trimmed.length - 1; i >= 0; i--) {
-          try {
-            localStorage.setItem(DV2_HISTORY_KEY, JSON.stringify(trimmed));
-            break;
-          } catch (err) {
-            trimmed = trimmed.map((x, idx) => idx >= i ? { ...x, state: undefined } : x);
-          }
-        }
-        dv2RenderHistory();
-      }
-
-      function dv2RenderHistory() {
-        const listEl = el("#dv2-history-list");
-        const h = dv2LoadHistory();
-        const clr = el("#dv2-history-clear");
-        if (clr) clr.style.display = h.length ? "" : "none";
-        if (!h.length) {
-          listEl.innerHTML = `<div class="chk-history-empty">Chưa có lịch sử</div>`;
-          return;
-        }
-        listEl.innerHTML = h.map((x, i) => `
-          <div class="chk-history-item" data-dv2-index="${i}" title="${x.state ? "Bấm để xem lại kết quả đã lưu" : "Kết quả lớn không lưu được, bấm để nạp lại danh sách mã"}">
-            <div class="h-time">${dv2Esc(x.time)}</div>
-            <div class="h-count">${x.found}/${x.requested} mã${x.state ? "" : " · cần tra lại"}</div>
-            <button class="h-del" data-del-index="${i}" title="Xóa lần tra này">✕</button>
-          </div>`).join("");
-      }
-
-      el("#dv2-history-clear").addEventListener("click", () => {
-        if (!confirm("Xóa toàn bộ lịch sử tra cứu BI trên máy này?")) return;
-        try { localStorage.removeItem(DV2_HISTORY_KEY); } catch (err) { }
-        dv2RenderHistory();
-      });
-
-      el("#dv2-history-list").addEventListener("click", e => {
-        const del = e.target.closest(".h-del");
-        if (del) {
-          e.stopPropagation();
-          const h = dv2LoadHistory();
-          h.splice(Number(del.dataset.delIndex), 1);
-          try { localStorage.setItem(DV2_HISTORY_KEY, JSON.stringify(h)); } catch (err) { }
-          dv2RenderHistory();
-          return;
-        }
-        const item = e.target.closest(".chk-history-item");
-        if (!item) return;
-        const x = dv2LoadHistory()[Number(item.dataset.dv2Index)];
-        if (!x) return;
-        document.querySelectorAll("#dv2-history-list .chk-history-item").forEach(n => n.classList.remove("active"));
-        item.classList.add("active");
-        if (x.state) {
-          dv2State = x.state;
-          dv2Search = "";
-          dv2StatusFilter = new Set();
-          dv2RenderResults();
-        } else {
-          dv2CodesInput.value = (x.codes || []).join("\n");
-          dv2UpdateCount();
-        }
-      });
-
-      async function dv2FetchChunks(codes, next, label) {
-        const chunks = [];
-        for (let i = 0; i < codes.length; i += DV2_CHUNK) chunks.push(codes.slice(i, i + DV2_CHUNK));
-        const t0 = Date.now();
-        const results = new Array(chunks.length);
-        let done = 0;
-        let foundSoFar = next.items.length;
-        const paint = () => {
-          const sec = Math.round((Date.now() - t0) / 1000);
-          dv2ResultsArea.innerHTML = `<div class="state loading"><span class="spinner"></span>${label}${chunks.length > 1 ? ` — xong ${done}/${chunks.length} lượt (${codes.length} mã, chạy ${Math.min(DV2_PARALLEL, chunks.length)} lượt cùng lúc) · đã tìm thấy ${foundSoFar} · ${sec}s` : "..."}</div>`;
-        };
-        paint();
-        const ticker = setInterval(paint, 1000);
-        let cursor = 0;
-        const worker = async () => {
-          while (cursor < chunks.length) {
-            const i = cursor++;
-            try {
-              const res = await fetch(DV2_ENDPOINT, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ c: chunks[i], e: sessionEmail, k: sessionPassword, q: 1 })
-              });
-              const data = await res.json().catch(() => ({ ok: false, message: `HTTP ${res.status}` }));
-              if (data.ok !== true) throw new Error(data.message || `HTTP ${res.status}`);
-              results[i] = { data };
-              foundSoFar += (data.items || []).length;
-            } catch (err) {
-              results[i] = { error: err.message };
-            }
-            done++;
-            paint();
-          }
-        };
-        await Promise.all(Array.from({ length: Math.min(DV2_PARALLEL, chunks.length) }, worker));
-        clearInterval(ticker);
-        results.forEach((r, i) => {
-          if (r && r.data) {
-            const data = r.data;
-            next.items.push(...(data.items || []));
-            if (!next.columns.length && Array.isArray(data.columns)) next.columns = data.columns;
-            if (!next.exportColumns && Array.isArray(data.exportColumns)) next.exportColumns = data.exportColumns;
-            if (!next.dateDisplay && data.dateDisplay) next.dateDisplay = data.dateDisplay;
-            if (data.queryMode) next.queryMode = next.queryMode && next.queryMode !== data.queryMode ? "card" : data.queryMode;
-            if (next.moneyHighlight === undefined && data.moneyHighlight !== undefined) next.moneyHighlight = data.moneyHighlight;
-            if (!next.missingColumns.length && Array.isArray(data.missingColumns)) next.missingColumns = data.missingColumns;
-            next.notFound.push(...(data.notFound || []));
-            next.invalid.push(...(data.invalid || []));
-            next.duplicates += Number(data.duplicates || 0);
-          } else {
-            next.errors.push({ index: next.errors.length + 1, count: chunks[i].length, message: (r && r.error) || "Không rõ lỗi", codes: chunks[i] });
-          }
-        });
-        next.ms += Date.now() - t0;
-        return { parts: chunks.length, ms: Date.now() - t0 };
-      }
-
-      function dv2SendLog(mode, codes, stats, state) {
-        const codeSet = new Set(codes);
-        const found = state.items.filter(r => codeSet.has(String(r.order_code || "").toUpperCase())).length;
-        const errs = (state.errors || []);
-        const summary = {
-          mode,
-          requested: codes.length,
-          found,
-          errors: errs.length,
-          errorMessages: [...new Set(errs.map(e => e.message))].slice(0, 3),
-          ms: stats.ms,
-          parts: stats.parts,
-          codes,
-          notFound: (state.notFound || []).filter(c => codeSet.has(c))
-        };
-        fetch(DV2_ENDPOINT, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ kind: "log", e: sessionEmail, k: sessionPassword, summary })
-        }).catch(() => { });
-      }
-
-      async function dv2Run() {
-        const codes = parseCodes(dv2CodesInput.value).map(c => c.toUpperCase());
-        if (!codes.length) {
-          dv2ResultsArea.innerHTML = `<div class="empty"><div class="big">✏️</div>Nhập ít nhất một mã đơn để tra cứu.</div>`;
-          return;
-        }
-        dv2BtnRun.disabled = true;
-        const next = { items: [], columns: [], missingColumns: [], notFound: [], invalid: [], requested: codes.length, ms: 0, duplicates: 0, errors: [], allCodes: codes };
-        const stats = await dv2FetchChunks(codes, next, "Đang tra cứu");
-        dv2SendLog("run", codes, stats, next);
-        dv2BtnRun.disabled = false;
-        dv2State = next;
-        dv2Search = "";
-        dv2StatusFilter = new Set();
-        dv2SortField = null;
-        dv2RenderResults();
-        if (next.items.length) dv2SaveHistory();
-      }
-
-      async function dv2RetryFailed() {
-        const s = dv2State;
-        const codes = (s.errors || []).flatMap(e => e.codes || []);
-        if (!codes.length) return;
-        dv2BtnRun.disabled = true;
-        s.errors = [];
-        s.allCodes = s.allCodes || codes;
-        const stats = await dv2FetchChunks(codes, s, "Đang tra lại các lượt lỗi");
-        dv2SendLog("retry", codes, stats, s);
-        const order = new Map((s.allCodes || []).map((c, i) => [c, i]));
-        const seen = new Set();
-        s.items = s.items.filter(r => { const k = String(r.order_code || "").toUpperCase(); if (seen.has(k)) return false; seen.add(k); return true; })
-          .sort((a, b) => (order.get(String(a.order_code).toUpperCase()) ?? 1e9) - (order.get(String(b.order_code).toUpperCase()) ?? 1e9));
-        s.notFound = [...new Set(s.notFound)].filter(c => !seen.has(c));
-        dv2BtnRun.disabled = false;
-        dv2RenderResults();
-        if (s.items.length) dv2SaveHistory();
-      }
-
-      dv2BtnRun.onclick = dv2Run;
-      el("#dv2-btn-clear").onclick = () => {
-        dv2CodesInput.value = "";
-        dv2UpdateCount();
-        dv2State = { items: [], columns: [], notFound: [], invalid: [], requested: 0, ms: 0, duplicates: 0, errors: [] };
-        dv2ResultsArea.innerHTML = "";
-      };
-
-      function dv2FilteredRows() {
-        const tokens = dv2Search.split(/[\s,;]+/).map(s => s.trim().toUpperCase()).filter(Boolean);
-        let rows = tokens.length ? dv2State.items.filter(r => tokens.some(t => String(r.order_code || "").toUpperCase().includes(t))) : dv2State.items;
-        if (dv2StatusFilter.size) rows = rows.filter(r => dv2StatusFilter.has(r.status || "Không rõ"));
-        if (dv2SortField) {
-          const f = dv2SortField;
-          rows = [...rows].sort((a, b) => {
-            if (DV2_MONEY.has(f) || DV2_NUMBER.has(f)) return ((Number(a[f]) || 0) - (Number(b[f]) || 0)) * dv2SortDir;
-            return String(a[f] ?? "").localeCompare(String(b[f] ?? ""), "vi", { numeric: true, sensitivity: "base" }) * dv2SortDir;
-          });
-        }
-        return { rows, tokens };
-      }
-
-      function dv2RenderResults() {
-        const s = dv2State;
-        if (!s.items.length && !s.notFound.length && !s.errors.length) {
-          dv2ResultsArea.innerHTML = `<div class="empty"><div class="big">🗄️</div>Chưa có kết quả.</div>`;
-          return;
-        }
-        const cols = dv2Columns();
-        const { rows, tokens } = dv2FilteredRows();
-        const statusCount = {};
-        s.items.forEach(r => { const k = r.status || "Không rõ"; statusCount[k] = (statusCount[k] || 0) + 1; });
-        const statusChips = Object.entries(statusCount).sort((a, b) => b[1] - a[1]).map(([k, v]) => `<span class="stat-badge dv2-chip ${dv2RowClass(k)}${dv2StatusFilter.has(k) ? " active" : ""}" data-dv2-status="${dv2Esc(k)}" title="Bấm để lọc · Ctrl + bấm để chọn thêm trạng thái · bấm lại để bỏ lọc">${dv2Esc(k)}: ${v}</span>`).join(" ");
-        const body = rows.map(r => `<tr class="${dv2RowClass(r.status)}">${cols.map(f => {
-          if (f === "order_code") {
-            const url = `https://tracuunoibo.ghn.vn/internal?order_code=${encodeURIComponent(r.order_code || "")}`;
-            return `<td class="code-cell"><a href="${url}" target="_blank" rel="noopener" class="ticket-link">${dv2Esc(r.order_code)}</a></td>`;
-          }
-          const raw = r[f];
-          const shown = dv2Display(r, f);
-          const tip = typeof raw === "string" && shown !== raw ? ` title="${dv2Esc(raw)}"` : "";
-          const limit = Number(dv2State.moneyHighlight || 0);
-          const high = limit > 0 && DV2_MONEY.has(f) && Number(raw) >= limit;
-          const classes = [];
-          if (DV2_MONEY.has(f) || DV2_NUMBER.has(f)) classes.push("amount-cell");
-          if (high) classes.push("dv2-money-high");
-          let copyId = "";
-          if (DV2_COPY_NUMBER.has(f) && raw !== "" && raw !== null && raw !== undefined) copyId = String(raw);
-          else if (typeof raw === "string") { const m = raw.match(DV2_ID_NAME_RE); if (m) copyId = m[1]; }
-          if (copyId) classes.push("wh-copyable");
-          const clsAttr = classes.length ? ` class="${classes.join(" ")}"` : "";
-          const copyAttr = copyId ? ` data-copy-id="${dv2Esc(copyId)}"` : "";
-          const title = copyId ? ` title="${dv2Esc((DV2_COPY_NUMBER.has(f) ? "Bấm để copy số: " : "Bấm để copy ID: ") + copyId + (tip ? " · " + raw : ""))}"` : tip;
-          return `<td${clsAttr}${copyAttr}${title}>${dv2Esc(shown)}</td>`;
-        }).join("")}</tr>`).join("");
-        const nfHtml = s.notFound.length ? `
-          <div class="state error" style="margin-top:10px;">
-            ⚠️ Không tìm thấy ${s.notFound.length} mã (chỉ có đơn tạo từ đầu tháng ${dv2WindowStart()} trở lại đây, thuộc nhóm client trong nguồn dữ liệu).
-            <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">
-              <button class="btn-ghost" id="dv2-btn-copy-nf">📋 Copy mã không tìm thấy</button>
-              <button class="btn-ghost" id="dv2-btn-nf-realtime">↪ Kiểm tra Realtime các mã này</button>
-            </div>
-          </div>` : "";
-        const errCodes = s.errors.reduce((n, e) => n + (e.count || 0), 0);
-        const errHtml = s.errors.length ? `<div class="state error" style="margin-top:10px;">⚠️ ${s.errors.length} lượt bị lỗi (${errCodes} mã chưa tra được), kết quả có thể chưa đầy đủ: ${s.errors.map(e => `lượt ${e.index} (${e.count} mã): ${dv2Esc(e.message)}`).join("; ")}
-            <div style="margin-top:8px;"><button class="btn-ghost" id="dv2-btn-retry">🔁 Tra lại ${errCodes} mã bị lỗi</button></div></div>` : "";
-        const invHtml = s.invalid.length ? `<div style="margin-top:8px;font-size:13.5px;color:var(--muted);">Bỏ qua ${s.invalid.length} mã sai định dạng: ${s.invalid.map(dv2Esc).join(", ")}</div>` : "";
-        const noExp = dv2Columns().filter(c => !dv2ExportColumns().includes(c));
-        const neHtml = noExp.length ? `<div style="margin-top:8px;font-size:13.5px;color:var(--muted);">🔒 Chỉ xem, không có trong file tải và Copy: ${noExp.map(dv2Esc).join(", ")}</div>` : "";
-        const mcHtml = (s.missingColumns || []).length ? `<div style="margin-top:8px;font-size:13.5px;color:var(--muted);">ℹ️ Cột khai báo nhưng card không có: ${s.missingColumns.map(dv2Esc).join(", ")}</div>` : "";
-        const dupHtml = s.duplicates ? `<div style="margin-top:8px;font-size:13.5px;color:var(--muted);">ℹ️ Nguồn dữ liệu trả ${s.duplicates} dòng trùng mã đơn, đã giữ dòng đầu tiên.</div>` : "";
-        dv2ResultsArea.innerHTML = `
-          <div class="toolbar dv2-toolbar">
-            <span class="stats">
-              <span class="stat-badge total">Tìm thấy: ${s.items.length}/${s.requested}</span>
-              <span class="stat-badge">⏱ ${(s.ms / 1000).toFixed(1)}s</span>
-              ${s.queryMode ? `<span class="stat-badge dv2-mode" title="Cách truy vấn nguồn dữ liệu">${s.queryMode === "inlist" ? "⚡ IN-list" : "🐢 card"}</span>` : ""}
-              ${statusChips}
-            </span>
-            <div class="toolbar-actions"${s.items.length ? "" : ' style="display:none;"'}>
-              <button class="btn-ghost" id="dv2-btn-copy">Copy kết quả</button>
-              <button class="btn-ghost" id="dv2-btn-realtime" title="Đưa các mã đang xem sang nguồn Realtime">↪ Kiểm tra Realtime</button>
-              <div class="dl-wrap">
-                <button class="btn-ghost" id="dv2-btn-dl-toggle">⬇ Tải ▾</button>
-                <div class="dl-menu" id="dv2-dl-menu">
-                  <div class="dl-item" data-fmt="xlsx">Excel (.xlsx)</div>
-                  <div class="dl-item" data-fmt="csv">CSV (.csv)</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="result-search-row">
-            <input type="text" id="dv2-search" class="result-search-input" placeholder="Lọc mã đơn trong kết quả này — dán được nhiều mã, cách nhau bằng dấu phẩy/khoảng trắng" value="${dv2Esc(dv2Search)}" />
-            <span class="result-search-count">${tokens.length || dv2StatusFilter.size ? `${rows.length}/${s.items.length} dòng khớp` : `${s.items.length} dòng`}</span>
-          </div>
-          ${s.items.length ? `<div class="results-table-wrap">
-            <table class="result-table">
-              <thead><tr>${cols.map(f => {
-                const arrow = dv2SortField === f ? (dv2SortDir === 1 ? " ▲" : " ▼") : " ⇅";
-                const cls = DV2_MONEY.has(f) || DV2_NUMBER.has(f) ? "align-right chk-sortable-th" : "chk-sortable-th";
-                return `<th class="${cls}" data-dv2-sort="${f}" style="text-transform:none;">${dv2Esc(f)}<span class="chk-sort-arrow">${arrow}</span></th>`;
-              }).join("")}</tr></thead>
-              <tbody>${body}</tbody>
-            </table>
-          </div>` : ""}
-          ${nfHtml}${errHtml}${invHtml}${dupHtml}${mcHtml}${neHtml}`;
-        dv2BindResultEvents();
-      }
-
-      function dv2WindowStart() {
-        const d = new Date();
-        const m = new Date(d.getFullYear(), d.getMonth() - (DV2_WINDOW_MONTHS - 1), 1);
-        return `${String(m.getMonth() + 1).padStart(2, "0")}/${m.getFullYear()}`;
-      }
-
-      function dv2Aoa() {
-        const cols = dv2ExportColumns();
-        return [cols, ...dv2FilteredRows().rows.map(r => cols.map(f => {
-          const v = r[f];
-          if (v === undefined || v === null) return "";
-          if (v === "") return "";
-          return DV2_MONEY.has(f) || DV2_NUMBER.has(f) ? Number(v) : v;
-        }))];
-      }
-
-      function dv2SendToRealtime(codes) {
-        if (!codes.length) return;
-        chkCodesInput.value = codes.join("\n");
-        chkCodesInput.dispatchEvent(new Event("input"));
-        chkSource = "realtime";
-        setChkMode("tra-cuu");
-      }
-
-      function dv2BindResultEvents() {
-        document.querySelectorAll("#dv2-results-area .dv2-chip").forEach(chip => {
-          chip.onclick = e => {
-            const k = chip.dataset.dv2Status;
-            if (e.ctrlKey || e.metaKey) {
-              if (dv2StatusFilter.has(k)) dv2StatusFilter.delete(k); else dv2StatusFilter.add(k);
-            } else if (dv2StatusFilter.size === 1 && dv2StatusFilter.has(k)) {
-              dv2StatusFilter = new Set();
-            } else {
-              dv2StatusFilter = new Set([k]);
-            }
-            dv2RenderResults();
-          };
-        });
-        const search = el("#dv2-search");
-        if (search) {
-          search.addEventListener("input", () => {
-            dv2Search = search.value;
-            const pos = search.selectionStart;
-            dv2RenderResults();
-            const again = el("#dv2-search");
-            again.focus();
-            again.setSelectionRange(pos, pos);
-          });
-        }
-        document.querySelectorAll("#dv2-results-area th[data-dv2-sort]").forEach(th => {
-          th.onclick = () => {
-            const f = th.dataset.dv2Sort;
-            if (dv2SortField === f) dv2SortDir = -dv2SortDir; else { dv2SortField = f; dv2SortDir = 1; }
-            dv2RenderResults();
-          };
-        });
-        const copyBtn = el("#dv2-btn-copy");
-        if (copyBtn) copyBtn.onclick = async () => {
-          const text = dv2Aoa().map(r => r.join("\t")).join("\n");
-          try { await navigator.clipboard.writeText(text); copyBtn.textContent = "✓ Đã copy"; } catch (err) { copyBtn.textContent = "Không copy được"; }
-          setTimeout(() => { copyBtn.textContent = "Copy kết quả"; }, 1500);
-        };
-        const rtBtn = el("#dv2-btn-realtime");
-        if (rtBtn) rtBtn.onclick = () => dv2SendToRealtime(dv2FilteredRows().rows.map(r => r.order_code));
-        const nfCopy = el("#dv2-btn-copy-nf");
-        if (nfCopy) nfCopy.onclick = async () => {
-          try { await navigator.clipboard.writeText(dv2State.notFound.join("\n")); nfCopy.textContent = "✓ Đã copy"; } catch (err) { }
-        };
-        const retryBtn = el("#dv2-btn-retry");
-        if (retryBtn) retryBtn.onclick = dv2RetryFailed;
-        const nfRt = el("#dv2-btn-nf-realtime");
-        if (nfRt) nfRt.onclick = () => dv2SendToRealtime(dv2State.notFound);
-        const dlToggle = el("#dv2-btn-dl-toggle");
-        if (dlToggle) dlToggle.onclick = e => {
-          e.stopPropagation();
-          el("#dv2-dl-menu").classList.toggle("open");
-        };
-        document.querySelectorAll("#dv2-dl-menu .dl-item").forEach(item => {
-          item.onclick = () => {
-            const ws = XLSX.utils.aoa_to_sheet(dv2Aoa());
-            const stamp = new Date().toLocaleString("sv-SE", { timeZone: "Asia/Ho_Chi_Minh" }).replace(/[-: ]/g, "");
-            if (item.dataset.fmt === "csv") {
-              const blob = new Blob(["\ufeff" + XLSX.utils.sheet_to_csv(ws)], { type: "text/csv;charset=utf-8" });
-              const a = document.createElement("a");
-              a.href = URL.createObjectURL(blob);
-              a.download = `tracuu_v2_${stamp}.csv`;
-              a.click();
-              setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-            } else {
-              const wb = XLSX.utils.book_new();
-              XLSX.utils.book_append_sheet(wb, ws, "TraCuuV2");
-              XLSX.writeFile(wb, `tracuu_v2_${stamp}.xlsx`);
-            }
-            el("#dv2-dl-menu").classList.remove("open");
-          };
-        });
-      }
-
-      function applyChkModeChrome(mode) {
-        const isV2 = mode === "tra-cuu-v2";
-        const hint = el("#chk-hint-note");
-        if (hint) hint.style.display = isV2 ? "none" : "";
-        const divider = el("#side-panel-checker .divider-or");
-        if (divider) divider.style.display = isV2 ? "none" : "";
-        if (isV2) {
-          chkConfigFields.style.display = "none";
-          chkConfigSummary.style.display = "none";
-        } else {
-          updateChkConfigView();
-        }
-      }
-
-      dv2ResultsArea.addEventListener("click", e => {
-        const cell = e.target.closest(".wh-copyable");
-        if (!cell || !cell.dataset.copyId) return;
-        const id = cell.dataset.copyId;
-        navigator.clipboard.writeText(id).then(() => {
-          if (typeof chkShowToast === "function") chkShowToast("Đã copy: " + id);
-        }).catch(() => { });
-      });
-
-      dv2RenderHistory();
-      applyChkModeChrome(chkEffectiveMode);
 
       /* ───────────────────── Tab POD (Demo B — 3 cột Pick/Deliver/Return) ───────────────────── */
       const podCodesInput = el("#pod-codes-input");
@@ -3939,15 +3159,6 @@
       });
 
       el("#chk-btn-clear").onclick = () => {
-        chkRunId++;
-        chkRunState = "idle";
-        chkPauseRequested = false;
-        chkInterrupted = false;
-        chkRunCodes = [];
-        chkElapsedMs = 0;
-        chkStatusFilter = new Set();
-        chkClearRunStorage();
-        chkBtnRun.disabled = false;
         chkCodesInput.value = "";
         chkCodeCount.textContent = "";
         chkResultsArea.innerHTML = "";
@@ -3973,13 +3184,12 @@
         }
       }
 
-      function saveChkHistoryEntry(results, ms) {
+      function saveChkHistoryEntry(results) {
         if (!results.length) return;
         const history = loadChkHistory();
         history.unshift({
           time: new Date().toLocaleString("vi-VN"),
           count: results.length,
-          ms: ms || 0,
           results
         });
         const trimmed = history.slice(0, CHK_HISTORY_MAX);
@@ -3992,8 +3202,6 @@
         const history = loadChkHistory();
         const listEl = el("#chk-history-list");
         if (!listEl) return;
-        const clr = el("#chk-history-clear");
-        if (clr) clr.style.display = history.length ? "" : "none";
         if (!history.length) {
           listEl.innerHTML = `<div class="chk-history-empty">Chưa có lịch sử</div>`;
           return;
@@ -4002,47 +3210,24 @@
           <div class="chk-history-item" data-history-index="${i}">
             <div class="h-time">${h.time}</div>
             <div class="h-count">${h.count} mã đơn</div>
-            <button class="h-del" data-del-index="${i}" title="Xóa lần tra này">✕</button>
           </div>`).join("");
       }
 
-      el("#chk-history-clear").addEventListener("click", () => {
-        if (!confirm("Xóa toàn bộ lịch sử tra cứu Realtime trên máy này?")) return;
-        try { localStorage.removeItem(CHK_HISTORY_KEY); } catch (err) { }
-        renderChkHistoryList();
-      });
-
       el("#chk-history-list").addEventListener("click", e => {
-        const del = e.target.closest(".h-del");
-        if (del) {
-          e.stopPropagation();
-          const history = loadChkHistory();
-          history.splice(Number(del.dataset.delIndex), 1);
-          try { localStorage.setItem(CHK_HISTORY_KEY, JSON.stringify(history)); } catch (err) { }
-          renderChkHistoryList();
-          return;
-        }
         const item = e.target.closest(".chk-history-item");
         if (!item) return;
         const idx = Number(item.dataset.historyIndex);
         const history = loadChkHistory();
         if (!history[idx]) return;
-        if (!chkLoadFromHistory(history[idx])) return;
+        chkResults = history[idx].results;
+        chkSearchQuery = "";
+        renderChkResults();
         document.querySelectorAll(".chk-history-item").forEach(x => x.classList.remove("active"));
         item.classList.add("active");
       });
 
       renderChkHistoryList();
       let chkSearchQuery = "";
-      let chkRunState = "idle";
-      let chkPauseRequested = false;
-      let chkRunCodes = [];
-      let chkElapsedMs = 0;
-      let chkRunId = 0;
-      let chkInterrupted = false;
-      let chkStatusFilter = new Set();
-      const CHK_RUN_KEY = "ka_lookup_chk_run_v1";
-      const CHK_ERROR_KEY = "Lỗi / không có dữ liệu";
 
       function formatMoney(v) {
         const n = Number(v);
@@ -4216,35 +3401,6 @@
       }
 
       chkResultsArea.addEventListener("click", e => {
-        const chip = e.target.closest(".dv2-chip[data-chk-status]");
-        if (chip) {
-          const k = decodeURIComponent(chip.dataset.chkStatus);
-          if (e.ctrlKey || e.metaKey) {
-            if (chkStatusFilter.has(k)) chkStatusFilter.delete(k); else chkStatusFilter.add(k);
-          } else if (chkStatusFilter.size === 1 && chkStatusFilter.has(k)) {
-            chkStatusFilter = new Set();
-          } else {
-            chkStatusFilter = new Set([k]);
-          }
-          renderChkResults();
-          return;
-        }
-        if (e.target.closest("#chk-btn-pause")) {
-          if (chkRunState === "running") {
-            chkPauseRequested = true;
-            chkRunState = "pausing";
-            renderChkResults();
-          }
-          return;
-        }
-        if (e.target.closest("#chk-btn-resume")) {
-          chkResume();
-          return;
-        }
-        if (e.target.closest("#chk-btn-finish")) {
-          chkFinish();
-          return;
-        }
         const cell = e.target.closest(".wh-copyable");
         if (cell) {
           const id = cell.dataset.copyId;
@@ -4267,46 +3423,15 @@
         }
       });
 
-      function chkStatusKey(r) {
-        if (r.ok === false) return CHK_ERROR_KEY;
-        return r.status_vn || r.status_name || "Không rõ";
-      }
-
-      function chkRunBannerHtml() {
-        const total = chkRunCodes.length;
-        const done = chkResults.length;
-        const pct = total ? Math.min(100, Math.round(done / total * 100)) : 0;
-        if (chkRunState === "running" || chkRunState === "pausing") {
-          const pausing = chkRunState === "pausing";
-          return `<div class="chk-run-banner"><span class="spinner"></span><div class="chk-run-text">${pausing ? "Đang tạm dừng sau mã hiện tại..." : "Đang chạy"} ${done}/${total} mã<small>Kết quả đã tìm được hiện ngay bên dưới và được lưu tự động, bấm F5 cũng không bị mất.</small></div><div class="chk-run-progress"><div style="width:${pct}%"></div></div><div class="chk-run-actions"><button class="btn-ghost" id="chk-btn-pause"${pausing ? " disabled" : ""}>⏸ Tạm dừng</button></div></div>`;
-        }
-        if (chkRunState === "paused") {
-          const left = Math.max(0, total - done);
-          return `<div class="chk-run-banner paused"><div class="chk-run-text">${chkInterrupted ? "⚠️ Phiên tra cứu trước bị gián đoạn" : "⏸ Đã tạm dừng"}: xong ${done}/${total} mã<small>Dữ liệu đã tìm thấy được giữ lại, vẫn xem, lọc và tải được ngay.</small></div><div class="chk-run-progress"><div style="width:${pct}%"></div></div><div class="chk-run-actions"><button class="btn-primary" id="chk-btn-resume">▶ Tiếp tục (còn ${left} mã)</button><button class="btn-ghost" id="chk-btn-finish">⏹ Kết thúc &amp; lưu lịch sử</button></div></div>`;
-        }
-        return "";
-      }
-
       function renderChkResults() {
-        const bannerHtml = chkRunBannerHtml();
         if (!chkResults.length) {
-          chkResultsArea.innerHTML = bannerHtml || `<div class="empty"><div class="big">🔍</div>Chưa có kết quả.</div>`;
+          chkResultsArea.innerHTML = `<div class="empty"><div class="big">🔍</div>Chưa có kết quả.</div>`;
           return;
         }
         const filterTokens = chkSearchQuery.split(/[\s,;]+/).map(s => s.trim().toUpperCase()).filter(Boolean);
-        let filtered = filterTokens.length
+        const filtered = filterTokens.length
           ? chkResults.filter(r => filterTokens.some(t => (r.order_code || "").toUpperCase().includes(t)))
           : chkResults;
-        if (chkStatusFilter.size) filtered = filtered.filter(r => chkStatusFilter.has(chkStatusKey(r)));
-        const statusCount = {};
-        chkResults.forEach(r => { const k = chkStatusKey(r); statusCount[k] = (statusCount[k] || 0) + 1; });
-        const foundCount = chkResults.filter(r => r.ok !== false).length;
-        const totalCount = Math.max(chkRunCodes.length, chkResults.length);
-        const statusChips = Object.entries(statusCount)
-          .sort((a, b) => (a[0] === CHK_ERROR_KEY) - (b[0] === CHK_ERROR_KEY) || b[1] - a[1])
-          .map(([k, v]) => `<span class="stat-badge dv2-chip ${k === CHK_ERROR_KEY ? "notfound" : dv2RowClass(k)}${chkStatusFilter.has(k) ? " active" : ""}" data-chk-status="${encodeURIComponent(k)}" title="Bấm để lọc · Ctrl + bấm để chọn thêm trạng thái · bấm lại để bỏ lọc">${dv2Esc(k)}: ${v}</span>`)
-          .join(" ");
-        const statsHtml = `<span class="stats"><span class="stat-badge total">Tìm thấy: ${foundCount}/${totalCount}</span>${chkElapsedMs ? `<span class="stat-badge">⏱ ${(chkElapsedMs / 1000).toFixed(1)}s</span>` : ""}${statusChips}</span>`;
         const displayRows = chkSortField ? [...filtered].sort((a, b) => {
           let av = chkRawValue(a, chkSortField);
           let bv = chkRawValue(b, chkSortField);
@@ -4319,10 +3444,10 @@
           <div class="result-search-row">
             <input type="text" id="chk-result-search" class="result-search-input" placeholder="Lọc mã đơn trong kết quả này — dán được nhiều mã, cách nhau bằng dấu phẩy/khoảng trắng" value="${chkSearchQuery.replace(/"/g, "&quot;")}" />
             ${chkSearchQuery ? `<button class="btn-ghost" id="chk-btn-clear-search">Xóa lọc</button>` : ""}
-            <span class="result-search-count">${filterTokens.length || chkStatusFilter.size ? `${filtered.length}/${chkResults.length} dòng khớp` : `${chkResults.length} dòng`}</span>
+            <span class="result-search-count">${filterTokens.length ? `${filtered.length}/${chkResults.length} dòng khớp` : `${chkResults.length} dòng`}</span>
           </div>`;
         if (!filtered.length) {
-          chkResultsArea.innerHTML = `${bannerHtml}<div class="toolbar dv2-toolbar">${statsHtml}</div>${searchBoxHtml}<div class="empty"><div class="big">🔍</div>Không có mã đơn nào khớp bộ lọc.</div>`;
+          chkResultsArea.innerHTML = `${searchBoxHtml}<div class="empty"><div class="big">🔍</div>Không có mã đơn nào khớp ô lọc.</div>`;
           bindChkSearchEvents();
           return;
         }
@@ -4370,9 +3495,8 @@
           return `<tr class="${rowClass}">${cells}</tr>`;
         }).join("");
         chkResultsArea.innerHTML = `
-          ${bannerHtml}
-          <div class="toolbar dv2-toolbar">
-            ${statsHtml}
+          <div class="toolbar">
+            <span class="stats"><span class="stat-badge total">Tổng: ${chkResults.length}</span></span>
             <div class="toolbar-actions">
               <button class="btn-ghost" id="chk-btn-copy">Copy kết quả</button>
               <div class="dl-wrap">
@@ -4512,105 +3636,7 @@
         return res.json();
       }
 
-      function chkPersistRun(status) {
-        try {
-          localStorage.setItem(CHK_RUN_KEY, JSON.stringify({ codes: chkRunCodes, results: chkResults, ms: chkElapsedMs, status }));
-        } catch (err) { }
-      }
-
-      function chkClearRunStorage() {
-        try { localStorage.removeItem(CHK_RUN_KEY); } catch (err) { }
-      }
-
-      function chkFinalize() {
-        chkRunState = "idle";
-        chkPauseRequested = false;
-        chkInterrupted = false;
-        chkBtnRun.disabled = false;
-        chkClearRunStorage();
-        saveChkHistoryEntry(chkResults, chkElapsedMs);
-        renderChkHistoryList();
-        renderChkResults();
-      }
-
-      async function chkRunLoop() {
-        const userAgent = chkUserAgentInput.value.trim();
-        const token = chkTokenInput.value.trim();
-        const runId = ++chkRunId;
-        const baseMs = chkElapsedMs;
-        const t0 = Date.now();
-        const doneCodes = new Set(chkResults.map(r => r.order_code));
-        const pending = chkRunCodes.filter(c => !doneCodes.has(c));
-        chkRunState = "running";
-        chkPauseRequested = false;
-        chkInterrupted = false;
-        chkBtnRun.disabled = true;
-        chkPersistRun("running");
-        renderChkResults();
-        for (const code of pending) {
-          if (chkPauseRequested || runId !== chkRunId) break;
-          let row;
-          try {
-            const data = await fetchOneOrder(code, userAgent, token);
-            row = { order_code: code, ...data };
-          } catch (err) {
-            row = { order_code: code, ok: false, message: "Lỗi kết nối" };
-          }
-          if (runId !== chkRunId) return;
-          chkResults.push(row);
-          chkElapsedMs = baseMs + (Date.now() - t0);
-          chkPersistRun("running");
-          renderChkResults();
-        }
-        if (runId !== chkRunId) return;
-        chkElapsedMs = baseMs + (Date.now() - t0);
-        if (chkResults.length >= chkRunCodes.length) {
-          chkFinalize();
-        } else {
-          chkRunState = "paused";
-          chkPersistRun("paused");
-          chkBtnRun.disabled = false;
-          renderChkResults();
-        }
-      }
-
-      function chkResume() {
-        if (chkRunState !== "paused") return;
-        if (!chkUserAgentInput.value.trim() || !chkTokenInput.value.trim()) {
-          alert("Vui lòng nhập đầy đủ User-Agent và Token.");
-          return;
-        }
-        chkRunLoop();
-      }
-
-      function chkFinish() {
-        if (chkRunState !== "paused") return;
-        chkFinalize();
-      }
-
-      function chkLoadFromHistory(entry) {
-        if (chkRunState === "running" || chkRunState === "pausing") {
-          chkShowToast("Đang chạy, hãy tạm dừng hoặc chờ chạy xong rồi mới xem lịch sử.");
-          return false;
-        }
-        if (chkRunState === "paused") {
-          if (!confirm("Phiên đang tạm dừng sẽ bị bỏ. Vẫn xem lịch sử này?")) return false;
-          chkRunId++;
-          chkRunState = "idle";
-          chkInterrupted = false;
-          chkClearRunStorage();
-          chkBtnRun.disabled = false;
-        }
-        chkResults = entry.results;
-        chkRunCodes = entry.results.map(r => r.order_code);
-        chkElapsedMs = entry.ms || 0;
-        chkSearchQuery = "";
-        chkStatusFilter = new Set();
-        renderChkResults();
-        return true;
-      }
-
-      chkBtnRun.onclick = () => {
+      chkBtnRun.onclick = async () => {
         const userAgent = chkUserAgentInput.value.trim();
         const token = chkTokenInput.value.trim();
         if (!userAgent || !token) {
@@ -4622,46 +3648,27 @@
           alert("Vui lòng nhập ít nhất 1 mã đơn.");
           return;
         }
-        if (chkRunState === "paused" && !confirm(`Đang có phiên tạm dừng (${chkResults.length}/${chkRunCodes.length} mã). Chạy lượt mới sẽ bỏ phiên này, tiếp tục?`)) return;
         saveChkConfig();
         updateChkConfigView();
+        chkBtnRun.disabled = true;
         chkResults = [];
-        chkRunCodes = codes;
-        chkElapsedMs = 0;
         chkSearchQuery = "";
         chkSortField = null;
         chkSortDir = 1;
-        chkStatusFilter = new Set();
-        chkRunLoop();
-      };
-
-      window.addEventListener("beforeunload", e => {
-        if (chkRunState === "running" || chkRunState === "pausing") {
-          e.preventDefault();
-          e.returnValue = "";
+        for (let i = 0; i < codes.length; i++) {
+          chkResultsArea.innerHTML = `<div class="state loading"><span class="spinner"></span>Đang chạy... ${i + 1}/${codes.length}</div>`;
+          try {
+            const data = await fetchOneOrder(codes[i], userAgent, token);
+            chkResults.push({ order_code: codes[i], ...data });
+          } catch (err) {
+            chkResults.push({ order_code: codes[i], ok: false, message: "Lỗi kết nối" });
+          }
         }
-      });
-
-      (function chkRestoreRun() {
-        let saved = null;
-        try { saved = JSON.parse(localStorage.getItem(CHK_RUN_KEY) || "null"); } catch (err) { }
-        if (!saved || !Array.isArray(saved.codes) || !saved.codes.length || !Array.isArray(saved.results)) {
-          chkClearRunStorage();
-          return;
-        }
-        chkResults = saved.results;
-        chkRunCodes = saved.codes;
-        chkElapsedMs = Number(saved.ms) || 0;
-        chkCodesInput.value = chkRunCodes.join("\n");
-        chkCodeCount.textContent = chkRunCodes.length + " mã đơn";
-        if (chkResults.length >= chkRunCodes.length) {
-          chkFinalize();
-          return;
-        }
-        chkRunState = "paused";
-        chkInterrupted = saved.status === "running";
+        chkBtnRun.disabled = false;
+        saveChkHistoryEntry(chkResults);
+        renderChkHistoryList();
         renderChkResults();
-      })();
+      };
 
       codesInput.addEventListener("keydown", e => {
         if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) doSearch();
@@ -4851,10 +3858,6 @@
       target.appendChild(ripple);
       setTimeout(() => ripple.remove(), 550);
     });
-  </script>
-  <script>const APP_VERSION = "v3";
-    const APP_BUILD = "2026-10-16.1";
-    document.getElementById("rail-version").innerHTML = APP_VERSION + " · bản<br>" + APP_BUILD;
   </script>
 </body>
 
