@@ -3287,8 +3287,8 @@
         }).join("")}</tr>`).join("");
         const nfHtml = s.notFound.length ? `
           <div class="state error" style="margin-top:10px;">
-            ⚠️ Không tìm thấy ${s.notFound.length} mã (chỉ có đơn tạo từ đầu tháng ${dv2WindowStart()} trở lại đây, thuộc nhóm client trong nguồn dữ liệu):
-            <div style="margin-top:6px;word-break:break-all;">${s.notFound.map(dv2Esc).join(", ")}</div>
+            ⚠️ Không tìm thấy ${s.notFound.length} mã (chỉ có đơn tạo từ đầu tháng ${dv2WindowStart()} trở lại đây, thuộc nhóm client trong nguồn dữ liệu)
+            // <div style="margin-top:6px;word-break:break-all;">${s.notFound.map(dv2Esc).join(", ")}</div>
             <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">
               <button class="btn-ghost" id="dv2-btn-copy-nf">📋 Copy mã không tìm thấy</button>
               <button class="btn-ghost" id="dv2-btn-nf-realtime">↪ Kiểm tra Realtime các mã này</button>
