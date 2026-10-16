@@ -244,6 +244,68 @@
       border-color: var(--orange);
     }
 
+    .dv2-chip.notfound.active {
+      background: var(--danger);
+      border-color: var(--danger);
+      color: #fff;
+    }
+
+    .chk-run-banner {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      flex: none;
+      padding: 10px 14px;
+      margin-bottom: 10px;
+      border: 1px solid #cfe0f0;
+      background: var(--blue-soft);
+      border-radius: 12px;
+      font-size: 14.5px;
+      color: var(--blue);
+    }
+
+    .chk-run-banner.paused {
+      border-color: #E8C468;
+      background: #FFF8E1;
+      color: #8A6200;
+    }
+
+    .chk-run-text {
+      flex: 1 1 260px;
+      min-width: 220px;
+      font-weight: 700;
+    }
+
+    .chk-run-text small {
+      display: block;
+      margin-top: 2px;
+      font-weight: 400;
+      color: var(--muted);
+    }
+
+    .chk-run-progress {
+      flex: 1 1 160px;
+      min-width: 120px;
+      height: 8px;
+      border-radius: 99px;
+      overflow: hidden;
+      background: rgba(0, 0, 0, .08);
+    }
+
+    .chk-run-progress > div {
+      height: 100%;
+      border-radius: 99px;
+      background: var(--orange);
+      transition: width .3s;
+    }
+
+    .chk-run-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
     .dv2-money-high {
       background: #FDE2E1 !important;
       color: #B42318;
@@ -2981,6 +3043,7 @@
 
       const DV2_ENDPOINT = "/api/v2x4";
       const DV2_CHUNK = 500;
+      const DV2_WINDOW_MONTHS = 12;
       const DV2_PARALLEL = 2;
       const DV2_HISTORY_KEY = "ka_lookup_dv2_history_v1";
       const DV2_HISTORY_MAX = 5;
@@ -3287,8 +3350,7 @@
         }).join("")}</tr>`).join("");
         const nfHtml = s.notFound.length ? `
           <div class="state error" style="margin-top:10px;">
-            ⚠️ Không tìm thấy ${s.notFound.length} mã (chỉ có đơn tạo từ đầu tháng ${dv2WindowStart()} trở lại đây, thuộc nhóm client trong nguồn dữ liệu):
-            <div style="margin-top:6px;word-break:break-all;">${s.notFound.map(dv2Esc).join(", ")}</div>
+            ⚠️ Không tìm thấy ${s.notFound.length} mã (chỉ có đơn tạo từ đầu tháng ${dv2WindowStart()} trở lại đây, thuộc nhóm client trong nguồn dữ liệu).
             <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">
               <button class="btn-ghost" id="dv2-btn-copy-nf">📋 Copy mã không tìm thấy</button>
               <button class="btn-ghost" id="dv2-btn-nf-realtime">↪ Kiểm tra Realtime các mã này</button>
@@ -3342,7 +3404,7 @@
 
       function dv2WindowStart() {
         const d = new Date();
-        const m = new Date(d.getFullYear(), d.getMonth() - 5, 1);
+        const m = new Date(d.getFullYear(), d.getMonth() - (DV2_WINDOW_MONTHS - 1), 1);
         return `${String(m.getMonth() + 1).padStart(2, "0")}/${m.getFullYear()}`;
       }
 
@@ -3863,6 +3925,15 @@
       });
 
       el("#chk-btn-clear").onclick = () => {
+        chkRunId++;
+        chkRunState = "idle";
+        chkPauseRequested = false;
+        chkInterrupted = false;
+        chkRunCodes = [];
+        chkElapsedMs = 0;
+        chkStatusFilter = new Set();
+        chkClearRunStorage();
+        chkBtnRun.disabled = false;
         chkCodesInput.value = "";
         chkCodeCount.textContent = "";
         chkResultsArea.innerHTML = "";
@@ -3888,12 +3959,13 @@
         }
       }
 
-      function saveChkHistoryEntry(results) {
+      function saveChkHistoryEntry(results, ms) {
         if (!results.length) return;
         const history = loadChkHistory();
         history.unshift({
           time: new Date().toLocaleString("vi-VN"),
           count: results.length,
+          ms: ms || 0,
           results
         });
         const trimmed = history.slice(0, CHK_HISTORY_MAX);
@@ -3941,15 +4013,22 @@
         const idx = Number(item.dataset.historyIndex);
         const history = loadChkHistory();
         if (!history[idx]) return;
-        chkResults = history[idx].results;
-        chkSearchQuery = "";
-        renderChkResults();
+        if (!chkLoadFromHistory(history[idx])) return;
         document.querySelectorAll(".chk-history-item").forEach(x => x.classList.remove("active"));
         item.classList.add("active");
       });
 
       renderChkHistoryList();
       let chkSearchQuery = "";
+      let chkRunState = "idle";
+      let chkPauseRequested = false;
+      let chkRunCodes = [];
+      let chkElapsedMs = 0;
+      let chkRunId = 0;
+      let chkInterrupted = false;
+      let chkStatusFilter = new Set();
+      const CHK_RUN_KEY = "ka_lookup_chk_run_v1";
+      const CHK_ERROR_KEY = "Lỗi / không có dữ liệu";
 
       function formatMoney(v) {
         const n = Number(v);
@@ -4123,6 +4202,35 @@
       }
 
       chkResultsArea.addEventListener("click", e => {
+        const chip = e.target.closest(".dv2-chip[data-chk-status]");
+        if (chip) {
+          const k = decodeURIComponent(chip.dataset.chkStatus);
+          if (e.ctrlKey || e.metaKey) {
+            if (chkStatusFilter.has(k)) chkStatusFilter.delete(k); else chkStatusFilter.add(k);
+          } else if (chkStatusFilter.size === 1 && chkStatusFilter.has(k)) {
+            chkStatusFilter = new Set();
+          } else {
+            chkStatusFilter = new Set([k]);
+          }
+          renderChkResults();
+          return;
+        }
+        if (e.target.closest("#chk-btn-pause")) {
+          if (chkRunState === "running") {
+            chkPauseRequested = true;
+            chkRunState = "pausing";
+            renderChkResults();
+          }
+          return;
+        }
+        if (e.target.closest("#chk-btn-resume")) {
+          chkResume();
+          return;
+        }
+        if (e.target.closest("#chk-btn-finish")) {
+          chkFinish();
+          return;
+        }
         const cell = e.target.closest(".wh-copyable");
         if (cell) {
           const id = cell.dataset.copyId;
@@ -4145,15 +4253,46 @@
         }
       });
 
+      function chkStatusKey(r) {
+        if (r.ok === false) return CHK_ERROR_KEY;
+        return r.status_vn || r.status_name || "Không rõ";
+      }
+
+      function chkRunBannerHtml() {
+        const total = chkRunCodes.length;
+        const done = chkResults.length;
+        const pct = total ? Math.min(100, Math.round(done / total * 100)) : 0;
+        if (chkRunState === "running" || chkRunState === "pausing") {
+          const pausing = chkRunState === "pausing";
+          return `<div class="chk-run-banner"><span class="spinner"></span><div class="chk-run-text">${pausing ? "Đang tạm dừng sau mã hiện tại..." : "Đang chạy"} ${done}/${total} mã<small>Kết quả đã tìm được hiện ngay bên dưới và được lưu tự động, bấm F5 cũng không bị mất.</small></div><div class="chk-run-progress"><div style="width:${pct}%"></div></div><div class="chk-run-actions"><button class="btn-ghost" id="chk-btn-pause"${pausing ? " disabled" : ""}>⏸ Tạm dừng</button></div></div>`;
+        }
+        if (chkRunState === "paused") {
+          const left = Math.max(0, total - done);
+          return `<div class="chk-run-banner paused"><div class="chk-run-text">${chkInterrupted ? "⚠️ Phiên tra cứu trước bị gián đoạn" : "⏸ Đã tạm dừng"}: xong ${done}/${total} mã<small>Dữ liệu đã tìm thấy được giữ lại, vẫn xem, lọc và tải được ngay.</small></div><div class="chk-run-progress"><div style="width:${pct}%"></div></div><div class="chk-run-actions"><button class="btn-primary" id="chk-btn-resume">▶ Tiếp tục (còn ${left} mã)</button><button class="btn-ghost" id="chk-btn-finish">⏹ Kết thúc &amp; lưu lịch sử</button></div></div>`;
+        }
+        return "";
+      }
+
       function renderChkResults() {
+        const bannerHtml = chkRunBannerHtml();
         if (!chkResults.length) {
-          chkResultsArea.innerHTML = `<div class="empty"><div class="big">🔍</div>Chưa có kết quả.</div>`;
+          chkResultsArea.innerHTML = bannerHtml || `<div class="empty"><div class="big">🔍</div>Chưa có kết quả.</div>`;
           return;
         }
         const filterTokens = chkSearchQuery.split(/[\s,;]+/).map(s => s.trim().toUpperCase()).filter(Boolean);
-        const filtered = filterTokens.length
+        let filtered = filterTokens.length
           ? chkResults.filter(r => filterTokens.some(t => (r.order_code || "").toUpperCase().includes(t)))
           : chkResults;
+        if (chkStatusFilter.size) filtered = filtered.filter(r => chkStatusFilter.has(chkStatusKey(r)));
+        const statusCount = {};
+        chkResults.forEach(r => { const k = chkStatusKey(r); statusCount[k] = (statusCount[k] || 0) + 1; });
+        const foundCount = chkResults.filter(r => r.ok !== false).length;
+        const totalCount = Math.max(chkRunCodes.length, chkResults.length);
+        const statusChips = Object.entries(statusCount)
+          .sort((a, b) => (a[0] === CHK_ERROR_KEY) - (b[0] === CHK_ERROR_KEY) || b[1] - a[1])
+          .map(([k, v]) => `<span class="stat-badge dv2-chip ${k === CHK_ERROR_KEY ? "notfound" : dv2RowClass(k)}${chkStatusFilter.has(k) ? " active" : ""}" data-chk-status="${encodeURIComponent(k)}" title="Bấm để lọc · Ctrl + bấm để chọn thêm trạng thái · bấm lại để bỏ lọc">${dv2Esc(k)}: ${v}</span>`)
+          .join(" ");
+        const statsHtml = `<span class="stats"><span class="stat-badge total">Tìm thấy: ${foundCount}/${totalCount}</span>${chkElapsedMs ? `<span class="stat-badge">⏱ ${(chkElapsedMs / 1000).toFixed(1)}s</span>` : ""}${statusChips}</span>`;
         const displayRows = chkSortField ? [...filtered].sort((a, b) => {
           let av = chkRawValue(a, chkSortField);
           let bv = chkRawValue(b, chkSortField);
@@ -4166,10 +4305,10 @@
           <div class="result-search-row">
             <input type="text" id="chk-result-search" class="result-search-input" placeholder="Lọc mã đơn trong kết quả này — dán được nhiều mã, cách nhau bằng dấu phẩy/khoảng trắng" value="${chkSearchQuery.replace(/"/g, "&quot;")}" />
             ${chkSearchQuery ? `<button class="btn-ghost" id="chk-btn-clear-search">Xóa lọc</button>` : ""}
-            <span class="result-search-count">${filterTokens.length ? `${filtered.length}/${chkResults.length} dòng khớp` : `${chkResults.length} dòng`}</span>
+            <span class="result-search-count">${filterTokens.length || chkStatusFilter.size ? `${filtered.length}/${chkResults.length} dòng khớp` : `${chkResults.length} dòng`}</span>
           </div>`;
         if (!filtered.length) {
-          chkResultsArea.innerHTML = `${searchBoxHtml}<div class="empty"><div class="big">🔍</div>Không có mã đơn nào khớp ô lọc.</div>`;
+          chkResultsArea.innerHTML = `${bannerHtml}<div class="toolbar dv2-toolbar">${statsHtml}</div>${searchBoxHtml}<div class="empty"><div class="big">🔍</div>Không có mã đơn nào khớp bộ lọc.</div>`;
           bindChkSearchEvents();
           return;
         }
@@ -4217,8 +4356,9 @@
           return `<tr class="${rowClass}">${cells}</tr>`;
         }).join("");
         chkResultsArea.innerHTML = `
-          <div class="toolbar">
-            <span class="stats"><span class="stat-badge total">Tổng: ${chkResults.length}</span></span>
+          ${bannerHtml}
+          <div class="toolbar dv2-toolbar">
+            ${statsHtml}
             <div class="toolbar-actions">
               <button class="btn-ghost" id="chk-btn-copy">Copy kết quả</button>
               <div class="dl-wrap">
@@ -4358,7 +4498,105 @@
         return res.json();
       }
 
-      chkBtnRun.onclick = async () => {
+      function chkPersistRun(status) {
+        try {
+          localStorage.setItem(CHK_RUN_KEY, JSON.stringify({ codes: chkRunCodes, results: chkResults, ms: chkElapsedMs, status }));
+        } catch (err) { }
+      }
+
+      function chkClearRunStorage() {
+        try { localStorage.removeItem(CHK_RUN_KEY); } catch (err) { }
+      }
+
+      function chkFinalize() {
+        chkRunState = "idle";
+        chkPauseRequested = false;
+        chkInterrupted = false;
+        chkBtnRun.disabled = false;
+        chkClearRunStorage();
+        saveChkHistoryEntry(chkResults, chkElapsedMs);
+        renderChkHistoryList();
+        renderChkResults();
+      }
+
+      async function chkRunLoop() {
+        const userAgent = chkUserAgentInput.value.trim();
+        const token = chkTokenInput.value.trim();
+        const runId = ++chkRunId;
+        const baseMs = chkElapsedMs;
+        const t0 = Date.now();
+        const doneCodes = new Set(chkResults.map(r => r.order_code));
+        const pending = chkRunCodes.filter(c => !doneCodes.has(c));
+        chkRunState = "running";
+        chkPauseRequested = false;
+        chkInterrupted = false;
+        chkBtnRun.disabled = true;
+        chkPersistRun("running");
+        renderChkResults();
+        for (const code of pending) {
+          if (chkPauseRequested || runId !== chkRunId) break;
+          let row;
+          try {
+            const data = await fetchOneOrder(code, userAgent, token);
+            row = { order_code: code, ...data };
+          } catch (err) {
+            row = { order_code: code, ok: false, message: "Lỗi kết nối" };
+          }
+          if (runId !== chkRunId) return;
+          chkResults.push(row);
+          chkElapsedMs = baseMs + (Date.now() - t0);
+          chkPersistRun("running");
+          renderChkResults();
+        }
+        if (runId !== chkRunId) return;
+        chkElapsedMs = baseMs + (Date.now() - t0);
+        if (chkResults.length >= chkRunCodes.length) {
+          chkFinalize();
+        } else {
+          chkRunState = "paused";
+          chkPersistRun("paused");
+          chkBtnRun.disabled = false;
+          renderChkResults();
+        }
+      }
+
+      function chkResume() {
+        if (chkRunState !== "paused") return;
+        if (!chkUserAgentInput.value.trim() || !chkTokenInput.value.trim()) {
+          alert("Vui lòng nhập đầy đủ User-Agent và Token.");
+          return;
+        }
+        chkRunLoop();
+      }
+
+      function chkFinish() {
+        if (chkRunState !== "paused") return;
+        chkFinalize();
+      }
+
+      function chkLoadFromHistory(entry) {
+        if (chkRunState === "running" || chkRunState === "pausing") {
+          chkShowToast("Đang chạy, hãy tạm dừng hoặc chờ chạy xong rồi mới xem lịch sử.");
+          return false;
+        }
+        if (chkRunState === "paused") {
+          if (!confirm("Phiên đang tạm dừng sẽ bị bỏ. Vẫn xem lịch sử này?")) return false;
+          chkRunId++;
+          chkRunState = "idle";
+          chkInterrupted = false;
+          chkClearRunStorage();
+          chkBtnRun.disabled = false;
+        }
+        chkResults = entry.results;
+        chkRunCodes = entry.results.map(r => r.order_code);
+        chkElapsedMs = entry.ms || 0;
+        chkSearchQuery = "";
+        chkStatusFilter = new Set();
+        renderChkResults();
+        return true;
+      }
+
+      chkBtnRun.onclick = () => {
         const userAgent = chkUserAgentInput.value.trim();
         const token = chkTokenInput.value.trim();
         if (!userAgent || !token) {
@@ -4370,27 +4608,46 @@
           alert("Vui lòng nhập ít nhất 1 mã đơn.");
           return;
         }
+        if (chkRunState === "paused" && !confirm(`Đang có phiên tạm dừng (${chkResults.length}/${chkRunCodes.length} mã). Chạy lượt mới sẽ bỏ phiên này, tiếp tục?`)) return;
         saveChkConfig();
         updateChkConfigView();
-        chkBtnRun.disabled = true;
         chkResults = [];
+        chkRunCodes = codes;
+        chkElapsedMs = 0;
         chkSearchQuery = "";
         chkSortField = null;
         chkSortDir = 1;
-        for (let i = 0; i < codes.length; i++) {
-          chkResultsArea.innerHTML = `<div class="state loading"><span class="spinner"></span>Đang chạy... ${i + 1}/${codes.length}</div>`;
-          try {
-            const data = await fetchOneOrder(codes[i], userAgent, token);
-            chkResults.push({ order_code: codes[i], ...data });
-          } catch (err) {
-            chkResults.push({ order_code: codes[i], ok: false, message: "Lỗi kết nối" });
-          }
-        }
-        chkBtnRun.disabled = false;
-        saveChkHistoryEntry(chkResults);
-        renderChkHistoryList();
-        renderChkResults();
+        chkStatusFilter = new Set();
+        chkRunLoop();
       };
+
+      window.addEventListener("beforeunload", e => {
+        if (chkRunState === "running" || chkRunState === "pausing") {
+          e.preventDefault();
+          e.returnValue = "";
+        }
+      });
+
+      (function chkRestoreRun() {
+        let saved = null;
+        try { saved = JSON.parse(localStorage.getItem(CHK_RUN_KEY) || "null"); } catch (err) { }
+        if (!saved || !Array.isArray(saved.codes) || !saved.codes.length || !Array.isArray(saved.results)) {
+          chkClearRunStorage();
+          return;
+        }
+        chkResults = saved.results;
+        chkRunCodes = saved.codes;
+        chkElapsedMs = Number(saved.ms) || 0;
+        chkCodesInput.value = chkRunCodes.join("\n");
+        chkCodeCount.textContent = chkRunCodes.length + " mã đơn";
+        if (chkResults.length >= chkRunCodes.length) {
+          chkFinalize();
+          return;
+        }
+        chkRunState = "paused";
+        chkInterrupted = saved.status === "running";
+        renderChkResults();
+      })();
 
       codesInput.addEventListener("keydown", e => {
         if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) doSearch();
