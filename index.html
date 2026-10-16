@@ -141,6 +141,15 @@
       background: var(--danger-bg);
     }
 
+    .rail-version {
+      flex-shrink: 0;
+      padding: 0 4px;
+      font-size: 10.5px;
+      line-height: 1.35;
+      text-align: center;
+      color: var(--muted);
+    }
+
     .side-panel {
       width: 320px;
       flex: none;
@@ -588,6 +597,10 @@
       .rail-logout {
         margin-top: 0;
         margin-left: auto;
+      }
+
+      .rail-version {
+        display: none;
       }
 
       .side-panel,
@@ -2065,6 +2078,7 @@
         <div class="tab" id="tab-checker">🔎 Kiểm tra đơn</div>
         <div class="tabs" id="tabs"></div>
         <button type="button" id="btn-logout" class="rail-logout" title="Đăng xuất">⏻</button>
+        <div class="rail-version" id="rail-version"></div>
       </div>
 
       <div class="side-panel" id="side-panel-normal">
@@ -4837,6 +4851,10 @@
       target.appendChild(ripple);
       setTimeout(() => ripple.remove(), 550);
     });
+  </script>
+  <script>const APP_VERSION = "v3";
+    const APP_BUILD = "2026-10-16.1";
+    document.getElementById("rail-version").innerHTML = APP_VERSION + " · bản<br>" + APP_BUILD;
   </script>
 </body>
 
